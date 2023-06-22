@@ -1,4 +1,4 @@
-toggleTheme()
+function toggleTheme()
 {
     document.body.dataset.isDarkTheme = !document.body.dataset.isDarkTheme;
     console.log(document.body.dataset.isDarkTheme);
@@ -12,7 +12,7 @@ toggleTheme()
     }
 }
 
-init()
+function init()
 {
     document.body.dataset.isDarkTheme = false;
     const button = document.getElementById("toggle-theme-button");
