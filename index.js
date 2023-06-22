@@ -12,8 +12,8 @@ function toggleTheme()
 
 function init()
 {
-    document.body.dataset.theme = light;
-    const button = document.getElementById("toggle-theme-button");
+    document.body.dataset.theme = 'light';
+    const button = document.getElementById('toggle-theme-button');
     button.addEventListener('mouseup', toggleTheme());
 }
 
