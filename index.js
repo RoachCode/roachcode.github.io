@@ -1,21 +1,19 @@
 function toggleTheme()
 {
-    document.body.dataset.isDarkTheme = !document.body.dataset.isDarkTheme;
-    console.log(document.body.dataset.isDarkTheme);
-    if (document.body.dataset.isDarkTheme)
+    if (document.body.dataset.theme === 'dark')
     {
-        document.body.setAttribute('class', 'dark');
+        document.body.dataset.theme = 'light';
     }
     else
     {
-        document.body.setAttribute('class', 'light');
+        document.body.dataset.theme = 'dark'
     }
 }
 
 function init()
 {
-    document.body.dataset.isDarkTheme = false;
+    document.body.dataset.theme = light;
     const button = document.getElementById("toggle-theme-button");
-    button.addEventListener('mouseup', () => toggleTheme());
+    button.addEventListener('mouseup', toggleTheme());
 }
 

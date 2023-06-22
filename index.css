@@ -2,10 +2,10 @@
     color: red;
 }
 
-.light {
-    background-color: blanchedalmond;
+[data-theme="dark"] {
+    background-color: black;
 }
 
-.dark {
-    background-color: black;
+[data-theme="light"] {
+    background-color: blanchedalmond;
 }
