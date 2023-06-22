@@ -1,6 +1,7 @@
 toggleTheme()
 {
     document.body.dataset.isDarkTheme = !document.body.dataset.isDarkTheme;
+    console.log(document.body.dataset.isDarkTheme);
     if (document.body.dataset.isDarkTheme)
     {
         document.body.setAttribute('class', 'dark');
