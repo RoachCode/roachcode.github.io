@@ -13,6 +13,7 @@ toggleTheme()
 
 init()
 {
+    document.body.dataset.isDarkTheme = false;
     const button = document.getElementById("toggle-theme-button");
     button.addEventListener('mouseup', toggleTheme());
 }
