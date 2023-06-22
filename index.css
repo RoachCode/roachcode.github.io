@@ -1,3 +1,11 @@
 .text {
     color: red;
 }
+
+.light {
+    background-color: blanchedalmond;
+}
+
+.dark {
+    background-color: black;
+}
