@@ -1,22 +1,20 @@
 function toggleTheme()
 {
-    const button = document.getElementById('toggle-theme-button');
-    if (document.body.dataset.theme === 'dark')
+    const checkbox = document.getElementById('theme-checkbox')
+
+    if (checkbox.checked)
     {
-        document.body.dataset.theme = 'light';
-        button.innerText = 'Enable Dark Mode';
+        document.body.dataset.theme = 'dark';
     }
     else
     {
-        document.body.dataset.theme = 'dark'
-        button.innerText = 'Enable Light Mode';
+        document.body.dataset.theme = 'light'
     }
 }
 
 function init()
 {
-    document.body.dataset.theme = 'light';    
-    button.innerText = 'Enable Dark Mode';
-    document.getElementById('toggle-theme-button').addEventListener('mouseup', toggleTheme);
+    // Attach event listeners
+    document.getElementById('theme-toggle').addEventListener('mouseup', toggleTheme);
 }
 
