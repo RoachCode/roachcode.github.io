@@ -13,15 +13,9 @@ function toggleTheme()
     }
 }
 
-function toggleHamburgerMenu()
-{
-    const nav = document.getElementsByTagName('nav');
-}
-
 function init()
 {
     // Attach event listeners
     document.getElementById('theme-toggle').addEventListener('mouseup', toggleTheme);
-    document.getElementById('burger').addEventListener('click', toggleHamburgerMenu);
 }
 

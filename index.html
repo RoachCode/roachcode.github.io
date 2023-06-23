@@ -3,22 +3,36 @@
         <meta charset="utf-8"/>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=nunito">
         <link rel="stylesheet" href="index.css">
-        <title>Welcome to Bradley Aldridge's Portfolio</title>
+        <title>Welcome to Bradley's Portfolio</title>
     </head>
     <body data-theme='light' onload="init()">
         <script src="index.js"></script>
-        <nav>
+        <div id="topnav">
             <ul id='nav-list' class='hide-div smooth-trans'>
                 <li><a href="#">Introduction</a></li>
+                <li>|</li>
                 <li><a href="#">Portfolio</a></li>
+                <li>|</li>
                 <li><a href="#">History</a></li>
+                <li>|</li>
                 <li><a href="#">Contact</a></li>
             </ul>
-            <label>
+            <label id="label-theme">
                 <input id="theme-checkbox" type = 'checkbox' checked>
                 <span id = 'theme-toggle' class = 'slider'></span>
             </label>
-            <div id="burger"></div>  
-        </nav>
+            <label id="label-burger">
+                <input id="burger-checkbox" type = 'checkbox' unchecked>
+                <span id = 'burger'></span>
+                <div id="sidenav">
+                    <ul id="nav-list-vertical">
+                        <li><a href="#">Introduction</a></li><br>
+                        <li><a href="#">Portfolio</a></li><br>
+                        <li><a href="#">History</a></li><br>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </label> 
+        </div>
     </body>
 </html>
