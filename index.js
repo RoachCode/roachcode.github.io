@@ -1,6 +1,7 @@
+
 function toggleTheme()
 {
-    const checkbox = document.getElementById('theme-checkbox')
+    const checkbox = document.getElementById('theme-checkbox');
 
     if (checkbox.checked)
     {
@@ -8,13 +9,19 @@ function toggleTheme()
     }
     else
     {
-        document.body.dataset.theme = 'light'
+        document.body.dataset.theme = 'light';
     }
+}
+
+function toggleHamburgerMenu()
+{
+    const nav = document.getElementsByTagName('nav');
 }
 
 function init()
 {
     // Attach event listeners
     document.getElementById('theme-toggle').addEventListener('mouseup', toggleTheme);
+    document.getElementById('burger').addEventListener('click', toggleHamburgerMenu);
 }
 
