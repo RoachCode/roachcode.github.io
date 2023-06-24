@@ -9,11 +9,17 @@ body
 {
     font-family: "nunito", sans-serif;
     margin: auto;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */    
+}
+
+body::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
 }
 
 #topnav
 {
-    position: absolute;
+    position: fixed;
     background-color: black;
     width: 100vw;
     height: 7vh;
@@ -32,6 +38,7 @@ body
     transition: 0.2s;
     transition-timing-function: ease-out;
     pointer-events: none;
+    box-sizing: border-box;
 }
 input:checked ~ #sidenav
 {
@@ -74,21 +81,31 @@ a
     align-items: center;
 }
 
+#nav-list-vertical
+{
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    
+}
 #nav-list-vertical a
 {
     font-size: 7vh;
     margin: 0%;
     padding: 0%;
-    padding-left: 1vh;
     color: transparent;
-    transition: 0.2s;
+    display: none;
 }
 input:checked ~ #sidenav > #nav-list-vertical a
 {
+    display: block;
     font-size: 7vh;
     margin: 0%;
     padding: 0%;
-    padding-left: 1vh;
     color: var(--text-color-dark);
 }
 
@@ -110,10 +127,13 @@ li
     position: relative;
     color: var(--text-color-dark);
 }
-#nav-list-vertical li
+
+input:checked ~ #sidenav > #nav-list-vertical li
 {
     pointer-events: all;
+    left: 3.5vh;    
 }
+
 
 #label-theme
 {
@@ -196,4 +216,45 @@ input:checked ~ .slider::before
     background-color: var(--primary-color-dark);
     transition: 0.4s;
     color: var(--text-color-dark);
+}
+
+#introduction
+{
+    position: absolute;
+    top: 17.5vh;
+    left: 10.5vh;
+    bottom: 10.5vh;
+    right: 10.5vh;
+    z-index: -1;
+    cursor: default;
+    outline: 0.5vh solid var(--text-color-dark);
+}
+
+#gh-logo-container
+{
+    right: 2vh;
+    bottom: 2vh;
+    width: 6vh;
+    height: 6vh;
+    position: fixed;
+    background-color: var(--primary-color-light);
+    border-radius: 50%;
+    outline-offset: -0.15vh;
+    outline: 0.3vh solid var(--primary-color-dark);
+}
+#gh-logo
+{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#li-logo
+{
+    margin: 0;
+}
+
+#em-logo
+{
+    margin: 0;
 }

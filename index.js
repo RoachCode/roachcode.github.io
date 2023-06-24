@@ -17,5 +17,7 @@ function init()
 {
     // Attach event listeners
     document.getElementById('theme-toggle').addEventListener('mouseup', toggleTheme);
-}
 
+    const intro = document.getElementById('introduction');
+    intro.innerText = 'Hello';
+}
