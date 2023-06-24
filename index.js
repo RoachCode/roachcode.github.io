@@ -19,5 +19,5 @@ function init()
     document.getElementById('theme-toggle').addEventListener('mouseup', toggleTheme);
 
     const intro = document.getElementById('introduction');
-    intro.innerText = 'Hello';
+    intro.innerText = 'Under Construction - Coming Soon';
 }
