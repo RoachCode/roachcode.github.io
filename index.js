@@ -1,6 +1,7 @@
+
 function toggleTheme()
 {
-    const checkbox = document.getElementById('theme-checkbox')
+    const checkbox = document.getElementById('theme-checkbox');
 
     if (checkbox.checked)
     {
@@ -8,7 +9,7 @@ function toggleTheme()
     }
     else
     {
-        document.body.dataset.theme = 'light'
+        document.body.dataset.theme = 'light';
     }
 }
 
@@ -16,5 +17,7 @@ function init()
 {
     // Attach event listeners
     document.getElementById('theme-toggle').addEventListener('mouseup', toggleTheme);
-}
 
+    const intro = document.getElementById('introduction');
+    intro.innerText = 'Under Construction - Coming Soon';
+}
