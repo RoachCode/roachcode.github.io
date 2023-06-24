@@ -109,7 +109,7 @@ input:checked ~ #sidenav > #nav-list-vertical a
     color: var(--text-color-dark);
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1200px) {
     .hide-div {
         display: none !important;
     }
