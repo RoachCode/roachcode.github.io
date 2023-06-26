@@ -80,6 +80,7 @@ input
     border-radius: 50%;
     outline-offset: -0.15vh;
     outline: 0.3vh solid var(--primary-color-dark);
+    cursor: pointer;
 }
 #gh-logo
 {
