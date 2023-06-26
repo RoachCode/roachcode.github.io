@@ -1,0 +1,66 @@
+#label-theme
+{
+    position: absolute;
+    right: 1vh;
+    top: 1vh;
+    width: 10vh;
+    height: 5vh;
+    background-color: var(--primary-color-dark);
+    border-radius: 2.5vh;
+    cursor: pointer;
+}
+
+.slider
+{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 2.5vh;
+    transition: 0.4s;
+}
+
+input:checked ~ .slider
+{
+    background-color: var(--text-color-dark);
+}
+
+.slider::before
+{
+    content: "";
+    position: absolute;
+    top: 0.65vh;
+    left: 0.8vh;
+    width: 3.75vh;
+    height: 3.75vh;
+    border-radius: 50%;
+    box-shadow: inset 1.4vh -0.2vh 0px 0px var(--text-color-dark);
+    background-color: var(--primary-color-dark);
+    outline: dotted 0.5vmin rgba(47, 47, 53, 0);
+    outline-offset: -0.25vmin;
+    transition: 0.4s;
+}
+
+input:checked ~ .slider::before 
+{
+    transform: translateX(4.75vh);
+    background-color: var(--primary-color-dark);
+    box-shadow: none;
+    outline: dotted 0.5vmin var(--primary-color-dark);
+    outline-offset: -0.25vmin;
+    transition: 0.4s;
+}
+
+
+[data-theme='light']
+{
+    background-color: var(--primary-color-light);
+    transition: 0.4s;
+    color: var(--primary-color-dark);
+}
+
+[data-theme='dark']
+{
+    background-color: var(--primary-color-dark);
+    transition: 0.4s;
+    color: var(--text-color-dark);
+}

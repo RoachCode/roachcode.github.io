@@ -1,7 +1,11 @@
+@import "alert.css";
+@import "dark-mode-toggle.css";
+@import "navigation.css";
+
 :root 
 {
     --primary-color-light: rgb(255, 251, 244);
-    --text-color-dark: rgb(165, 163, 159);
+    --text-color-dark: rgb(204, 200, 193);
     --primary-color-dark: rgb(18, 19, 22);
 }
 
@@ -17,37 +21,6 @@ body::-webkit-scrollbar {
     display: none;  /* Safari and Chrome */
 }
 
-#topnav
-{
-    position: fixed;
-    background-color: black;
-    width: 100vw;
-    height: 7vh;
-}
-
-#sidenav
-{
-    position: absolute;
-    margin: 0px;
-    padding: 0px;
-    left: -1vh;
-    top: 6vh;
-    background-color: transparent;
-    width: 0vw;
-    height: 50vh;
-    transition: 0.2s;
-    transition-timing-function: ease-out;
-    pointer-events: none;
-    box-sizing: border-box;
-}
-input:checked ~ #sidenav
-{
-    position: absolute;
-    background-color: black;
-    width: 100vw;
-    height: 50vh;
-    pointer-events: none;
-}
 
 a
 {
@@ -56,58 +29,6 @@ a
     letter-spacing: 0.5vh;
 }
 
-#burger
-{
-    position: absolute;
-    display: inline-block;
-    background-color: var(--text-color-dark);
-    width: 8vh;
-    height: 1vh;
-    left: 1vh;
-    box-shadow: 0px 2vh var(--text-color-dark), 0px 4vh var(--text-color-dark);
-    border-radius: 0.25vmin;
-}
-
-#nav-list
-{
-    font-size: 3.5vh;
-    margin: 0%;
-    padding: 0%;
-    padding-left: 12vh;
-    width: calc(100vw - 24vh);
-    height: 7vh;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
-#nav-list-vertical
-{
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    
-}
-#nav-list-vertical a
-{
-    font-size: 7vh;
-    margin: 0%;
-    padding: 0%;
-    color: transparent;
-    display: none;
-}
-input:checked ~ #sidenav > #nav-list-vertical a
-{
-    display: block;
-    font-size: 7vh;
-    margin: 0%;
-    padding: 0%;
-    color: var(--text-color-dark);
-}
 
 @media screen and (max-width: 1200px) {
     .hide-div {
@@ -117,7 +38,7 @@ input:checked ~ #sidenav > #nav-list-vertical a
 
 @media screen{
     .smooth-trans {
-        transition: 0.2s;
+        transition: 0.15s;
     }
 }
 
@@ -128,35 +49,6 @@ li
     color: var(--text-color-dark);
 }
 
-input:checked ~ #sidenav > #nav-list-vertical li
-{
-    pointer-events: all;
-    left: 3.5vh;    
-}
-
-
-#label-theme
-{
-    position: absolute;
-    right: 1vh;
-    top: 1vh;
-    width: 10vh;
-    height: 5vh;
-    background-color: var(--primary-color-dark);
-    border-radius: 2.5vh;
-    cursor: pointer;
-}
-
-#label-burger
-{
-    position: absolute;
-    cursor: pointer;
-    width: 10vh;
-    height: 5vh;
-    left: 1vh;
-    top: 1vh;
-    border-radius: 2.5vmin;
-}
 
 input
 {
@@ -164,61 +56,8 @@ input
     display: none;
 }
 
-.slider
-{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 2.5vh;
-    transition: 0.4s;
-}
 
-input:checked ~ .slider
-{
-    background-color: var(--text-color-dark);
-}
-
-.slider::before
-{
-    content: "";
-    position: absolute;
-    top: 0.65vh;
-    left: 0.8vh;
-    width: 3.75vh;
-    height: 3.75vh;
-    border-radius: 50%;
-    box-shadow: inset 1.4vh -0.2vh 0px 0px var(--text-color-dark);
-    background-color: var(--primary-color-dark);
-    outline: dotted 0.5vmin rgba(47, 47, 53, 0);
-    outline-offset: -0.25vmin;
-    transition: 0.4s;
-}
-
-input:checked ~ .slider::before 
-{
-    transform: translateX(4.75vh);
-    background-color: var(--primary-color-dark);
-    box-shadow: none;
-    outline: dotted 0.5vmin var(--primary-color-dark);
-    outline-offset: -0.25vmin;
-    transition: 0.4s;
-}
-
-[data-theme='light']
-{
-    background-color: var(--primary-color-light);
-    transition: 0.4s;
-    color: var(--primary-color-dark);
-}
-
-[data-theme='dark']
-{
-    background-color: var(--primary-color-dark);
-    transition: 0.4s;
-    color: var(--text-color-dark);
-}
-
-#introduction
+#home
 {
     position: absolute;
     top: 17.5vh;
@@ -230,7 +69,7 @@ input:checked ~ .slider::before
     outline: 0.5vh solid var(--text-color-dark);
 }
 
-#gh-logo-container
+#logo-container
 {
     right: 2vh;
     bottom: 2vh;
@@ -248,13 +87,42 @@ input:checked ~ .slider::before
     width: 100%;
     height: 100%;
 }
-
 #li-logo
 {
-    margin: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
-
 #em-logo
 {
-    margin: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+
+
+@keyframes fadeout
+{
+
+    0%
+    {
+        opacity: 1;
+    }
+    99%
+    {
+        opacity: 0.01;
+    }
+    100%
+    {
+        opacity: 0;
+        display: none;
+        visibility: hidden;
+    }
+
+}
+    
+.fade-out
+{
+    animation: fadeout 2000ms forwards 2000ms;
 }
