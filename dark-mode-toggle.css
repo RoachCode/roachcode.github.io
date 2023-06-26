@@ -49,3 +49,18 @@ input:checked ~ .slider::before
     outline-offset: -0.25vmin;
     transition: 0.4s;
 }
+
+
+[data-theme='light']
+{
+    background-color: var(--primary-color-light);
+    transition: 0.4s;
+    color: var(--primary-color-dark);
+}
+
+[data-theme='dark']
+{
+    background-color: var(--primary-color-dark);
+    transition: 0.4s;
+    color: var(--text-color-dark);
+}

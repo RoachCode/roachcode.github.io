@@ -1,18 +1,18 @@
-function popUpAlert(inString, timeOut = 3000)
+function popUpAlert(inString, timeOut = 2000)
 {
     const popUpContainer = document.createElement('div');
     popUpContainer.id = 'pop-up-container';
 
-    const span = document.createElement('span');
-    span.style.padding = '1em';
     const content = document.createTextNode(inString);
-    span.appendChild(content);
-    popUpContainer.appendChild(span);
+    popUpContainer.appendChild(content);
+    popUpContainer.style.padding = '1vh';
+    popUpContainer.style.paddingBottom = '0.8vh';
     document.body.appendChild(popUpContainer);
     popUpContainer.classList.add('fade-out');
-    popUpContainer.style.animation = `fadeout ${timeOut}ms forwards`; 
+    popUpContainer.style.animation = `fadeout 2000ms forwards ${timeOut}ms`; 
 
-    setTimeout(function(){
+    setTimeout(function()
+    {
         document.body.removeChild(popUpContainer);
-    }, timeOut);
+    }, 2000 + Number(timeOut));
 }

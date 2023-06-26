@@ -1,0 +1,14 @@
+#pop-up-container
+{
+    position: absolute;
+    width: auto;
+    height: auto;
+    bottom: 11vmin;
+    right: 11vmin;
+    color: var(--primary-color-light);
+    background-color: rgb(68, 103, 69);
+    border-radius: 1vw;
+    opacity: 1;
+    outline: 0.4vmin solid var(--primary-color-dark);
+    outline-offset: -0.2vmin;
+}

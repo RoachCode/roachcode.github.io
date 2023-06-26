@@ -22,5 +22,5 @@ function copyEmailToClipboard() {
     navigator.clipboard.writeText('roachcode@gmail.com');
   
     // Alert the copied text
-    popUpAlert('Email address copied to clipboard.', 20000);
+    popUpAlert('Email address copied to clipboard.', 3000);
   } 
