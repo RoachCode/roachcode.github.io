@@ -1,3 +1,5 @@
+@import "dark-mode-toggle.css";
+
 :root 
 {
     --primary-color-light: rgb(255, 251, 244);
@@ -117,7 +119,7 @@ input:checked ~ #sidenav > #nav-list-vertical a
 
 @media screen{
     .smooth-trans {
-        transition: 0.2s;
+        transition: 0.15s;
     }
 }
 
@@ -134,18 +136,6 @@ input:checked ~ #sidenav > #nav-list-vertical li
     left: 3.5vh;    
 }
 
-
-#label-theme
-{
-    position: absolute;
-    right: 1vh;
-    top: 1vh;
-    width: 10vh;
-    height: 5vh;
-    background-color: var(--primary-color-dark);
-    border-radius: 2.5vh;
-    cursor: pointer;
-}
 
 #label-burger
 {
@@ -164,46 +154,6 @@ input
     display: none;
 }
 
-.slider
-{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 2.5vh;
-    transition: 0.4s;
-}
-
-input:checked ~ .slider
-{
-    background-color: var(--text-color-dark);
-}
-
-.slider::before
-{
-    content: "";
-    position: absolute;
-    top: 0.65vh;
-    left: 0.8vh;
-    width: 3.75vh;
-    height: 3.75vh;
-    border-radius: 50%;
-    box-shadow: inset 1.4vh -0.2vh 0px 0px var(--text-color-dark);
-    background-color: var(--primary-color-dark);
-    outline: dotted 0.5vmin rgba(47, 47, 53, 0);
-    outline-offset: -0.25vmin;
-    transition: 0.4s;
-}
-
-input:checked ~ .slider::before 
-{
-    transform: translateX(4.75vh);
-    background-color: var(--primary-color-dark);
-    box-shadow: none;
-    outline: dotted 0.5vmin var(--primary-color-dark);
-    outline-offset: -0.25vmin;
-    transition: 0.4s;
-}
-
 [data-theme='light']
 {
     background-color: var(--primary-color-light);
@@ -218,7 +168,7 @@ input:checked ~ .slider::before
     color: var(--text-color-dark);
 }
 
-#introduction
+#home
 {
     position: absolute;
     top: 17.5vh;
@@ -230,7 +180,7 @@ input:checked ~ .slider::before
     outline: 0.5vh solid var(--text-color-dark);
 }
 
-#gh-logo-container
+#logo-container
 {
     right: 2vh;
     bottom: 2vh;
@@ -248,13 +198,52 @@ input:checked ~ .slider::before
     width: 100%;
     height: 100%;
 }
-
 #li-logo
 {
-    margin: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
-
 #em-logo
 {
-    margin: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#pop-up-container
+{
+    position: absolute;
+    width: auto;
+    height: auto;
+    bottom: 10vh;
+    right: 10vh;
+    background-color: red;
+    border-radius: 1vw;
+    opacity: 1;
+}
+
+@keyframes fadeout
+{
+
+    0%
+    {
+        opacity: 1;
+    }
+    99%
+    {
+        opacity: 0.01;
+    }
+    100%
+    {
+        opacity: 0;
+        display: none;
+        visibility: hidden;
+    }
+
+}
+    
+.fade-out
+{
+    animation: fadeout 3000ms forwards;
 }

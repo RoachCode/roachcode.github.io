@@ -1,23 +1,14 @@
-
-function toggleTheme()
-{
-    const checkbox = document.getElementById('theme-checkbox');
-
-    if (checkbox.checked)
-    {
-        document.body.dataset.theme = 'dark';
-    }
-    else
-    {
-        document.body.dataset.theme = 'light';
-    }
-}
-
-function init()
+/**
+ * This function runs immediately on the DOM loading.
+ * Initializes values and attaches listeners.
+ */
+window.onload = () =>
 {
     // Attach event listeners
     document.getElementById('theme-toggle').addEventListener('mouseup', toggleTheme);
+    document.getElementById('em-logo').addEventListener('mouseup', copyEmailToClipboard);
 
-    const intro = document.getElementById('introduction');
+    // Populate text fields
+    const intro = document.getElementById('home');
     intro.innerText = 'Under Construction - Coming Soon';
 }
