@@ -18,8 +18,6 @@
     align-items: center;
 }
 
-
-
 #label-burger
 {
     position: absolute;
@@ -46,6 +44,7 @@
     pointer-events: none;
     box-sizing: border-box;
 }
+
 input:checked ~ #sidenav
 {
     position: absolute;

@@ -53,14 +53,66 @@ input:checked ~ .slider::before
 
 [data-theme='light']
 {
-    background-color: var(--primary-color-light);
     transition: 0.4s;
     color: var(--primary-color-dark);
+    outline-color: var(--primary-color-dark) !important;
 }
 
 [data-theme='dark']
 {
-    background-color: var(--primary-color-dark);
     transition: 0.4s;
     color: var(--text-color-dark);
+    outline-color: var(--primary-color-light) !important;
 }
+
+#gradient-wheel
+{
+    position: absolute;
+    display: block;
+    width: 300vmax;
+    height: 300vmax;
+    margin-left: -100vmax;
+    margin-top: -8vmax;
+    align-items: center;
+    border-radius: 50%;
+    background: repeating-conic-gradient(rgb(164, 185, 199), var(--primary-color-light), rgb(16, 30, 37), var(--primary-color-dark), rgb(164, 185, 199));
+    z-index: -2;
+    rotate: -50deg;
+}
+
+.rotate-in
+{
+    animation: oneEighty 0.4s ease-in-out forwards;
+}
+
+.rotate-out
+{
+    animation: threeSixty 0.4s ease-in-out forwards;
+}
+
+@keyframes oneEighty
+{
+    0% 
+    {
+      transform: rotate(0deg);
+    }
+    100% 
+    {
+      transform: rotate(180deg);
+    }
+}
+@keyframes threeSixty
+{
+    0% 
+    {
+      transform: rotate(180deg);
+    }
+    100% 
+    {
+      transform: rotate(360deg);
+    }
+}
+/*
+    background: radial-gradient(rgb(164, 185, 199), var(--primary-color-light));
+    background: radial-gradient(rgb(16, 30, 37), var(--primary-color-dark));    
+*/

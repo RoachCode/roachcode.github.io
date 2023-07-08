@@ -13,8 +13,10 @@ window.onload = () =>
         const burgerCheckbox = document.getElementById('burger-checkbox');
         burgerCheckbox.checked = false;
     });
-
-    // Populate text fields
-    const intro = document.getElementById('home');
-    intro.innerText = 'Under Construction - Coming Soon';
+    document.addEventListener('wheel', (ev) =>
+    {
+        // allows scroll-y fallthrough from parent
+        const container = document.getElementById('main-container');
+        container.scrollTop += ev.deltaY;
+    });
 }
