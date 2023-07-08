@@ -16,7 +16,7 @@ window.onload = () =>
     document.addEventListener('wheel', (ev) =>
     {
         // allows scroll-y fallthrough from parent
-        const container = document.getElementById('main-container');
+        const container = document.getElementById('text-container');
         container.scrollTop += ev.deltaY;
     });
 }

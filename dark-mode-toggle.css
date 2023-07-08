@@ -54,14 +54,14 @@ input:checked ~ .slider::before
 [data-theme='light']
 {
     transition: 0.4s;
-    color: var(--primary-color-dark);
+    color: var(--primary-color-dark) !important;
     outline-color: var(--primary-color-dark) !important;
 }
 
 [data-theme='dark']
 {
     transition: 0.4s;
-    color: var(--text-color-dark);
+    color: var(--text-color-dark) !important;
     outline-color: var(--primary-color-light) !important;
 }
 
