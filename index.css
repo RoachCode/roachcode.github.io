@@ -147,3 +147,8 @@ p
     animation: fadeout 2000ms forwards 2000ms;
 }
 
+#ray-tracer-screenshot
+{
+    width: 100%;
+    height: auto;
+}
