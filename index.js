@@ -19,4 +19,89 @@ window.onload = () =>
         const container = document.getElementById('text-container');
         container.scrollTop += ev.deltaY;
     });
+    
+    const links = document.getElementsByTagName('a');
+    for (clickable of links)
+    {
+        if (clickable.getAttribute('href') === '#')
+        {
+            clickable.addEventListener('mouseup', pageHandler);
+        }
+    }
+    buildPages();
+}
+
+function buildPages()
+{
+    const mainContainer = document.getElementById('main-container');
+    const buildHome = () => 
+    {
+        const homeContainer = document.createElement('div');
+        homeContainer.setAttribute('id', 'home');
+        homeContainer.dataset.theme = 'light';
+
+        const rayTracerContainer = document.createElement('div');
+        rayTracerContainer.setAttribute("id", "ray-tracer-screenshot-container");
+
+        const textContainer = document.createElement('div');
+        textContainer.setAttribute('id', 'text-container');
+
+        const p1 = document.createElement('p');
+        p1.classList.add('fine-print');
+        p1.dataset.theme = 'light';
+        p1.innerText = 'My name is';
+
+        const h1 = document.createElement('h3');
+        h1.dataset.theme = 'light';
+        h1.innerText = 'Bradley Aldridge';
+
+        const p2 = document.createElement('p');
+        p2.classList.add('fine-print');
+        p2.classList.add('alt');
+        p2.dataset.theme = 'light';
+        p2.innerText = 'and I write';
+
+        const h2 = document.createElement('h2');
+        h2.dataset.theme = 'light';
+        h2.innerText = 'software.';
+
+        textContainer.append(p1, h1, p2, h2);
+        homeContainer.append(rayTracerContainer, textContainer);
+        mainContainer.append(homeContainer);
+    };
+
+    const buildProjects = () => 
+    {
+        const projectsContainer = document.createElement('div');
+        projectsContainer.setAttribute('id', 'projects');
+        projectsContainer.dataset.theme = 'light';
+
+        
+
+        projectsContainer.classList.add('hidden');
+        mainContainer.append(projectsContainer);
+    };
+    const buildReferences = () => 
+    {
+        const referencesContainer = document.createElement('div');
+        referencesContainer.setAttribute('id', 'references');
+        referencesContainer.dataset.theme = 'light';
+
+        referencesContainer.classList.add('hidden');
+        mainContainer.append(referencesContainer);
+    };
+    const buildEmployers = () => 
+    {
+        const employersContainer = document.createElement('div');
+        employersContainer.setAttribute('id', 'employers');
+        employersContainer.dataset.theme = 'light';
+
+        employersContainer.classList.add('hidden');
+        mainContainer.append(employersContainer);
+    };
+
+    buildHome();
+    buildProjects();
+    buildReferences();
+    buildEmployers();
 }

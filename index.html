@@ -8,13 +8,13 @@
     <body data-theme='light'>
         <div id="topnav">
             <ul id='nav-list' class='hide-div smooth-trans'>
-                <li><a href="#home">Home</a></li>
+                <li><a href="#" id="home-link">Home</a></li>
                 <li>|</li>
-                <li><a href="#portfolio">Projects</a></li>
+                <li><a href="#" id="projects-link">Projects</a></li>
                 <li>|</li>
-                <li><a href="#references">References</a></li>
+                <li><a href="#" id="references-link">References</a></li>
                 <li>|</li>
-                <li><a href="#contact">Employers</a></li>
+                <li><a href="#" id="employers-link">Employers</a></li>
             </ul>
             <label id="label-theme">
                 <input id="theme-checkbox" type = 'checkbox' checked>
@@ -25,27 +25,18 @@
                 <span id = 'burger'></span>
                 <div id="sidenav">
                     <ul id="nav-list-vertical">
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#portfolio">Projects</a></li>
-                        <li><a href="#references">References</a></li>
-                        <li><a href="#contact">Employers</a></li>
+                        <li><a href="#" id="home-link">Home</a></li>
+                        <li><a href="#" id="projects-link">Projects</a></li>
+                        <li><a href="#" id="references-link">References</a></li>
+                        <li><a href="#" id="employers-link">Employers</a></li>
                     </ul>
                 </div>
             </label> 
         </div>
         <div id="main-container" data-theme="light">
-            <div id="home" data-theme="light">
-                <div id="ray-tracer-screenshot-container"></div>
-                <div id="text-container"> 
-                    <p class='fine-print' data-theme="light">My name is</p> 
-                    <h3 data-theme="light">Bradley Aldridge</h3>
-                    <p class='fine-print alt' data-theme="light">and I write</p> 
-                    <h2 data-theme="light">software.</h2> 
-                </div>
-            </div>
-            <div id="portfolio"></div>
-            <div id="references"></div>
-            <div id="contact"></div>
+        <!--
+            This is built dynamically to get around Github's rule of hosting only a single page.
+        -->
         </div>
         <div id="logo-container" style="bottom: 2vh" title="Open GitHub - New Tab">
             <a href="https://www.github.com/roachcode" target="_blank">

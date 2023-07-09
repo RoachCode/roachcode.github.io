@@ -82,7 +82,7 @@ input:checked ~ #sidenav
     margin: 0%;
     padding: 0%;
     color: transparent;
-    transition: 0.2s;
+    transition: 0.1s;
 }
 #nav-list-vertical li
 {
@@ -91,7 +91,7 @@ input:checked ~ #sidenav
 input:checked ~ #sidenav > #nav-list-vertical a
 {
     color: var(--text-color-dark);
-    transition: 0.2s;
+    transition: 0.1s;
 }
 input:checked ~ #sidenav > #nav-list-vertical li
 {

@@ -33,4 +33,34 @@ function copyEmailToClipboard()
   
     // Alert the copied text
     popUpAlert('Email address copied to clipboard.', 3000);
-} 
+}
+
+function pageHandler()
+{
+
+    const pages = [
+        document.getElementById('home'),
+        document.getElementById('projects'),
+        document.getElementById('references'),
+        document.getElementById('employers')
+    ]
+
+    // Choose the page to display
+    for (page of pages)
+    {
+        if (this.id === `${page.id}-link`)
+        {   
+            page.style.opacity = 0;      
+            if (!page.classList.contains('visible')) { page.classList.add('visible'); }
+            if (page.classList.contains('hidden')) { page.classList.remove('hidden'); }
+
+        }
+        else
+        {       
+            page.style.opacity = 1;   
+            if (!page.classList.contains('hidden')) { page.classList.add('hidden'); }
+            if (page.classList.contains('visible')) { page.classList.remove('visible'); }
+
+        }
+    }
+}
