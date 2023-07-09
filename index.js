@@ -76,18 +76,33 @@ function buildPages()
         projectsContainer.setAttribute('id', 'projects');
         projectsContainer.dataset.theme = 'light';
 
-        
+        const gifContainer = document.createElement('div');
+        gifContainer.setAttribute('id', 'flow-visualizer-gif-container');
 
-        projectsContainer.classList.add('hidden');
+        const textContainer = document.createElement('div');
+        textContainer.setAttribute('id', 'text-container');
+
+        const p1 = document.createElement('p');
+        p1.dataset.theme = 'light';
+        p1.innerText = 
+        `\
+        This image shows a vector field overlayed with a particle emitter. The compass needles show the direction of the flow.\
+        The angles of the needles are calculated from a simplex noise image (similar to classic Perlin noise) to give its pseudo-random gradient.\
+        `
+        textContainer.append(gifContainer, p1);
+        projectsContainer.append(textContainer);
+        projectsContainer.classList.add('hidden'); 
+        projectsContainer.style.opacity = 0;      
         mainContainer.append(projectsContainer);
     };
     const buildReferences = () => 
     {
-        const referencesContainer = document.createElement('div');
+        const referencesContainer = document.createElement('div');        
         referencesContainer.setAttribute('id', 'references');
         referencesContainer.dataset.theme = 'light';
 
         referencesContainer.classList.add('hidden');
+        referencesContainer.style.opacity = 0;
         mainContainer.append(referencesContainer);
     };
     const buildEmployers = () => 
@@ -97,6 +112,7 @@ function buildPages()
         employersContainer.dataset.theme = 'light';
 
         employersContainer.classList.add('hidden');
+        employersContainer.style.opacity = 0;
         mainContainer.append(employersContainer);
     };
 

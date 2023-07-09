@@ -50,7 +50,6 @@ input:checked ~ .slider::before
     transition: 0.4s;
 }
 
-
 [data-theme='light']
 {
     transition: 0.4s;
