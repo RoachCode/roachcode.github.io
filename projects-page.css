@@ -1,16 +1,4 @@
 
-#project-title
-{
-    position: fixed;
-    top: 7vh;
-    left: 0px;
-    text-align: center;
-    width: 100%;
-    letter-spacing: 1vw;
-    font-stretch:extra-expanded;
-    opacity: 80%;
-}
-
 #projects > #text-container
 {
     margin-top: 5vmin;
@@ -18,6 +6,7 @@
     grid-template-columns: 1fr;
     height: calc(100% - 8vmin);
     margin-bottom: 3vmin;
+    -webkit-overflow-scrolling: touch;
 }
 
 #projects .image-footer
@@ -28,6 +17,8 @@
     place-self: center;
     background: radial-gradient(transparent, rgba(128, 128, 128, 0.205));
     border: 1px solid;
+    padding-bottom: 0px;
+    padding-left: 2px;
 }
 
 #projects p
@@ -38,6 +29,7 @@
     background: unset;
     background-color: transparent;
     border: unset;
+    padding-bottom: 4vh;
 }
 
 #projects .p1
@@ -63,12 +55,50 @@
 #projects .p3
 {
     grid-row-start: 4; 
+    padding-top: 4vh;
 }
 
 #projects > #text-container > #noise-gif-container
 {
     grid-row-start: 5;
     background-image: url('loopingSimplexNoise.gif');
+    width: 90%;
+    height: 50vh;
+    background-size: cover;
+    place-self: center;
+}
+
+#projects .p4
+{
+    grid-row-start: 6;
+}
+
+#projects .p5
+{
+    grid-row-start: 7;
+    padding-top: 4vh;
+}
+
+#projects > #text-container > #noise-time-container
+{
+    grid-row-start: 8;
+    background-image: url('noiseOverTime.gif');
+    width: 90%;
+    height: 50vh;
+    background-size: cover;
+    place-self: center;
+}
+
+#projects .p6
+{
+    grid-row-start: 9;
+    padding-top: 4vh;
+}
+
+#projects > #text-container > #game-scene-container
+{
+    grid-row-start: 10;
+    background-image: url('gameScene.gif');
     width: 90%;
     height: 50vh;
     background-size: cover;

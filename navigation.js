@@ -37,7 +37,8 @@ function copyEmailToClipboard()
 
 function pageHandler()
 {
-
+    
+    document.getElementById('project-title').innerText = '';
     const pages = [
         document.getElementById('home'),
         document.getElementById('projects'),
@@ -53,7 +54,6 @@ function pageHandler()
             page.style.opacity = 0;      
             if (!page.classList.contains('visible')) { page.classList.add('visible'); }
             if (page.classList.contains('hidden')) { page.classList.remove('hidden'); }
-
         }
         else
         {       
@@ -61,6 +61,11 @@ function pageHandler()
             if (!page.classList.contains('hidden')) { page.classList.add('hidden'); }
             if (page.classList.contains('visible')) { page.classList.remove('visible'); }
 
+        }
+        if (this.id === 'projects-link')
+        {
+            const title = document.getElementById('project-title');
+            title.innerText = "Graphics - Flow Vectors on a Grid";
         }
     }
 }

@@ -76,8 +76,8 @@ function buildPages()
 
     const buildProjects = () => 
     {
-        const title = document.createElement('div');
-        title.setAttribute('id', 'project-title')
+
+        const title = document.getElementById('project-title');
         title.innerText = "Graphics - Flow Vectors on a Grid";
 
         const projectsContainer = document.createElement('div');
@@ -89,7 +89,6 @@ function buildPages()
 
         const textContainer = document.createElement('div');
         textContainer.setAttribute('id', 'text-container');
-
 
         const p1 = document.createElement('p');
         p1.classList.add('p1');
@@ -103,7 +102,6 @@ function buildPages()
 
         const p2 = document.createElement('p');
         p2.classList.add('p2', 'fine-print', 'image-footer');
-        p2.dataset.theme = 'light';
         p2.innerText = 
         `\
         This image shows a vector field overlayed with a particle emitter. The compass needles show the direction of the flow.\
@@ -119,16 +117,59 @@ function buildPages()
         Creating a static image is fairly easy - 2D noise is needed, and you can use simple coordinates as the inputs for the noise.\
         Looping the noise was a bit more difficult, ultimately needing 4D noise.
         The noise that would make up the image had to be mapped to a cylinder first, so that the X coordinate would be circular (end up back where it started)/
-        Then, this cylinder had to be bent together at the end, creating a torus, to give a final image that can loop in any 2D direction.
+        Then, this cylinder had to be bent together at the end, creating a torus, to give a final image that can loop in any 2D direction.\
         `;
 
         const gifContainer2 = document.createElement('div');
         gifContainer2.setAttribute('id', 'noise-gif-container');
 
-        textContainer.append(gifContainer1, p1, p2, p3, gifContainer2);
-        projectsContainer.append(title, textContainer);
+        const p4 = document.createElement('p');
+        p4.classList.add('p4', 'fine-print', 'image-footer');
+        p4.innerText = 
+        `\
+        This image shows Simplex noise looping over the X and Y axis. It's worth nothing that one of the dimensions can be substituted\
+        for time, allowing permutation of the noise - but if you're creating tileable noise, you'll run out of dimensions quickly if your noise engine\
+        can't support 5+ dimensions.\
+        `;
+
+        const p5 = document.createElement('p');
+        p5.classList.add('p5');
+        p5.innerText = 
+        `\
+        The following image uses the same Simplex noise width an extra modifier added for the time dimensions. \
+        As you can see it doesn't loop cleanly - for now my workaround is to reverse the animation after some time. \
+        Currently the engine only supports up to 4D noise.
+        `;
+
+        const gifContainer3 = document.createElement('div');
+        gifContainer3.setAttribute('id', 'noise-time-container');
+
+        const p6 = document.createElement('p');
+        p6.classList.add('p6');
+        p6.innerText = 
+        `\
+        Here's the noise in action:
+        `;
+
+        const gifContainer4 = document.createElement('div');
+        gifContainer4.setAttribute('id', 'game-scene-container');
+        
+        textContainer.append(gifContainer1, p1, p2, p3, gifContainer2, p4, p5, gifContainer3, p6, gifContainer4);
+        projectsContainer.append(textContainer);
         projectsContainer.classList.add('hidden');      
         mainContainer.append(projectsContainer);
+
+        textContainer.addEventListener('scroll', () => 
+        {
+            const gif1HiddenValue = gifContainer1.offsetTop + gifContainer1.clientHeight;
+            const gif2HiddenValue = gifContainer2.offsetTop + gifContainer2.clientHeight;
+            const gif3HiddenValue = gifContainer3.offsetTop + gifContainer3.clientHeight;
+            const gif4HiddenValue = gifContainer4.offsetTop + gifContainer4.clientHeight;
+            if (textContainer.scrollTop < gif1HiddenValue) { title.innerText = "Graphics - Flow Vectors on a Grid"; }
+            else if (textContainer.scrollTop < gif2HiddenValue) { title.innerText = "Graphics - Tileable Simplex (Perlin) Noise"; }
+            else if (textContainer.scrollTop < gif3HiddenValue) { title.innerText = "Graphics - Tileable Simplex Over Time"; }
+            else if (textContainer.scrollTop < gif4HiddenValue) { title.innerText = "Graphics - Scene with Noise"; }
+        });
     };
     const buildReferences = () => 
     {
@@ -154,7 +195,8 @@ function buildPages()
     buildProjects();
     buildReferences();
     buildEmployers();
-    buildHome();    
+    buildHome();
 
+    document.getElementById('project-title').innerText = '';
     mainContainer.style.opacity = 1;
 }
