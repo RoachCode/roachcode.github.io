@@ -104,3 +104,8 @@
     background-size: cover;
     place-self: center;
 }
+
+#projects .p7
+{
+    grid-row-start: 11;
+}

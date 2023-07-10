@@ -95,7 +95,7 @@ function buildPages()
         p1.innerText = 
         `\
         I've been working on a flow simulator to incorporate into 2D games. While a true fluid simulation would take into account density, viscosity etc., \
-        This simpler approximation uses a predefined grid of velocities that are multiplied with the current velocity of each particle.
+        this simpler approximation uses a predefined grid of velocities that are multiplied with the current velocity of each particle.
         Having control of the flow field allows flexibility in how this can be used - randomly placed pulses with textures applied to the particles \
         can be used for floating/falling objects, or a static emitter can form a stream for water or lightning.\
         `;
@@ -153,22 +153,38 @@ function buildPages()
 
         const gifContainer4 = document.createElement('div');
         gifContainer4.setAttribute('id', 'game-scene-container');
+
+        const p7 = document.createElement('p');
+        p7.classList.add('p7', 'fine-print', 'image-footer');
+        p7.innerText = 
+        `\
+        In this image you can see the tilemap scene and the noise overlays. This is being written using the SFML library.\
+        `;
         
-        textContainer.append(gifContainer1, p1, p2, p3, gifContainer2, p4, p5, gifContainer3, p6, gifContainer4);
+        const p8 = document.createElement('p');
+        p7.classList.add('p8');
+
+
+
+
+        textContainer.append(gifContainer1, p1, p2, p3, gifContainer2, p4, p5, gifContainer3, p6, gifContainer4, p7);
         projectsContainer.append(textContainer);
         projectsContainer.classList.add('hidden');      
         mainContainer.append(projectsContainer);
 
         textContainer.addEventListener('scroll', () => 
         {
-            const gif1HiddenValue = gifContainer1.offsetTop + gifContainer1.clientHeight;
-            const gif2HiddenValue = gifContainer2.offsetTop + gifContainer2.clientHeight;
-            const gif3HiddenValue = gifContainer3.offsetTop + gifContainer3.clientHeight;
-            const gif4HiddenValue = gifContainer4.offsetTop + gifContainer4.clientHeight;
-            if (textContainer.scrollTop < gif1HiddenValue) { title.innerText = "Graphics - Flow Vectors on a Grid"; }
-            else if (textContainer.scrollTop < gif2HiddenValue) { title.innerText = "Graphics - Tileable Simplex (Perlin) Noise"; }
-            else if (textContainer.scrollTop < gif3HiddenValue) { title.innerText = "Graphics - Tileable Simplex Over Time"; }
-            else if (textContainer.scrollTop < gif4HiddenValue) { title.innerText = "Graphics - Scene with Noise"; }
+            if (projectsContainer.classList.contains('visible'))
+            {
+                const gif1HiddenValue = gifContainer1.offsetTop + gifContainer1.clientHeight;
+                const gif2HiddenValue = gifContainer2.offsetTop + gifContainer2.clientHeight;
+                const gif3HiddenValue = gifContainer3.offsetTop + gifContainer3.clientHeight;
+                const gif4HiddenValue = gifContainer4.offsetTop + gifContainer4.clientHeight;
+                if (textContainer.scrollTop < gif1HiddenValue) { title.innerText = "Graphics - Flow Vectors on a Grid"; }
+                else if (textContainer.scrollTop < gif2HiddenValue) { title.innerText = "Graphics - Tileable Simplex (Perlin) Noise"; }
+                else if (textContainer.scrollTop < gif3HiddenValue) { title.innerText = "Graphics - Tileable Simplex Over Time"; }
+                else if (textContainer.scrollTop < gif4HiddenValue) { title.innerText = "Graphics - Scene with Noise"; }
+            }
         });
     };
     const buildReferences = () => 
