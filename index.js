@@ -127,7 +127,7 @@ function buildPages()
         p4.classList.add('p4', 'fine-print', 'image-footer');
         p4.innerText = 
         `\
-        This image shows Simplex noise looping over the X and Y axis. It's worth nothing that one of the dimensions can be substituted\
+        This image shows Simplex noise looping over the X and Y axis. It's worth noting that one of the dimensions can be substituted\
         for time, allowing permutation of the noise - but if you're creating tileable noise, you'll run out of dimensions quickly if your noise engine\
         can't support 5+ dimensions.\
         `;
@@ -138,7 +138,7 @@ function buildPages()
         `\
         The following image uses the same Simplex noise width an extra modifier added for the time dimensions. \
         As you can see it doesn't loop cleanly - for now my workaround is to reverse the animation after some time. \
-        Currently the engine only supports up to 4D noise.
+        Currently the engine only supports up to 4D noise. The colour values here are clamped to give sharper edges.
         `;
 
         const gifContainer3 = document.createElement('div');
@@ -162,12 +162,27 @@ function buildPages()
         `;
         
         const p8 = document.createElement('p');
-        p7.classList.add('p8');
+        p8.classList.add('p8');
+        p8.innerText =
+        `\
+        Moving on to something a little different.
+        I've been working through a wonderful course called Ray Tracing in One Weekend by Peter Shirley (see References tab).\
+        This is a very low level implementation - no textures or models are used, all objects in the scene are drawn using scattering and surface normals.\
+        I've been adapting the architechture to work with SFML (OpenGL) and plan on adding caustics before moving on to different shapes, lighting, and speed improvements.
+        `;
 
+        const imageContainer1 = document.createElement('div');
+        imageContainer1.setAttribute('id', 'ray-tracer-container');
 
+        const p9 = document.createElement('p');
+        p9.classList.add('p9', 'fine-print', 'image-footer');
+        p9.innerText = 
+        `\
+        Here you can see a raytraced scene of randomly populated spheres with three types of scattering - lambertian (diffuse), \
+        dialectric (glass), and reflective (metal).\
+        `;
 
-
-        textContainer.append(gifContainer1, p1, p2, p3, gifContainer2, p4, p5, gifContainer3, p6, gifContainer4, p7);
+        textContainer.append(gifContainer1, p1, p2, p3, gifContainer2, p4, p5, gifContainer3, p6, gifContainer4, p7, p8, imageContainer1, p9);
         projectsContainer.append(textContainer);
         projectsContainer.classList.add('hidden');      
         mainContainer.append(projectsContainer);
@@ -180,10 +195,12 @@ function buildPages()
                 const gif2HiddenValue = gifContainer2.offsetTop + gifContainer2.clientHeight;
                 const gif3HiddenValue = gifContainer3.offsetTop + gifContainer3.clientHeight;
                 const gif4HiddenValue = gifContainer4.offsetTop + gifContainer4.clientHeight;
+                const image1HiddenValue = imageContainer1.offsetTop + imageContainer1.clientHeight;
                 if (textContainer.scrollTop < gif1HiddenValue) { title.innerText = "Graphics - Flow Vectors on a Grid"; }
                 else if (textContainer.scrollTop < gif2HiddenValue) { title.innerText = "Graphics - Tileable Simplex (Perlin) Noise"; }
                 else if (textContainer.scrollTop < gif3HiddenValue) { title.innerText = "Graphics - Tileable Simplex Over Time"; }
                 else if (textContainer.scrollTop < gif4HiddenValue) { title.innerText = "Graphics - Scene with Noise"; }
+                else if (textContainer.scrollTop < image1HiddenValue) { title.innerText = "Graphics - Raytracer"; }
             }
         });
     };
@@ -193,6 +210,31 @@ function buildPages()
         referencesContainer.setAttribute('id', 'references');
         referencesContainer.dataset.theme = 'light';
 
+        const textContainer = document.createElement('div');
+        textContainer.setAttribute('id', 'text-container');
+
+        const oneWeekendLink = document.createElement('a');
+        oneWeekendLink.setAttribute('href', 'https://raytracing.github.io/');
+        oneWeekendLink.dataset.theme = 'light';
+        oneWeekendLink.innerText = 'Ray Tracing Series by Peter Shirley';
+        oneWeekendLink.append(document.createElement('br'));
+
+        const sfmlLink = document.createElement('a');
+        sfmlLink.setAttribute('href', 'https://www.sfml-dev.org/');
+        sfmlLink.dataset.theme = 'light';
+        sfmlLink.innerText = 'SFML - Simple and Fast Multimedia Library';
+        sfmlLink.append(document.createElement('br'));
+
+        const simplexLink = document.createElement('a');
+        simplexLink.setAttribute('href', 'https://github.com/deerel/OpenSimplexNoise');
+        simplexLink.dataset.theme = 'light';
+        simplexLink.innerText = 'C++ Port of OpenSimplexNoise by Rickard Lundberg';
+        simplexLink.append(document.createElement('br'));
+
+        
+        
+        textContainer.append(oneWeekendLink, sfmlLink, simplexLink);
+        referencesContainer.append(textContainer);
         referencesContainer.classList.add('hidden');
         mainContainer.append(referencesContainer);
     };

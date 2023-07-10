@@ -1,0 +1,13 @@
+#references a
+{
+    width: fit-content;
+    font-size: 3vmin;
+    letter-spacing: 0.25vmin;
+    padding-bottom: 4vmin;
+    padding-left: 4vmin;
+}
+
+#references #text-container
+{
+    display: block;
+}

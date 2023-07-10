@@ -6,7 +6,6 @@
     grid-template-columns: 1fr;
     height: calc(100% - 8vmin);
     margin-bottom: 3vmin;
-    -webkit-overflow-scrolling: touch;
 }
 
 #projects .image-footer
@@ -19,6 +18,7 @@
     border: 1px solid;
     padding-bottom: 0px;
     padding-left: 2px;
+    text-align: center;
 }
 
 #projects p
@@ -26,6 +26,7 @@
     font-size: 2vh;
     width: 95%;
     place-self: center;
+    text-align: left;
     background: unset;
     background-color: transparent;
     border: unset;
@@ -108,4 +109,25 @@
 #projects .p7
 {
     grid-row-start: 11;
+}
+
+#projects .p8
+{
+    grid-row-start: 12;
+    padding-top: 4vh;
+}
+
+#projects > #text-container > #ray-tracer-container
+{
+    grid-row-start: 13;
+    background-image: url('rayTracerScreenshot.png');
+    width: 90%;
+    height: 50vh;
+    background-size: cover;
+    place-self: center;
+}
+
+#projects .p9
+{
+    grid-row-start: 14;
 }
