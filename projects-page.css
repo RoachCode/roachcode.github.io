@@ -131,3 +131,11 @@
 {
     grid-row-start: 14;
 }
+
+#projects .p10
+{
+    display: block;
+    text-align: right;
+    padding-top: 4vmin;
+    padding-bottom: 0px;
+}

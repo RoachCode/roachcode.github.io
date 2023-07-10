@@ -182,7 +182,11 @@ function buildPages()
         dialectric (glass), and reflective (metal).\
         `;
 
-        textContainer.append(gifContainer1, p1, p2, p3, gifContainer2, p4, p5, gifContainer3, p6, gifContainer4, p7, p8, imageContainer1, p9);
+        const p10 = document.createElement('p');
+        p10.classList.add('p10', 'fine-print');
+        p10.innerText = '-end of page-'
+
+        textContainer.append(gifContainer1, p1, p2, p3, gifContainer2, p4, p5, gifContainer3, p6, gifContainer4, p7, p8, imageContainer1, p9, p10);
         projectsContainer.append(textContainer);
         projectsContainer.classList.add('hidden');      
         mainContainer.append(projectsContainer);
