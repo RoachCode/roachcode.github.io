@@ -53,7 +53,7 @@ function buildPages()
         const p1 = document.createElement('p');
         p1.classList.add('fine-print');
         p1.dataset.theme = 'light';
-        p1.innerText = 'My name is';
+        p1.innerText = 'Hello! My name is';
 
         const h1 = document.createElement('h3');
         h1.dataset.theme = 'light';
@@ -193,7 +193,7 @@ function buildPages()
 
         textContainer.addEventListener('scroll', () => 
         {
-            if (projectsContainer.classList.contains('visible'))
+            if (!projectsContainer.classList.contains('hidden'))
             {
                 const gif1HiddenValue = gifContainer1.offsetTop + gifContainer1.clientHeight;
                 const gif2HiddenValue = gifContainer2.offsetTop + gifContainer2.clientHeight;
@@ -235,8 +235,6 @@ function buildPages()
         simplexLink.innerText = 'C++ Port of OpenSimplexNoise by Rickard Lundberg';
         simplexLink.append(document.createElement('br'));
 
-        
-        
         textContainer.append(oneWeekendLink, sfmlLink, simplexLink);
         referencesContainer.append(textContainer);
         referencesContainer.classList.add('hidden');
@@ -248,9 +246,28 @@ function buildPages()
         employersContainer.setAttribute('id', 'employers');
         employersContainer.dataset.theme = 'light';
 
+        const title = document.getElementById('project-title');
+        title.innerText = 'Welcome to the employer portal';
+
+        const textContainer = document.createElement('div');
+        textContainer.setAttribute('id', 'text-container');
+        textContainer.dataset.theme = 'light';
+
+        var a1 = document.createElement('a');
+        a1.classList.add('a1');
+        a1.href = 'resume.pdf';
+        a1.download = 'resume.pdf';
+
+        a1.dataset.theme = 'light';
+        a1.innerText = 'Click to download resume (pdf)'
+        a1.append(document.createElement('br'));
+
+
         employersContainer.classList.add('hidden');
         employersContainer.style.opacity = 0;
-        mainContainer.append(employersContainer);
+        textContainer.append(a1);
+        employersContainer.append(textContainer)
+        mainContainer.append(title, employersContainer);
     };
 
 

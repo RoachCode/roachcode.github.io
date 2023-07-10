@@ -1,0 +1,18 @@
+#employers > #text-container
+{
+    display: block;
+}
+
+#employers a
+{
+    width: fit-content;
+    font-size: 3vmin;
+    letter-spacing: 0.25vmin;
+    padding-bottom: 4vmin;
+    padding-left: 4vmin;
+}
+
+#employers .a1
+{
+    position: relative;
+}
