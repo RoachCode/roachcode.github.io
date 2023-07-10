@@ -97,3 +97,35 @@ input:checked ~ #sidenav > #nav-list-vertical li
 {
     pointer-events: all;   
 }
+
+#logo-container
+{
+    right: 2vh;
+    bottom: 2vh;
+    width: 6vh;
+    height: 6vh;
+    position: fixed;
+    background-color: var(--primary-color-light);
+    border-radius: 50%;
+    outline-offset: -0.15vh;
+    outline: 0.3vh solid var(--primary-color-dark);
+    cursor: pointer;
+}
+#gh-logo
+{
+    position: absolute;
+    width: 6vh;
+    height: 6vh;
+}
+#li-logo
+{
+    position: absolute;
+    width: 6vh;
+    height: 6vh;
+}
+#em-logo
+{
+    position: absolute;
+    width: 6vh;
+    height: 6vh;
+}

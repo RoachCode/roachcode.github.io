@@ -17,7 +17,7 @@ function toggleTheme()
     else
     {
         document.body.dataset.theme = 'light';
-        if (wheel.classList.contains('rotate-in')) { wheel.classList.remove('rotate-in') }        
+        if (wheel.classList.contains('rotate-in')) { wheel.classList.remove('rotate-in') }
         wheel.classList.add('rotate-out');
     }
     for (ele of themedElements)

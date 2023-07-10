@@ -1,6 +1,8 @@
 @import "alert.css";
 @import "dark-mode-toggle.css";
 @import "navigation.css";
+@import "home-page.css";
+@import "projects-page.css";
 
 :root 
 {
@@ -19,14 +21,14 @@ body
 {
     font-family: "nunito", sans-serif;
     font-size: 4vmax;
-    height: 100vh;
-    width: 100vw;
+
     margin: 0px;
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;  /* Firefox */    
     overflow: hidden;
     transition: 0.4s ease-in-out forwards;
 }
+
 body::-webkit-scrollbar { 
     display: none;  /* Safari and Chrome */
 }
@@ -76,89 +78,6 @@ input
     display: none;  /* Safari and Chrome */
 }
 
-#home
-{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-}
-#home > #ray-tracer-screenshot-container
-{
-    position:absolute;
-    background-image: url('rayTracerScreenshot.png');
-    background-size: cover;
-    background-position: center;
-    width: 100%;
-    height: 100%;
-    opacity: 20%;
-    top: 0px;
-    z-index: -6;
-}
-#home > #text-container h2
-{
-    grid-row-start: 4;
-    grid-column-start: 2;
-    margin: 0px;
-    margin-left: 1vmin;
-    margin-top: -1.4vmax;
-}
-#home > #text-container p
-{
-    grid-row-start: 1;
-    grid-column-start: 2;
-    align-self: end;
-    margin: 0px;
-}
-#home > #text-container .alt
-{
-    grid-column-start: 2 !important;
-    grid-row-start: 3 !important;
-}
-#home > #text-container h3
-{
-    margin: 0px;
-    grid-row-start: 2;
-    grid-column-start: 2;
-    margin-left: 1vmin;
-}
-
-#projects > #text-container
-{
-    margin-top: 5vmin;
-    grid-template-columns: 1fr;
-    grid-template-rows: 8fr 1fr;
-
-    row-gap: 1vmin;
-    height: calc(100% - 8vmin);
-    margin-bottom: 3vmin;
-}
-#projects p
-{
-    grid-row-start: 2;
-    font-size: 2vh;
-    width: 80%;
-    place-self: center;
-}
-#projects > #text-container > #flow-visualizer-gif-container
-{
-    grid-row-start: 1;
-    background-image: url('loopingFlowVisualizer.gif');
-    width: 90%;
-    height: 100%;
-    background-size: cover;
-    place-self: center;
-}
-
-/*
-#references
-{
-
-}
-#employers
-{
-
-}
-*/
 #text-container
 {
     display: grid;
@@ -177,38 +96,6 @@ input
 
 #text-container::-webkit-scrollbar { 
     display: none;  /* Safari and Chrome */
-}
-
-#logo-container
-{
-    right: 2vh;
-    bottom: 2vh;
-    width: 6vh;
-    height: 6vh;
-    position: fixed;
-    background-color: var(--primary-color-light);
-    border-radius: 50%;
-    outline-offset: -0.15vh;
-    outline: 0.3vh solid var(--primary-color-dark);
-    cursor: pointer;
-}
-#gh-logo
-{
-    position: absolute;
-    width: 6vh;
-    height: 6vh;
-}
-#li-logo
-{
-    position: absolute;
-    width: 6vh;
-    height: 6vh;
-}
-#em-logo
-{
-    position: absolute;
-    width: 6vh;
-    height: 6vh;
 }
 
 .fine-print

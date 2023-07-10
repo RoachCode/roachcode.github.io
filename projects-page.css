@@ -1,0 +1,76 @@
+
+#project-title
+{
+    position: fixed;
+    top: 7vh;
+    left: 0px;
+    text-align: center;
+    width: 100%;
+    letter-spacing: 1vw;
+    font-stretch:extra-expanded;
+    opacity: 80%;
+}
+
+#projects > #text-container
+{
+    margin-top: 5vmin;
+    grid-auto-rows: max-content;
+    grid-template-columns: 1fr;
+    height: calc(100% - 8vmin);
+    margin-bottom: 3vmin;
+}
+
+#projects .image-footer
+{
+
+    font-size: 1.75vh;
+    width: 80%;
+    place-self: center;
+    background: radial-gradient(transparent, rgba(128, 128, 128, 0.205));
+    border: 1px solid;
+}
+
+#projects p
+{
+    font-size: 2vh;
+    width: 95%;
+    place-self: center;
+    background: unset;
+    background-color: transparent;
+    border: unset;
+}
+
+#projects .p1
+{
+    grid-row-start: 1;
+}
+
+#projects > #text-container > #flow-visualizer-gif-container
+{
+    grid-row-start: 2;
+    background-image: url('loopingFlowVisualizer.gif');
+    width: 90%;
+    height: 50vh;
+    background-size: cover;
+    place-self: center;
+}
+
+#projects .p2
+{
+    grid-row-start: 3;    
+}
+
+#projects .p3
+{
+    grid-row-start: 4; 
+}
+
+#projects > #text-container > #noise-gif-container
+{
+    grid-row-start: 5;
+    background-image: url('loopingSimplexNoise.gif');
+    width: 90%;
+    height: 50vh;
+    background-size: cover;
+    place-self: center;
+}
