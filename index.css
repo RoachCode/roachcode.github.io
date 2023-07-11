@@ -87,7 +87,7 @@ input
     z-index: -1;
     cursor: default;
     outline: 0.5vh solid var(--text-color-dark);
-    overflow-x: hidden;
+    overflow: hidden;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch; /* Non-standard, but I'm slightly desperate. */
 }
