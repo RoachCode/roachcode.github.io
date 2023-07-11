@@ -270,11 +270,11 @@ function buildPages()
         mainContainer.append(title, employersContainer);
     };
 
-    buildHome();
+
     buildProjects();
     buildReferences();
     buildEmployers();
-
+    buildHome();
 
     document.getElementById('project-title').innerText = '';
     mainContainer.style.opacity = 1;
