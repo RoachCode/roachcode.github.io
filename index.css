@@ -22,7 +22,7 @@ html
 body
 {
     font-family: "nunito", sans-serif;
-    font-size: 4vmax;
+    font-size: 3vmax;
 
     margin: 0px;
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
@@ -89,11 +89,7 @@ input
     outline: 0.5vh solid var(--text-color-dark);
     overflow: hidden;
     overflow-y: scroll;
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none;  /* Firefox */    
-}
-#main-container::-webkit-scrollbar { 
-    display: none;  /* Safari and Chrome */
+    -webkit-overflow-scrolling: touch; /* Non-standard, but I'm slightly desperate. */
 }
 
 #text-container
