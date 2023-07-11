@@ -87,7 +87,8 @@ input
     z-index: -1;
     cursor: default;
     outline: 0.5vh solid var(--text-color-dark);
-    overflow: scroll;
+    overflow: hidden;
+    overflow-y: scroll;
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;  /* Firefox */    
 }
