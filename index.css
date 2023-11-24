@@ -90,6 +90,7 @@ input
     overflow: hidden;
 
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    -webkit-overflow-scrolling: none;
     scrollbar-width: none;  /* Firefox */
 }
 #main-container::-webkit-scrollbar { 
