@@ -82,8 +82,8 @@ input
     position: absolute;
     top: 17.5vh;
     left: 10.5vh;
-    bottom: 10.5vh;
-    right: 10.5vh;
+    bottom: 10.5vmin;
+    right: 10.5vmin;
     z-index: -1;
     cursor: default;
     outline: 0.5vh solid var(--text-color-dark);
@@ -107,7 +107,7 @@ input
     height: calc(100% - 2vmin);
     margin: 1vmin;
     background-color: transparent;
-
+    scrollbar-width: none;  /* Firefox */
     overflow: scroll;
     -webkit-overflow-scrolling: touch;
 }
