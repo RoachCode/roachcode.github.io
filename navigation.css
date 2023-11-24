@@ -86,7 +86,7 @@ input:checked ~ #sidenav
 }
 #nav-list-vertical li
 {
-    left: 12vh;
+    left: 12vmin;
 }
 input:checked ~ #sidenav > #nav-list-vertical a
 {
