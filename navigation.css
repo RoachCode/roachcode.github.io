@@ -10,8 +10,8 @@
     font-size: 3.5vh;
     margin: 0%;
     padding: 0%;
-    padding-left: 12vh;
-    width: calc(100vw - 24vh);
+    padding-left: 12vmin;
+    width: calc(100vmax - 24vmin);
     height: 7vh;
     display: flex;
     justify-content: space-evenly;
@@ -100,32 +100,32 @@ input:checked ~ #sidenav > #nav-list-vertical li
 
 #logo-container
 {
-    right: 2vh;
-    bottom: 2vh;
-    width: 6vh;
-    height: 6vh;
+    right: 2vmin;
+    bottom: 2vmin;
+    width: 6vmin;
+    height: 6vmin;
     position: fixed;
     background-color: var(--primary-color-light);
     border-radius: 50%;
-    outline-offset: -0.15vh;
-    outline: 0.3vh solid var(--primary-color-dark);
+    outline-offset: -0.15vmin;
+    outline: 0.3vmin solid var(--primary-color-dark);
     cursor: pointer;
 }
 #gh-logo
 {
     position: absolute;
-    width: 6vh;
-    height: 6vh;
+    width: 6vmin;
+    height: 6vmin;
 }
 #li-logo
 {
     position: absolute;
-    width: 6vh;
-    height: 6vh;
+    width: 6vmin;
+    height: 6vmin;
 }
 #em-logo
 {
     position: absolute;
-    width: 6vh;
-    height: 6vh;
+    width: 6vmin;
+    height: 6vmin;
 }
