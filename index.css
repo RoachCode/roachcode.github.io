@@ -87,14 +87,13 @@ input
     z-index: -1;
     cursor: default;
     outline: 0.5vh solid var(--text-color-dark);
-    /*
     overflow: hidden;
     overflow-y: scroll;
-    -ms-overflow-style: none;
-    scrollbar-width: none;  
-    */
-    overflow: scroll;
-    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */    
+}
+#main-container::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
 }
 
 #text-container
@@ -107,10 +106,9 @@ input
     height: calc(100% - 2vmin);
     margin: 1vmin;
     background-color: transparent;
-    overflow: hidden;
-    overflow-y: hidden;
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none;  /* Firefox */    
+
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
 }
 
 #text-container::-webkit-scrollbar { 
