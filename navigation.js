@@ -65,12 +65,12 @@ function pageHandler()
         if (this.id === 'projects-link')
         {
             const title = document.getElementById('project-title');
-            title.innerText = "Graphics - Flow Vectors on a Grid";
+            title.innerText = "Flow on a Grid";
         }
         if (this.id === 'employers-link')
         {
             const title = document.getElementById('project-title');
-            title.innerText = 'Welcome';
+            title.innerText = '';
         }
     }
 }

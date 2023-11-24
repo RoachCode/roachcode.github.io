@@ -78,7 +78,7 @@ function buildPages()
     {
 
         const title = document.getElementById('project-title');
-        title.innerText = "Graphics - Flow Vectors on a Grid";
+        title.innerText = "Flow Vectors on a Grid";
 
         const projectsContainer = document.createElement('div');
         projectsContainer.setAttribute('id', 'projects');
@@ -200,11 +200,11 @@ function buildPages()
                 const gif3HiddenValue = gifContainer3.offsetTop + gifContainer3.clientHeight;
                 const gif4HiddenValue = gifContainer4.offsetTop + gifContainer4.clientHeight;
                 const image1HiddenValue = imageContainer1.offsetTop + imageContainer1.clientHeight;
-                if (textContainer.scrollTop < gif1HiddenValue) { title.innerText = "Graphics - Flow Vectors on a Grid"; }
-                else if (textContainer.scrollTop < gif2HiddenValue) { title.innerText = "Graphics - Tileable Simplex Noise"; }
-                else if (textContainer.scrollTop < gif3HiddenValue) { title.innerText = "Graphics - Tileable Simplex Over Time"; }
-                else if (textContainer.scrollTop < gif4HiddenValue) { title.innerText = "Graphics - Scene with Noise"; }
-                else if (textContainer.scrollTop < image1HiddenValue) { title.innerText = "Graphics - Raytracer with Spheres"; }
+                if (textContainer.scrollTop < gif1HiddenValue) { title.innerText = "Flow Vectors on a Grid"; }
+                else if (textContainer.scrollTop < gif2HiddenValue) { title.innerText = "Tileable Simplex Noise"; }
+                else if (textContainer.scrollTop < gif3HiddenValue) { title.innerText = "Simplex Over Time"; }
+                else if (textContainer.scrollTop < gif4HiddenValue) { title.innerText = "Scene with Noise"; }
+                else if (textContainer.scrollTop < image1HiddenValue) { title.innerText = "Raytracer with Spheres"; }
             }
         });
     };

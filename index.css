@@ -64,9 +64,9 @@ input
 
 #project-title
 {
-    font-size: 3.5vh;
+    font-size: 3.5vmax;
     position: fixed;
-    top: 7vh;
+    top: 8vh;
     left: 0px;
     text-align: center;
     width: 100%;
@@ -81,7 +81,7 @@ input
 {
     background-color: rgba(255, 166, 0, 0.07);
     position: absolute;
-    top: 17.5vh;
+    top: calc(10.5vmin + 7vh);
     left: 10.5vmin;
     bottom: 10.5vmin;
     right: 10.5vmin;
