@@ -255,11 +255,11 @@ function buildPages()
 
         var a1 = document.createElement('a');
         a1.classList.add('a1');
-        a1.href = 'resume.pdf';
-        a1.download = 'resume.pdf';
+        //a1.href = 'resume.pdf';
+        //a1.download = 'resume.pdf';
 
         a1.dataset.theme = 'light';
-        a1.innerText = 'Click to download resume (pdf)'
+        a1.innerText = 'Click to download resume (pdf) [Currently Disabled]'
         a1.append(document.createElement('br'));
 
 
