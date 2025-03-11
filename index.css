@@ -23,7 +23,7 @@ body
 {
     font-family: "nunito", sans-serif;
     font-size: 4vmax;
-
+    display: block;
     margin: 0px;
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;  /* Firefox */    
