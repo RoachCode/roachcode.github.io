@@ -80,7 +80,7 @@ input
 #main-container
 {
     background-color: rgba(255, 166, 0, 0.07);
-    position: fixed;
+    position: absolute;
     top: calc(10.5vmin + 7vh);
     left: 10.5vmin;
     bottom: 10.5vmin;
@@ -89,7 +89,7 @@ input
     cursor: default;
     outline: 0.5vh solid var(--text-color-dark);
     overflow: hidden;
-    -moz-overflow: scroll;
+    -moz-overflow: hidden;
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     -webkit-overflow-scrolling: none;
     scrollbar-width: none;  /* Firefox */
