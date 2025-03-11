@@ -7,7 +7,7 @@
 
 #home > #ray-tracer-screenshot-container
 {
-    position:absolute;
+    position: absolute;
     background-image: url('rayTracerScreenshot.png');
     background-size: cover;
     background-position: center;
