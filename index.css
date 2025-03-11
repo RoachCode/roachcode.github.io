@@ -89,7 +89,7 @@ input
     cursor: default;
     outline: 0.5vh solid var(--text-color-dark);
     overflow: hidden;
-    -moz-overflow: hidden;
+    -moz-overflow: scroll;
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     -webkit-overflow-scrolling: none;
     scrollbar-width: none;  /* Firefox */
