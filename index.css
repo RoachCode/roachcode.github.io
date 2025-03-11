@@ -80,7 +80,7 @@ input
 #main-container
 {
     background-color: rgba(255, 166, 0, 0.07);
-    position: absolute;
+    position: fixed;
     top: calc(10.5vmin + 7vh);
     left: 10.5vmin;
     bottom: 10.5vmin;

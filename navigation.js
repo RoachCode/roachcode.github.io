@@ -29,7 +29,7 @@ function toggleTheme()
 function copyEmailToClipboard() 
 {
      // Copy the text inside the text field
-    navigator.clipboard.writeText('roachcode@gmail.com');
+    navigator.clipboard.writeText('brad.aldridge.work@gmail.com');
   
     // Alert the copied text
     popUpAlert('Email address copied to clipboard.', 3000);
