@@ -1,7 +1,5 @@
-/**
- * Toggles between dark mode and light mode.
- * Changes the body.dataset.theme attribute between 'dark' and 'light'
- */
+//import { popUpAlert } from "./alert.js"
+
 function toggleTheme()
 {
     const checkbox = document.getElementById('theme-checkbox');
@@ -28,16 +26,12 @@ function toggleTheme()
 
 function copyEmailToClipboard() 
 {
-     // Copy the text inside the text field
     navigator.clipboard.writeText('brad.aldridge.work@gmail.com');
-  
-    // Alert the copied text
     popUpAlert('Email address copied to clipboard.', 3000);
 }
 
 function pageHandler()
 {
-    
     document.getElementById('project-title').innerText = '';
     const pages = [
         document.getElementById('home'),
@@ -62,15 +56,18 @@ function pageHandler()
             if (page.classList.contains('visible')) { page.classList.remove('visible'); }
 
         }
+        // Create titles
         if (this.id === 'projects-link')
         {
             const title = document.getElementById('project-title');
-            title.innerText = "Flow on a Grid";
+            title.innerText = "Flow on an Angle Grid";
         }
-        if (this.id === 'employers-link')
+        else if (this.id === 'employers-link')
         {
             const title = document.getElementById('project-title');
             title.innerText = '';
         }
     }
 }
+
+//export { pageHandler, toggleTheme, copyEmailToClipboard };
