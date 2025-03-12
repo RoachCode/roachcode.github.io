@@ -51,6 +51,7 @@
 #noise-time-container           { background-image: url('noiseOverTime.gif'); }
 #game-scene-container           { background-image: url('gameScene.gif'); }
 #ray-tracer-container           { background-image: url('rayTracerScreenshot.png'); }
+#shader-container               { background-image: url('gameSceneShader.gif'); }
 
 #projects .end
 {

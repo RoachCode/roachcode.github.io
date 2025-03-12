@@ -164,6 +164,21 @@ function buildProjects()
         ]}
     );
 
+    const shaderProject = new Project
+    (
+        {imageId: ['shader-container']},
+        {pText: [
+            `\
+            Here I've added a point light source and a normal map to the tilemap. This makes a marked difference in the perceived quality of the graphics.
+            `
+        ]},
+        {fText: [
+            `\
+            Characters in a snake formation with a light source attached, showing reflection of light off of surface normals.
+            `
+        ]}
+    )
+
     const rayTracerProject = new Project
     (
         {imageId: ['ray-tracer-container']},
@@ -194,6 +209,7 @@ function buildProjects()
         ...noiseProject.getElements(),
         ...noiseTimeProject.getElements(),
         ...gameSceneProject.getElements(),
+        ...shaderProject.getElements(),
         ...rayTracerProject.getElements(),
         pEnd
     );
@@ -264,12 +280,14 @@ function buildProjects()
             const img2HiddenValue = noiseProject.image.offsetTop + noiseProject.image.clientHeight;
             const img3HiddenValue = noiseTimeProject.image.offsetTop + noiseTimeProject.image.clientHeight;
             const img4HiddenValue = gameSceneProject.image.offsetTop + gameSceneProject.image.clientHeight;
-            const img5HiddenValue = rayTracerProject.image.offsetTop + rayTracerProject.image.clientHeight;
+            const img5HiddenValue = shaderProject.image.offsetTop + shaderProject.image.clientHeight;
+            const img6HiddenValue = rayTracerProject.image.offsetTop + rayTracerProject.image.clientHeight;
             if      (textContainer.scrollTop < img1HiddenValue) { title.innerText = "Flow on an Angle Grid"; }
             else if (textContainer.scrollTop < img2HiddenValue) { title.innerText = "Tileable Simplex Noise"; }
             else if (textContainer.scrollTop < img3HiddenValue) { title.innerText = "Simplex Over Time"; }
             else if (textContainer.scrollTop < img4HiddenValue) { title.innerText = "Scene with Noise"; }
-            else if (textContainer.scrollTop < img5HiddenValue) { title.innerText = "Raytracer with Spheres"; }
+            else if (textContainer.scrollTop < img5HiddenValue) { title.innerText = "Scene with Light and Normals"; }
+            else if (textContainer.scrollTop < img6HiddenValue) { title.innerText = "Raytracer with Spheres"; }
         }
     });
 };
