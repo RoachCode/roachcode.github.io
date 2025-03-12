@@ -76,37 +76,51 @@ function buildPages()
 
     const buildProjects = () => 
     {
+        class Project
+        {
+            constructor(imageId, pClass, pText, fClass, fText)
+            {
+                this.image = document.createElement('div');
+                this.image.setAttribute('id', imageId);
+    
+                this.paragraph = document.createElement('p');
+                this.paragraph.classList.add(pClass);
+                this.paragraph.innerText = pText;
+    
+                this.footer = document.createElement('p');
+                this.footer.classList.add(fClass, 'fine-print', 'image-footer');
+                this.footer.innerText = fText;
+            }
+        }
 
+        // Set defaults
         const title = document.getElementById('project-title');
         title.innerText = "Flow Vectors on a Grid";
-
         const projectsContainer = document.createElement('div');
         projectsContainer.setAttribute('id', 'projects');
         projectsContainer.dataset.theme = 'light';
-
-        const gifContainer1 = document.createElement('div');
-        gifContainer1.setAttribute('id', 'flow-visualizer-gif-container');
-
         const textContainer = document.createElement('div');
         textContainer.setAttribute('id', 'text-container');
 
-        const p1 = document.createElement('p');
-        p1.classList.add('p1');
-        p1.innerText = 
-        `\
-        I've been working on a flow simulator to incorporate into 2D games. While a true fluid simulation would take into account density, viscosity etc., \
-        this simpler approximation uses a predefined grid of velocities that are multiplied with the current velocity of each particle.
-        Having control of the flow field allows flexibility in how this can be used - randomly placed pulses with textures applied to the particles \
-        can be used for floating/falling objects, or a static emitter can form a stream for water or lightning.\
-        `;
+        // Build projects
+        const flowProject = new Project(
+            'flow-visualizer-gif-container',
+            'p1',
+            `\
+            I've been working on a flow simulator to incorporate into 2D games. While a true fluid simulation would take into account density, viscosity etc., \
+            this simpler approximation uses a predefined grid of velocities that are multiplied with the current velocity of each particle.
+            Having control of the flow field allows flexibility in how this can be used - randomly placed pulses with textures applied to the particles \
+            can be used for floating/falling objects, or a static emitter can form a stream for water or lightning.\
+            `,
+            'p2',
+            `\
+            This image shows a vector field overlayed with a particle emitter. The compass needles show the direction of the flow.\
+            The angles of the needles are calculated from a Simplex noise image (similar to classic Perlin noise) to give its pseudo-random gradient.\
+            `
+        );
+        
 
-        const p2 = document.createElement('p');
-        p2.classList.add('p2', 'fine-print', 'image-footer');
-        p2.innerText = 
-        `\
-        This image shows a vector field overlayed with a particle emitter. The compass needles show the direction of the flow.\
-        The angles of the needles are calculated from a Simplex noise image (similar to classic Perlin noise) to give its pseudo-random gradient.\
-        `;
+
 
         const p3 = document.createElement('p');
         p3.classList.add('p3');
@@ -186,7 +200,24 @@ function buildPages()
         p10.classList.add('p10', 'fine-print');
         p10.innerText = '-end of page-'
 
-        textContainer.append(gifContainer1, p1, p2, p3, gifContainer2, p4, p5, gifContainer3, p6, gifContainer4, p7, p8, imageContainer1, p9, p10);
+        textContainer.append(
+            flowProject.image, 
+            flowProject.paragraph, 
+            flowProject.footer, 
+            p3, 
+            gifContainer2, 
+            p4, 
+            p5, 
+            gifContainer3, 
+            p6, 
+            gifContainer4, 
+            p7, 
+            p8, 
+            imageContainer1, 
+            p9, 
+            p10
+        );
+
         projectsContainer.append(textContainer);
         projectsContainer.classList.add('hidden');      
         mainContainer.append(projectsContainer);
