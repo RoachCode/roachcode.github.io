@@ -23,16 +23,19 @@ window.onload = () =>
         }
     }
 
-    // Slows scroll wheel to a reasonable speed
-    document.addEventListener('wheel', (ev) =>
+    // Slow scroll speed
+    document.addEventListener('wheel', (event) =>
     {
-        // allows scroll-y fallthrough from parent
-        ev.preventDefault();
-        ev.stopImmediatePropagation();
-        ev.stopPropagation();
+        event.preventDefault();
         const container = document.getElementById('text-container');
-        container.scrollTop += ev.deltaY / 5;
-    }, false);
+
+        // Calculate the new scroll position
+        let delta = event.deltaY;
+        let scrollPosition = container.scrollTop + (delta * 0.3);
+
+        // Set the new scroll position
+        container.scrollTo({ top: scrollPosition, behavior: 'smooth' });
+    }, { passive: false });
 
     // Builds the different pages so they can be loaded dynamically
     buildPages(); 

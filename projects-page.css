@@ -1,6 +1,6 @@
 #projects .image-footer
 {
-    font-size: 1.75vh;
+    font-size: 2vh;
     width: 80%;
     place-self: center;
     background: radial-gradient(transparent, rgba(128, 128, 128, 0.205));
@@ -8,13 +8,13 @@
     margin-bottom: 4vh;
     padding-top: 0px;
     padding-bottom: 0px;
-    padding-left: 2px;
+    /*padding-left: 2px;*/
     text-align: center;
 }
 
 #projects p
 {
-    font-size: 2vh;
+    font-size: 2.25vh;
     width: 95%;
     place-self: center;
     text-align: left;
@@ -22,7 +22,19 @@
     background-color: transparent;
     border: unset;
     padding-bottom: 4vh;
+}
 
+#project-title
+{
+    position: relative;
+    font-size: 5vmin;
+    text-align: center;
+    width: 100%;
+    letter-spacing: 0.3vw;
+    font-stretch: expanded;
+    opacity: 80%;
+    top: 7vh;
+    bottom: 8vmin;
 }
 
 #projects > #text-container
@@ -32,14 +44,13 @@
     grid-template-columns: 1fr;
     height: calc(100% - 8vmin);
     margin-bottom: 3vmin;
-    /*overflow-y: hidden;*/
-
-    #flow-visualizer-gif-container  { background-image: url('loopingFlowVisualizer.gif'); }
-    #noise-gif-container            { background-image: url('loopingSimplexNoise.gif'); }
-    #noise-time-container           { background-image: url('noiseOverTime.gif'); }
-    #game-scene-container           { background-image: url('gameScene.gif'); }
-    #ray-tracer-container           { background-image: url('rayTracerScreenshot.png'); }
 }
+
+#flow-visualizer-gif-container  { background-image: url('loopingFlowVisualizer.gif'); }
+#noise-gif-container            { background-image: url('loopingSimplexNoise.gif'); }
+#noise-time-container           { background-image: url('noiseOverTime.gif'); }
+#game-scene-container           { background-image: url('gameScene.gif'); }
+#ray-tracer-container           { background-image: url('rayTracerScreenshot.png'); }
 
 #projects .end
 {
@@ -47,4 +58,25 @@
     text-align: right;
     padding-top: 4vmin;
     padding-bottom: 0px;
+}
+
+#projects > #minimap-container
+{
+    right: 2vmin;
+    bottom: 2vmin;
+    top: 9vh;
+    width: 6vmin;
+
+    position: fixed;
+    background-color: var(--primary-color-light);
+
+    outline-offset: -0.15vmin;
+    outline: 0.3vmin solid var(--primary-color-dark);
+
+    #minimap
+    {
+        position:fixed;
+        display:inline-block;
+        opacity: 40%;
+    }
 }

@@ -100,7 +100,7 @@ input:checked ~ #sidenav > #nav-list-vertical li
 
 #logo-container
 {
-    right: 2vmin;
+    left: 2vmin;
     bottom: 2vmin;
     width: 6vmin;
     height: 6vmin;

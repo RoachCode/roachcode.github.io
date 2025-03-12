@@ -125,7 +125,7 @@ function buildProjects()
         The values that created the angles in the previous image are represented here as a gradient between black and white.\
         Creating a static image is fairly easy - 2D noise is needed, and you can use simple coordinates as the inputs for the noise.\
         Looping the noise was a bit more difficult, ultimately needing 4D noise.
-        The noise that would make up the image had to be mapped to a cylinder first, so that the X coordinate would be circular (end up back where it started)/
+        The noise that would make up the image had to be mapped to a cylinder first, so that the X coordinate would be circular (end up back where it started)\
         Then, this cylinder had to be bent together at the end, creating a torus, to give a final image that can loop in any 2D direction.\
         `
         ]},
@@ -209,6 +209,51 @@ function buildProjects()
     projectsContainer.classList.add('hidden');      
     mainContainer.append(projectsContainer);
 
+    /*
+    // Create mini-map of projects page
+    const minimapContainer = document.createElement('div');
+    minimapContainer.setAttribute('id', 'minimap-container');
+
+    // Create a duplicate of the main container
+    const minimap = document.createElement('div');
+    minimap.setAttribute('id', 'minimap');
+    minimap.style.width = `${mainContainer.clientWidth}px`;
+    minimap.style.height = `${mainContainer.clientHeight}px`;
+    minimap.innerHTML = textContainer.innerHTML;
+
+    // Define computed CSS styles for use here and now
+    function vh(percent)
+    {
+        var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        return (percent * h) / 100;
+    }
+    function vw(percent)
+    {
+        var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+        return (percent * w) / 100;
+    }
+    function vmin(percent)
+    {
+        return Math.min(vh(percent), vw(percent));
+    }
+
+    // Define ratio of original container to minimap div and transform scale, position
+    const scaleWidth = vmin(6) / mainContainer.clientWidth;
+    const scaleHeight = vmin(90) / textContainer.lastElementChild.offsetTop;
+    const offsetX = vmin(108.2);
+    const offsetY = vmin(40.5);
+    minimap.style.left = `${offsetX}px`;
+    minimap.style.bottom = `${offsetY}px`
+    minimap.style.transform = `scale(${scaleWidth}, ${scaleHeight})`;
+
+    // Append containers
+    minimapContainer.append(minimap);
+    projectsContainer.append(minimapContainer);
+
+
+    */
+
+
     // Event listener that changes the title based on scroll position
     // TODO: make this generic and scalable
     textContainer.addEventListener('scroll', () => 
@@ -220,7 +265,7 @@ function buildProjects()
             const img3HiddenValue = noiseTimeProject.image.offsetTop + noiseTimeProject.image.clientHeight;
             const img4HiddenValue = gameSceneProject.image.offsetTop + gameSceneProject.image.clientHeight;
             const img5HiddenValue = rayTracerProject.image.offsetTop + rayTracerProject.image.clientHeight;
-                    if (textContainer.scrollTop < img1HiddenValue) { title.innerText = "Flow on an Angle Grid"; }
+            if      (textContainer.scrollTop < img1HiddenValue) { title.innerText = "Flow on an Angle Grid"; }
             else if (textContainer.scrollTop < img2HiddenValue) { title.innerText = "Tileable Simplex Noise"; }
             else if (textContainer.scrollTop < img3HiddenValue) { title.innerText = "Simplex Over Time"; }
             else if (textContainer.scrollTop < img4HiddenValue) { title.innerText = "Scene with Noise"; }
@@ -297,7 +342,7 @@ function buildEmployers()
     // Append all
     textContainer.append(a1);
     employersContainer.append(textContainer)
-    mainContainer.append(title, employersContainer);
+    mainContainer.append(employersContainer);
 };
 
 function buildPages()
