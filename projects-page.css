@@ -32,7 +32,7 @@
     grid-template-columns: 1fr;
     height: calc(100% - 8vmin);
     margin-bottom: 3vmin;
-    overflow-y: hidden;
+    /*overflow-y: hidden;*/
 
     #flow-visualizer-gif-container  { background-image: url('loopingFlowVisualizer.gif'); }
     #noise-gif-container            { background-image: url('loopingSimplexNoise.gif'); }
