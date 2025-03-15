@@ -225,7 +225,6 @@ function buildProjects()
     projectsContainer.classList.add('hidden');      
     mainContainer.append(projectsContainer);
 
-    /*
     // Create mini-map of projects page
     const minimapContainer = document.createElement('div');
     minimapContainer.setAttribute('id', 'minimap-container');
@@ -233,43 +232,45 @@ function buildProjects()
     // Create a duplicate of the main container
     const minimap = document.createElement('div');
     minimap.setAttribute('id', 'minimap');
-    minimap.style.width = `${mainContainer.clientWidth}px`;
-    minimap.style.height = `${mainContainer.clientHeight}px`;
     minimap.innerHTML = textContainer.innerHTML;
 
-    // Define computed CSS styles for use here and now
-    function vh(percent)
+    const resizeScrollBar = () =>
     {
-        var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-        return (percent * h) / 100;
-    }
-    function vw(percent)
-    {
-        var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-        return (percent * w) / 100;
-    }
-    function vmin(percent)
-    {
-        return Math.min(vh(percent), vw(percent));
-    }
+        minimap.style.width = `${mainContainer.clientWidth}px`;
+        minimap.style.height = `${mainContainer.clientHeight}px`;
 
-    // Define ratio of original container to minimap div and transform scale, position
-    const scaleWidth = vmin(6) / mainContainer.clientWidth;
-    const scaleHeight = vmin(90) / textContainer.lastElementChild.offsetTop;
-    const offsetX = vmin(108.2);
-    const offsetY = vmin(40.5);
-    minimap.style.left = `${offsetX}px`;
-    minimap.style.bottom = `${offsetY}px`
-    minimap.style.transform = `scale(${scaleWidth}, ${scaleHeight})`;
-
+        // Define computed CSS styles for use here and now
+        function vh(percent)
+        {
+            var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+            return (percent * h) / 100;
+        }
+        function vw(percent)
+        {
+            var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+            return (percent * w) / 100;
+        }
+        function vmin(percent)
+        {
+            return Math.min(vh(percent), vw(percent));
+        }
+    
+        // Define ratio of original container to minimap div and transform scale, position
+        const scaleWidth = vmin(6) / mainContainer.clientWidth;
+        const scaleHeight = vh(89) / textContainer.lastElementChild.offsetTop;
+        // offset by the original width minus the new width, divided by two.
+        const offsetX = (mainContainer.clientWidth - vmin(6)) / 2;
+        // offset by the original height minus the ratio of the new height to the last element height, divided by two.
+        const offsetY = (mainContainer.clientHeight / 2) - ((vh(89) * scaleHeight) / 2);
+        minimap.style.transform = `translate(-${offsetX}px, -${offsetY}px) scale(${scaleWidth}, ${scaleHeight})`;
+    }
+    resizeScrollBar();
     // Append containers
     minimapContainer.append(minimap);
     projectsContainer.append(minimapContainer);
 
-
-    */
-
-
+    // Resizes the scrollbar dynamically
+    window.addEventListener('resize', resizeScrollBar);
     // Event listener that changes the title based on scroll position
     // TODO: make this generic and scalable
     textContainer.addEventListener('scroll', () => 

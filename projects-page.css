@@ -44,6 +44,7 @@
     grid-template-columns: 1fr;
     height: calc(100% - 8vmin);
     margin-bottom: 3vmin;
+    overflow:hidden;
 }
 
 #flow-visualizer-gif-container  { background-image: url('loopingFlowVisualizer.gif'); }
@@ -64,8 +65,8 @@
 #projects > #minimap-container
 {
     right: 2vmin;
-    bottom: 2vmin;
     top: 9vh;
+    height: 89vh;
     width: 6vmin;
 
     position: fixed;
@@ -76,8 +77,8 @@
 
     #minimap
     {
-        position:fixed;
-        display:inline-block;
+        position: fixed;
+        top: 9vh;
         opacity: 40%;
     }
 }
