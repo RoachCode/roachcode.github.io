@@ -1,3 +1,4 @@
+
 #projects .image-footer
 {
     font-size: 2vh;
@@ -35,6 +36,7 @@
     opacity: 80%;
     top: 7vh;
     bottom: 8vmin;
+    pointer-events: none;
 }
 
 #projects > #text-container
@@ -70,15 +72,25 @@
     width: 6vmin;
 
     position: fixed;
-    background-color: var(--primary-color-light);
+    background-color: inherit;
 
     outline-offset: -0.15vmin;
     outline: 0.3vmin solid var(--primary-color-dark);
-
+    user-select: none;
+    
     #minimap
     {
         position: fixed;
         top: 9vh;
         opacity: 40%;
+    }
+
+    #scroll-box
+    {
+        position: fixed;
+        width: inherit;
+        outline-offset: -0.15vmin;
+        outline: 0.3vmin solid var(--primary-color-dark);
+        flood-opacity: 100%;
     }
 }
