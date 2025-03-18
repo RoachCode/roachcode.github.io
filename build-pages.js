@@ -40,6 +40,8 @@ function buildHome() {
 };
 
 function buildProjects() {
+    // Define inline functions:
+
     // Handles creation and style of elements.
     // This is styled automatically so that changes are easy
     // And scalable, and nothing breaks the DOM.
@@ -80,16 +82,30 @@ function buildProjects() {
         }
     }
 
+    // Define computed CSS styles for use here and now.
+    function vh(percent) {
+        var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        return (percent * h) / 100;
+    }
+    function vw(percent) {
+        var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+        return (percent * w) / 100;
+    }
+    function vmin(percent) {
+        return Math.min(vh(percent), vw(percent));
+    }
+
     // Set defaults
     const mainContainer = document.getElementById('main-container');
+
     const title = document.getElementById('project-title');
     title.innerText = "Flow on an Angle Grid";
+
     const projectsContainer = document.createElement('div');
     projectsContainer.setAttribute('id', 'projects');
-    projectsContainer.dataset.theme = 'light';
+
     const textContainer = document.createElement('div');
     textContainer.setAttribute('id', 'text-container');
-    textContainer.setAttribute('data-theme', 'light');
 
     // Build projects
     const flowProject = new Project
@@ -169,7 +185,7 @@ function buildProjects() {
             {
                 fText: [
                     `\
-        In this image you can see the tilemap scene and the noise overlays. This is being written using the SFML library.\
+        In this image you can see the tilemap scene and the noise overlays.\
         `
                 ]
             }
@@ -193,7 +209,21 @@ function buildProjects() {
             `
                 ]
             }
-        )
+        );
+
+    const shaderLightProject = new Project
+        (
+            { title: ['Scene with Only Light Map'] },
+            { imageId: ['light-map-container'] },
+            { pText: [] },
+            {
+                fText: [
+                    `\
+            And here's an image showing the scene without the diffuse render - only the light reflecting off of normals.
+            `
+                ]
+            }
+        );
 
     const rayTracerProject = new Project
         (
@@ -202,7 +232,7 @@ function buildProjects() {
             {
                 pText: [
                     `\
-        Moving on to something a little different.
+        Moving on to something a little different - 3D raytracing.
         I've been working through a wonderful course called Ray Tracing in One Weekend by Peter Shirley (see References tab).\
         This is a very low level implementation - no textures or models are used, all objects in the scene are drawn using scattering and surface normals.\
         I've been adapting the architechture to work with SFML (OpenGL) and plan on adding caustics before moving on to different shapes, lighting, and speed improvements.
@@ -231,6 +261,7 @@ function buildProjects() {
         ...noiseTimeProject.getElements(),
         ...gameSceneProject.getElements(),
         ...shaderProject.getElements(),
+        ...shaderLightProject.getElements(),
         ...rayTracerProject.getElements(),
         pEnd
     );
@@ -248,66 +279,77 @@ function buildProjects() {
     // Create mini-map of projects page
     const minimapContainer = document.createElement('div');
     minimapContainer.setAttribute('id', 'minimap-container');
-    minimapContainer.setAttribute('data-theme', 'light');
 
-    // Create a duplicate of the main container
+    // Set styles
+    minimapContainer.dataset.theme = 'light';
+
+    // Create a duplicate of the main container for minimap
     const minimap = document.createElement('div');
     minimap.setAttribute('id', 'minimap');
-    minimap.setAttribute('data-theme', 'light');
+    minimap.dataset.theme = 'light';
     minimap.innerHTML = textContainer.innerHTML;
 
     // Create a box to highlight the visible area
     const visibleBox = document.createElement('div');
     visibleBox.setAttribute('id', 'scroll-box');
-    visibleBox.setAttribute('data-theme', 'light');
+    visibleBox.dataset.theme = 'light';
 
     const resizeScrollBar = () => {
+        // Declare variables
+        const miniWidth = minimapContainer.clientWidth;
+        const miniHeight = minimapContainer.clientHeight;
+
+        // Ignore default transition
+        minimapContainer.classList.add('ignore-transition');
+        minimap.classList.add('ignore-transition');
+        visibleBox.classList.add('ignore-transition');
+    
+        // Resize minimap width to main container before scaling
         minimap.style.width = `${mainContainer.clientWidth}px`;
         minimap.style.height = `${mainContainer.clientHeight}px`;
-
-        // Define computed CSS styles for use here and now
-        function vh(percent) {
-            var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-            return (percent * h) / 100;
-        }
-        function vw(percent) {
-            var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-            return (percent * w) / 100;
-        }
-        function vmin(percent) {
-            return Math.min(vh(percent), vw(percent));
-        }
-
-        // Define ratio of original container to minimap div and transform scale, position
-        const scaleWidth = vmin(6) / mainContainer.clientWidth;
-        const scaleHeight = vh(89) / textContainer.lastElementChild.offsetTop;
+    
+        // Define ratio of main container to minimap div and transform scale, position
+        const scaleWidth = miniWidth / mainContainer.clientWidth;
+        const scaleHeight = miniHeight / textContainer.lastElementChild.offsetTop;
+    
         // offset by the original width minus the new width, divided by two.
-        const offsetX = (mainContainer.clientWidth - vmin(6)) / 2;
+        const offsetX = (mainContainer.clientWidth - miniWidth) / 2;
         // offset by the original height minus the ratio of the new height to the last element height, divided by two.
-        const offsetY = (mainContainer.clientHeight / 2) - ((vh(89) * scaleHeight) / 2);
+        const offsetY = (mainContainer.clientHeight / 2) - ((miniHeight * scaleHeight) / 2);
         minimap.style.transform = `translate(-${offsetX}px, -${offsetY}px) scale(${scaleWidth}, ${scaleHeight})`;
-
+    
         // Set scrollbox size
         const visibleHeight = textContainer.clientHeight * scaleHeight;
         visibleBox.style.height = `${visibleHeight}px`;
+    
+        // Re-enable transitions
+        minimapContainer.classList.remove('ignore-transition');
+        minimap.classList.remove('ignore-transition');
+        visibleBox.classList.remove('ignore-transition');
     }
+
     const setScrollBoxPosition = () => {
-        // Define computed CSS styles for use here and now
-        function vh(percent) {
-            var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-            return (percent * h) / 100;
+        // Declarations
+        const miniHeight = minimapContainer.clientHeight;
+        const miniTop = minimapContainer.offsetTop;
+
+        const scaleHeight = miniHeight / textContainer.lastElementChild.offsetTop;
+        var scrollPos = textContainer.scrollTop * scaleHeight + miniTop;
+        if (scrollPos + visibleBox.clientHeight > miniHeight + miniTop) {
+            scrollPos = miniHeight + miniTop - visibleBox.clientHeight;
         }
-        const scaleHeight = vh(89) / textContainer.lastElementChild.offsetTop;
-        var scrollPos = textContainer.scrollTop * scaleHeight + vh(9);
-        if (scrollPos + visibleBox.clientHeight > vh(98)) { scrollPos = vh(98) - visibleBox.clientHeight; }
         visibleBox.style.top = `${scrollPos}px`;
     }
-    resizeScrollBar();
-    setScrollBoxPosition();
+
     // Append containers
     minimapContainer.append(minimap);
     minimapContainer.append(visibleBox);
     projectsContainer.append(minimapContainer);
+
+    if (!!minimapContainer) {
+        resizeScrollBar(); 
+        setScrollBoxPosition();
+    }    
 
     // Resizes the scrollbar dynamically
     window.addEventListener('resize', resizeScrollBar);

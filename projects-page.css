@@ -9,7 +9,6 @@
     margin-bottom: 4vh;
     padding-top: 0px;
     padding-bottom: 0px;
-    /*padding-left: 2px;*/
     text-align: center;
 }
 
@@ -41,10 +40,10 @@
 
 #projects > #text-container
 {
-    margin-top: 5vmin;
+    margin-top: 3vmin;
     grid-auto-rows: max-content;
     grid-template-columns: 1fr;
-    height: calc(100% - 8vmin);
+    height: calc(100% - 6vmin);
     margin-bottom: 3vmin;
     overflow:hidden;
 }
@@ -55,6 +54,7 @@
 #game-scene-container           { background-image: url('gameScene.gif'); }
 #ray-tracer-container           { background-image: url('rayTracerScreenshot.png'); }
 #shader-container               { background-image: url('gameSceneShader.gif'); }
+#light-map-container            { background-image: url('light-map.png'); }
 
 #projects .end
 {
@@ -72,16 +72,15 @@
     width: 6vmin;
 
     position: fixed;
-    background-color: inherit;
 
     outline-offset: -0.15vmin;
     outline: 0.3vmin solid var(--primary-color-dark);
     user-select: none;
     
     #minimap
-    {
+    {       
         position: fixed;
-        top: 9vh;
+        width: inherit;
         opacity: 40%;
     }
 
@@ -89,8 +88,13 @@
     {
         position: fixed;
         width: inherit;
-        outline-offset: -0.15vmin;
-        outline: 0.3vmin solid var(--primary-color-dark);
-        flood-opacity: 100%;
+        outline-offset: -0.3vmin;
+        outline: 0.4vmin solid var(--primary-color-dark);
+        transition-duration: 0.05s;
     }
+}
+
+.ignore-transition
+{
+    transition: none !important;
 }
