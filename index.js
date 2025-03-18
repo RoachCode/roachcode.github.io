@@ -31,7 +31,7 @@ window.onload = () =>
 
         // Calculate the new scroll position
         let delta = event.deltaY;
-        let scrollPosition = container.scrollTop + (delta * 0.3);
+        let scrollPosition = container.scrollTop + (delta * 0.5);
 
         // Set the new scroll position
         container.scrollTo({ top: scrollPosition, behavior: 'smooth' });
