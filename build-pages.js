@@ -296,7 +296,7 @@ function buildProjects() {
 
     const resizeScrollBar = () => {
         // Declare variables
-        const miniWidth = minimapContainer.getBoundingClientRect().width;
+        const miniWidth = minimapContainer.clientWidth;
         const miniHeight = minimapContainer.clientHeight;
 
         // Ignore default transition
