@@ -357,14 +357,10 @@ function buildProjects() {
     // Scroll by click
     minimapContainer.addEventListener('mousedown', (e) =>
     {
-        // Define computed CSS styles for use here and now
-        function vh(percent)
-        {
-            var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-            return (percent * h) / 100;
-        }
-        const scaleHeight = vh(89) / textContainer.lastElementChild.offsetTop;
-        textContainer.scrollTop = ((e.pageY - vh(9)) / scaleHeight) - ((visibleBox.clientHeight / scaleHeight) / 2);
+        const miniHeight = minimapContainer.clientHeight;
+        const miniTop = minimapContainer.offsetTop;
+        const scaleHeight = miniHeight / textContainer.lastElementChild.offsetTop;
+        textContainer.scrollTop = ((e.pageY - miniTop) / scaleHeight) - ((visibleBox.clientHeight / scaleHeight) / 2);
 
         setScrollBoxPosition();
     });
@@ -376,7 +372,7 @@ function buildProjects() {
             for (var i = 0; i < textContainer.childElementCount; i++) {
                 // for every image
                 if (textContainer.childNodes[i].classList.contains('is-image')) {
-                    const hideValue = textContainer.childNodes[i].offsetTop + textContainer.childNodes[i].clientHeight;
+                    const hideValue = textContainer.childNodes[i].offsetTop + (textContainer.childNodes[i].clientHeight * 0.85);
                     if (textContainer.scrollTop < hideValue) {
                         title.innerText = textContainer.childNodes[i].title;
                         break;
