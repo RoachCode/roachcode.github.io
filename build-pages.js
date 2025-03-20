@@ -82,31 +82,6 @@ function buildProjects() {
         }
     }
 
-    // Define computed CSS styles for use here and now.
-    function vh(percent) {
-        var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-        return (percent * h) / 100;
-    }
-    function vw(percent) {
-        var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-        return (percent * w) / 100;
-    }
-    function vmin(percent) {
-        return Math.min(vh(percent), vw(percent));
-    }
-
-    // Set defaults
-    const mainContainer = document.getElementById('main-container');
-
-    const title = document.getElementById('project-title');
-    title.innerText = "Flow on an Angle Grid";
-
-    const projectsContainer = document.createElement('div');
-    projectsContainer.setAttribute('id', 'projects');
-
-    const textContainer = document.createElement('div');
-    textContainer.setAttribute('id', 'text-container');
-
     // Build projects
     const flowProject = new Project
         (
@@ -255,6 +230,8 @@ function buildProjects() {
     pEnd.innerText = '-end of page-'
 
     // Appends all elements to textContainer
+    const textContainer = document.createElement('div');
+    textContainer.setAttribute('id', 'text-container');
     textContainer.append(
         ...flowProject.getElements(),
         ...noiseProject.getElements(),
@@ -271,9 +248,16 @@ function buildProjects() {
         textContainer.children[i].style.gridRowStartCount = Number(i) + 1;
     }
 
+    // Set title
+    const title = document.getElementById('project-title');
+    title.innerText = textContainer.childNodes[0].title;
+
     // Append to parent containers
+    const projectsContainer = document.createElement('div');
+    projectsContainer.setAttribute('id', 'projects');    
     projectsContainer.append(textContainer);
     projectsContainer.classList.add('hidden');
+    const mainContainer = document.getElementById('main-container');    
     mainContainer.append(projectsContainer);
 
     // Create mini-map of projects page
@@ -293,6 +277,24 @@ function buildProjects() {
     const visibleBox = document.createElement('div');
     visibleBox.setAttribute('id', 'scroll-box');
     visibleBox.dataset.theme = 'light';
+
+    // Append containers
+    minimapContainer.append(minimap);
+    minimapContainer.append(visibleBox);
+    projectsContainer.append(minimapContainer);
+
+    // Define computed CSS styles
+    function vh(percent) {
+        var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        return (percent * h) / 100;
+    }
+    function vw(percent) {
+        var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+        return (percent * w) / 100;
+    }
+    function vmin(percent) {
+        return Math.min(vh(percent), vw(percent));
+    }
 
     const resizeScrollBar = () => {
         // Declare variables
@@ -341,11 +343,7 @@ function buildProjects() {
         visibleBox.style.top = `${scrollPos}px`;
     }
 
-    // Append containers
-    minimapContainer.append(minimap);
-    minimapContainer.append(visibleBox);
-    projectsContainer.append(minimapContainer);
-
+    // Set initial
     if (!!minimapContainer) {
         resizeScrollBar(); 
         setScrollBoxPosition();

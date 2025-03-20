@@ -3,10 +3,18 @@
     "configurations":
     [
         {
+            "name": "Launch Firefox",
+            "type": "firefox",
+            "request": "launch",
+            "reAttach": true,
+            "file": "${workspaceFolder}/index.html"
+        },
+        {
+            "name": "Launch Chrome",
             "type": "chrome",
             "request": "launch",
-            "name": "Launch Chrome against localhost",
-            "file": "C:/Users/Windows/Documents/GitHub/Page/roachcode.github.io/index.html"
+
+            "file": "${workspaceFolder}/index.html"
         }
     ]
 }
