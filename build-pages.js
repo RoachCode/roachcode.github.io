@@ -256,7 +256,7 @@ function buildProjects() {
     const projectsContainer = document.createElement('div');
     projectsContainer.setAttribute('id', 'projects');    
     projectsContainer.append(textContainer);
-    projectsContainer.classList.add('hidden');
+    makeHidden(projectsContainer);
     const mainContainer = document.getElementById('main-container');    
     mainContainer.append(projectsContainer);
 
@@ -282,19 +282,6 @@ function buildProjects() {
     minimapContainer.append(minimap);
     minimapContainer.append(visibleBox);
     projectsContainer.append(minimapContainer);
-
-    // Define computed CSS styles
-    function vh(percent) {
-        var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-        return (percent * h) / 100;
-    }
-    function vw(percent) {
-        var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-        return (percent * w) / 100;
-    }
-    function vmin(percent) {
-        return Math.min(vh(percent), vw(percent));
-    }
 
     const resizeScrollBar = () => {
         // Declare variables
@@ -393,6 +380,7 @@ function buildReferences() {
     // Links to Ray Tracing in One Weekend
     const oneWeekendLink = document.createElement('a');
     oneWeekendLink.setAttribute('href', 'https://raytracing.github.io/');
+    oneWeekendLink.setAttribute('target', '_blank');
     oneWeekendLink.dataset.theme = 'light';
     oneWeekendLink.innerText = 'Ray Tracing Series by Peter Shirley';
     oneWeekendLink.append(document.createElement('br'));
@@ -400,6 +388,7 @@ function buildReferences() {
     // Links to Simple Fast Multimedia Library
     const sfmlLink = document.createElement('a');
     sfmlLink.setAttribute('href', 'https://www.sfml-dev.org/');
+    sfmlLink.setAttribute('target', '_blank');
     sfmlLink.dataset.theme = 'light';
     sfmlLink.innerText = 'SFML - Simple and Fast Multimedia Library';
     sfmlLink.append(document.createElement('br'));
@@ -407,6 +396,7 @@ function buildReferences() {
     // Links to C++ port of Open Simplex
     const simplexLink = document.createElement('a');
     simplexLink.setAttribute('href', 'https://github.com/deerel/OpenSimplexNoise');
+    simplexLink.setAttribute('target', '_blank');
     simplexLink.dataset.theme = 'light';
     simplexLink.innerText = 'C++ Port of OpenSimplexNoise by Rickard Lundberg';
     simplexLink.append(document.createElement('br'));
@@ -418,38 +408,6 @@ function buildReferences() {
     mainContainer.append(referencesContainer);
 };
 
-function buildEmployers() {
-    // Build containers
-    const mainContainer = document.getElementById('main-container');
-    const employersContainer = document.createElement('div');
-    employersContainer.setAttribute('id', 'employers');
-    employersContainer.dataset.theme = 'light';
-    employersContainer.classList.add('hidden');
-    employersContainer.style.opacity = 0;
-
-    const textContainer = document.createElement('div');
-    textContainer.setAttribute('id', 'text-container');
-    textContainer.dataset.theme = 'light';
-
-    // Add title
-    const title = document.getElementById('project-title');
-    title.innerText = 'Welcome to the employer portal';
-
-    // Add resume link
-    var a1 = document.createElement('a');
-    a1.classList.add('a1');
-    //a1.href = 'resume.pdf';
-    //a1.download = 'resume.pdf';
-    a1.dataset.theme = 'light';
-    a1.innerText = 'Click to download resume (pdf) [Currently Disabled]'
-    a1.append(document.createElement('br'));
-
-    // Append all
-    textContainer.append(a1);
-    employersContainer.append(textContainer)
-    mainContainer.append(employersContainer);
-};
-
 function buildPages() {
     // Sets homepage to visible
     const mainContainer = document.getElementById('main-container');
@@ -458,12 +416,9 @@ function buildPages() {
     // Builds all pages and hides them
     buildProjects();
     buildReferences();
-    buildEmployers();
     buildHome();
 
     // Reset all and wait for user selection
     document.getElementById('project-title').innerText = '';
     mainContainer.style.opacity = 1;
 }
-
-//export { buildPages };

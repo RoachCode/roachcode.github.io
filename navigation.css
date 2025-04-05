@@ -5,13 +5,14 @@
     width: 100vw;
     height: 7vh;
 }
+
 #nav-list
 {
     font-size: 3.5vh;
     margin: 0%;
     padding: 0%;
     padding-left: 12vmin;
-    width: calc(100vmax - 24vmin);
+    padding-right: 12vmin;
     height: 7vh;
     display: flex;
     justify-content: space-evenly;
@@ -38,20 +39,28 @@
     top: 6vh;
     background-color: transparent;
     width: 0vw;
-    height: 50vh;
-    transition: 0.2s;
+    height: 40vh;
+    transition: 0.1s;
     transition-timing-function: ease-out;
     pointer-events: none;
     box-sizing: border-box;
+    #nav-list-vertical
+    {
+        display: none;
+    }
 }
 
 input:checked ~ #sidenav
 {
     position: absolute;
     background-color: black;
+    opacity: 100%;
     width: 100vw;
-    height: 50vh;
     pointer-events: none;
+    #nav-list-vertical
+    {
+        display: flex;
+    }
 }
 
 #burger
@@ -72,15 +81,12 @@ input:checked ~ #sidenav
     margin: 0px;
     padding: 0px;
     list-style: none;
-    display: flex;
     flex-direction: column;
     justify-content: space-around;
 }
 #nav-list-vertical a
 {
     font-size: 7vh;
-    margin: 0%;
-    padding: 0%;
     color: transparent;
     transition: 0.1s;
 }

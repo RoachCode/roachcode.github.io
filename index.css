@@ -8,6 +8,9 @@
 
 :root 
 {
+    touch-action: pan-x pan-y;
+    height: 100%;
+
     --primary-color-light: rgb(255, 251, 244);
     --text-color-dark: rgb(204, 200, 193);
     --primary-color-dark: rgb(18, 19, 22);
@@ -16,7 +19,7 @@
 html
 {
     width: 100vw;
-    height: 100vh;
+    height: 100%;
 }
 
 body
@@ -110,17 +113,17 @@ input
 
 .fade-out
 {
-    animation: fadeout 2000ms forwards;
+    animation: fadeout 200ms forwards;
 }
 
 .hidden
 {
-    animation: fadeout 100ms forwards;
+    animation: fadeout 50ms forwards;
 }
 
 .visible
 {
-    animation: fadein 100ms forwards;
+    animation: fadein 50ms forwards;
 }
 
 @media screen and (max-width: 1200px) {
@@ -131,7 +134,7 @@ input
 
 @media screen{
     .smooth-trans {
-        transition: 0.15s;
+        transition: 0.05s;
     }
 }
 

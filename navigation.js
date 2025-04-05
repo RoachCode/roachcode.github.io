@@ -1,5 +1,3 @@
-//import { popUpAlert } from "./alert.js"
-
 function toggleTheme()
 {
     const checkbox = document.getElementById('theme-checkbox');
@@ -36,8 +34,7 @@ function pageHandler()
     const pages = [
         document.getElementById('home'),
         document.getElementById('projects'),
-        document.getElementById('references'),
-        document.getElementById('employers')
+        document.getElementById('references')
     ]
 
     // Choose the page to display
@@ -46,15 +43,12 @@ function pageHandler()
         if (this.id === `${page.id}-link`)
         {   
             page.style.opacity = 0;      
-            if (!page.classList.contains('visible')) { page.classList.add('visible'); }
-            if (page.classList.contains('hidden')) { page.classList.remove('hidden'); }
+            makeVisible(page);
         }
         else
         {       
             page.style.opacity = 1;   
-            if (!page.classList.contains('hidden')) { page.classList.add('hidden'); }
-            if (page.classList.contains('visible')) { page.classList.remove('visible'); }
-
+            makeHidden(page);
         }
         // Create titles
         if (this.id === 'projects-link')
@@ -62,12 +56,7 @@ function pageHandler()
             const title = document.getElementById('project-title');
             title.innerText = "Flow on an Angle Grid";
         }
-        else if (this.id === 'employers-link')
-        {
-            const title = document.getElementById('project-title');
-            title.innerText = '';
-        }
     }
+    const burgerCheckbox = document.getElementById('burger-checkbox');
+    burgerCheckbox.checked = false;    
 }
-
-//export { pageHandler, toggleTheme, copyEmailToClipboard };

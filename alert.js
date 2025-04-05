@@ -16,5 +16,3 @@ function popUpAlert(inString, timeOut = 2000)
         document.body.removeChild(popUpContainer);
     }, 2000 + Number(timeOut));
 }
-
-//export { popUpAlert };

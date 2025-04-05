@@ -1,18 +1,31 @@
-//import { pageHandler, toggleTheme, copyEmailToClipboard } from "./navigation.js";
-//import { buildPages } from "./build-pages.js"
-
 window.onload = () =>
 {
     // Attach event listeners
     document.getElementById('theme-toggle').addEventListener('mouseup', toggleTheme);
     document.getElementById('em-logo').addEventListener('mouseup', copyEmailToClipboard);
-    document.getElementById('nav-list-vertical').addEventListener('mouseup', () =>
-    {
-        // Closes the sidenav on selection
-        const burgerCheckbox = document.getElementById('burger-checkbox');
-        burgerCheckbox.checked = false;
+    document.addEventListener('click', (event) => {   
+        if (!document.getElementById('sidenav').contains(event.target))
+        {
+            if (!document.getElementById('label-burger').contains(event.target))
+            {
+                const burgerCheckbox = document.getElementById('burger-checkbox');
+                burgerCheckbox.checked = false;    
+            }
+        }
     });
 
+    document.getElementById('label-burger').addEventListener('mouseup', () => {
+        if (document.getElementById('nav-list').classList.contains('hidden'))
+        {
+            makeVisible(document.getElementById('nav-list'));
+            makeVisible(document.getElementById('project-title'));
+        }
+        else
+        {
+            makeHidden(document.getElementById('nav-list'));
+            makeHidden(document.getElementById('project-title'));
+        }
+    });
     // Hides or shows pages based on user selection
     const links = document.getElementsByTagName('a');
     for (clickable of links)
@@ -24,6 +37,9 @@ window.onload = () =>
     }
 
     // Slow scroll speed
+    document.addEventListener('scroll', (event) => { event.preventDefault(); }, { passive: false });
+    document.addEventListener('DOMMouseScroll', (event) => { event.preventDefault(); }, { passive: false });
+    document.addEventListener('MozMousePixelScroll', (event) => { event.preventDefault(); }, { passive: false });
     document.addEventListener('wheel', (event) =>
     {
         event.preventDefault();

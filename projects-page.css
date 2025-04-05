@@ -26,6 +26,7 @@
 
 #project-title
 {
+    align-items: center;
     position: relative;
     font-size: 5vmin;
     text-align: center;
