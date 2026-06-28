@@ -1,35 +1,27 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: #1a1a1a; /* Dark base color */
+    background-color: #1a1a1a;
     overflow-x: hidden; 
 }
 
 .hex-background {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
     z-index: -1; 
     display: block;
-    background-color: #1a1a1a; 
 }
 
 /* SVG Specific Styling */
 .hex-border {
     fill: none;
-    stroke: #1f1f1f;
 }
 
 .path-base {
     fill: none;
-    stroke: #423a47;
     stroke-linecap: butt;
 }
 
 .path-eraser {
     fill: none;
-    stroke: #1a1a1a;
     stroke-linecap: round;
 }
