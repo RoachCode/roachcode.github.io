@@ -17,7 +17,7 @@ const textBoxOptions = {
     bgColor: "#161616e9",
     hexColor: "#dcdacc00",
     contentColor: "#dcdacc",
-    border: {x: 155, y: 49}
+    border: {x: 60, y: 32}
 };
 
 createCelticBox(backgroundOptions, document.querySelector('body'));
