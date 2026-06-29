@@ -62,7 +62,7 @@ export default function createCelticBox(options = {}, ele) {
     tiledSvgBox.classList.add("hex-background");
     tiledSvgBox.style.left = options.boxPosition.x + "px";
     tiledSvgBox.style.top = options.boxPosition.y + "px";
-    tiledSvgBox.style.position = "flex"; 
+    tiledSvgBox.style.position = "absolute"; 
     tiledSvgBox.setAttribute("width", finalBoxWidth);
     tiledSvgBox.setAttribute("height", finalBoxHeight);
     tiledSvgBox.appendChild(bgLayer);
