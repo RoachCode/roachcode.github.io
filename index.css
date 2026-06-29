@@ -1,17 +1,36 @@
 body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;             /* Adds space between side-by-side boxes */
+    flex-wrap: wrap;       /* Allows boxes to stack if the screen is too small */
+    min-height: 100vh;     /* Ensures perfect vertical centering */
     margin: 0;
-    padding: 0;
+    padding: 2rem;
     background-color: #1a1a1a;
     overflow-x: hidden; 
+    font-family: 'Lora', serif;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.page-background {
+    position: absolute;
+}
+
+/* NEW: The container that holds one complete box together */
+.celtic-box-wrapper {
+    position: relative;
+    /* Size is set dynamically via JavaScript */
 }
 
 .hex-background {
-    position: fixed;
+    position: absolute;
+    top: 0;
+    left: 0;
     z-index: -1; 
-    display: block;
 }
 
-/* SVG Specific Styling */
 .hex-border {
     fill: none;
 }
@@ -24,4 +43,13 @@ body {
 .path-eraser {
     fill: none;
     stroke-linecap: round;
+}
+
+.hex-box-content {
+    position: absolute;
+    box-sizing: border-box;
+    overflow: auto;
+    border: 2px solid;
+    border-radius: 10px;
+    padding: 1rem; /* Switched to rem for more consistent text padding */
 }

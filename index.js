@@ -11,15 +11,14 @@ const backgroundOptions = {
 };
 
 const textBoxOptions = {
-    boxPosition: {x: 200, y: 200},
-    boxWidth: 500,
-    boxHeight: 350,
-    hexWidth: 25,
-    pathColor: "#47285a",
-    bgColor: "#000000",
-    hexColor: "#ff0000",
-    borderThickness: 2
+    boxPosition: {x: 0, y: 0},
+    hexWidth: 8,
+    pathColor: "#ffea9e6a",
+    bgColor: "#161616e9",
+    hexColor: "#dcdacc00",
+    contentColor: "#dcdacc",
+    border: {x: 155, y: 49}
 };
 
 createCelticBox(backgroundOptions, document.querySelector('body'));
-//createCelticBox(textBoxOptions, document.querySelector('body'));
+createCelticBox(textBoxOptions, document.querySelector('body'));

@@ -1,7 +1,4 @@
 export default function createCelticBox(options = {}, ele) {
-    console.log("Options received:", options);
-    console.log("Element received:", ele);
-
     // Define hex
     const width = options.hexWidth;
     const totalLineWidth = width / 7; 
@@ -18,15 +15,59 @@ export default function createCelticBox(options = {}, ele) {
     const completeHex = document.createElementNS(svgNS, "g");
     const hexBorder = document.createElementNS(svgNS, "polygon");
 
+    // Check for border mode
+    const isBorder = !!options.border;
+    let finalBoxWidth = options.boxWidth;
+    let finalBoxHeight = options.boxHeight;
+
+    // To prevent clipping, offset the start of the grid by half a hex
+    const startX = radius;
+    const startY = height / 2;
+
+    if (isBorder) {
+        // Exactly calculate SVG dimensions to perfectly wrap the shifted border grid
+        if (options.border.x % 2 === 0 && options.border.x > 1) { options.border.x -= 1; }
+        finalBoxWidth = (options.border.x - 1) * (radius * 1.5) + width;
+        finalBoxHeight = (options.border.y - 1) * height + (height * 2);
+
+        // Exactly calculate SVG dimensions to perfectly wrap the shifted border grid
+        if (options.border.x % 2 === 0 && options.border.x > 1) { options.border.x -= 1; }
+        finalBoxWidth = (options.border.x - 1) * (radius * 1.5) + width;
+        finalBoxHeight = (options.border.y - 1) * height + (height * 2);
+        const contentDiv = document.createElement("div");
+        contentDiv.classList.add("hex-box-content");
+        contentDiv.style.borderColor = options.pathColor;
+
+        // These paddings clear the inner vertices of the border hexes plus a comfort buffer
+        const innerPaddingX = width * 1.2; 
+        const innerPaddingY = height * 1.65;
+
+        // Match the absolute positioning grid of the SVG box
+        contentDiv.style.left = (options.boxPosition.x + innerPaddingX) + "px";
+        contentDiv.style.top = (options.boxPosition.y + innerPaddingY) + "px";
+        contentDiv.style.width = (finalBoxWidth - (innerPaddingX * 2)) + "px";
+        contentDiv.style.height = (finalBoxHeight - (innerPaddingY * 2)) + "px";
+        contentDiv.style.color = options.contentColor || "#fff"; 
+        contentDiv.innerText =
+        ` A classic, literary serif font inspired by traditional books. It looks professional and feels right at home in a fantasy setting
+        `;
+
+        ele.appendChild(contentDiv);
+    }
+    else{
+        tiledSvgBox.classList.add("page-background");
+    }
+
     // Style and append
     tiledSvgBox.classList.add("hex-background");
     tiledSvgBox.style.left = options.boxPosition.x + "px";
     tiledSvgBox.style.top = options.boxPosition.y + "px";
-    tiledSvgBox.setAttribute("width", options.boxWidth);
-    tiledSvgBox.setAttribute("height", options.boxHeight);
-    tiledSvgBox.style.backgroundColor = options.bgColor; 
+    tiledSvgBox.style.position = "flex"; 
+    tiledSvgBox.setAttribute("width", finalBoxWidth);
+    tiledSvgBox.setAttribute("height", finalBoxHeight);
     tiledSvgBox.appendChild(bgLayer);
     tiledSvgBox.appendChild(pathLayer);
+    if (!isBorder) { tiledSvgBox.style.border = "none"; }
 
     // Draw hex border
     const points = [
@@ -36,6 +77,7 @@ export default function createCelticBox(options = {}, ele) {
 
     hexBorder.setAttribute("points", points);
     hexBorder.classList.add("hex-border");
+    hexBorder.style.fill = options.bgColor;
     hexBorder.style.stroke = options.hexColor;
     hexBorder.setAttribute("stroke-width", hexStrokeWidth);
 
@@ -65,10 +107,11 @@ export default function createCelticBox(options = {}, ele) {
         const eraserLine = document.createElementNS(svgNS, "path");
         eraserLine.setAttribute("d", dString);
         eraserLine.classList.add("path-eraser");
-        eraserLine.style.stroke = options.bgColor;        
+        eraserLine.style.stroke = options.bgColor;
+        if (isBorder) { eraserLine.style.stroke = options.pathColor; }
         eraserLine.setAttribute("stroke-width", lineGapWidth);
 
-        const group = document.createElementNS(svgNS, "g");    
+        const group = document.createElementNS(svgNS, "g");  
         group.appendChild(baseLine);
         group.appendChild(eraserLine);
         return group;
@@ -79,37 +122,86 @@ export default function createCelticBox(options = {}, ele) {
     completeHex.appendChild(createDoubleLine(topLeft, bottomLeft)); 
     completeHex.appendChild(createDoubleLine(topRight, bottomMiddle));
 
-    // Generate the grid over bounding area
-    let col = 0;
-    for (let x = 0; x <= options.boxWidth + width; x += radius * 1.5) {
-        const yOffset = (col % 2 === 1) ? height / 2 : 0;
+   // Generate the grid over bounding area OR as a hollow border
+    
+    // FIX: Add left side bleed for backgrounds. Stepping back by 2 columns 
+    // ensures we perfectly maintain the even/odd parity for alignment.
+    const leftBleedCols = !isBorder ? 2 : 0;
+    let col = -leftBleedCols;
+    const maxCols = isBorder ? options.border.x : Infinity;
+
+    // START loop at startX offset, factoring in the left bleed
+    for (let x = startX - (leftBleedCols * radius * 1.5); ; x += radius * 1.5) {
+        if (isBorder && col >= maxCols) break;
         
-        for (let y = yOffset; y <= options.boxHeight + height; y += height) {
+        // FIX: Add right side bleed buffer to ensure the right edge doesn't clip
+        const rightBleedBuffer = !isBorder ? width * 2 : 0;
+        if (!isBorder && (x - startX) > options.boxWidth + width + rightBleedBuffer) break;
 
-            if (options.borderThickness) {
-                // Generously calculate boundaries so edges catch exactly 'n' hexes
-                const thickX = (options.borderThickness - 0.1) * (radius * 1.5);
-                const thickY = (options.borderThickness - 0.1) * height;
+        // INVERTED LOGIC: Even columns shift down, making odd columns step "up"
+        const isEvenCol = (col % 2 === 0);
+        const yOffset = isEvenCol ? height / 2 : 0;
+        
+        let row = 0;
+        
+        // Give odd columns one extra row so the bottom edge zigzags downward
+        const baseRows = isBorder ? options.border.y : Infinity;
+        const currentMaxRows = isBorder ? (isEvenCol ? baseRows : baseRows + 1) : Infinity;
 
-                const isBorderX = x < thickX || x > (options.boxWidth + width) - thickX;
-                const isBorderY = y < thickY || y > (options.boxHeight + height) - thickY;
+        // Prevent top clipping on backgrounds by starting the draw loop one full hex higher
+        const bgTopBleed = !isBorder ? -height : 0;
 
-                // Skip drawing this specific hexagon if it falls in the center
-                if (!isBorderX && !isBorderY) {
-                    continue; 
-                }
+        // START loop at startY offset, factoring in the top bleed
+        for (let y = startY + yOffset + bgTopBleed; ; y += height) {
+            if (isBorder && row >= currentMaxRows) break;
+            
+            // Bottom bleed buffer
+            const bottomBleedBuffer = !isBorder ? height * 2 : 0;
+            if (!isBorder && (y - startY) > options.boxHeight + height + bottomBleedBuffer) break;
+
+            let shouldDrawHex = true;
+            
+            // If in border mode, only draw the perimeter
+            if (isBorder) {
+                const isLeftEdge = (col === 0);
+                const isRightEdge = (col === maxCols - 1);
+                const isTopEdge = (row === 0);
+                
+                // Check against the dynamically adjusted row count for this specific column
+                const isBottomEdge = (row === currentMaxRows - 1);
+                
+                shouldDrawHex = isLeftEdge || isRightEdge || isTopEdge || isBottomEdge;
             }
 
-            const rotation = Math.floor(Math.random() * 6) * 60;
-            const transformString = `translate(${x}, ${y}) rotate(${rotation})`;
-            
-            const hexBgInstance = hexBorder.cloneNode(true);
-            hexBgInstance.setAttribute("transform", transformString);
-            bgLayer.appendChild(hexBgInstance);
-            
-            const hexPathInstance = completeHex.cloneNode(true);
-            hexPathInstance.setAttribute("transform", transformString);
-            pathLayer.appendChild(hexPathInstance);
+            if (shouldDrawHex) {
+                const rotation = Math.floor(Math.random() * 6) * 60;
+                const transformString = `translate(${x}, ${y}) rotate(${rotation})`;
+                
+                const hexBgInstance = hexBorder.cloneNode(true);
+                hexBgInstance.setAttribute("transform", transformString);
+                bgLayer.appendChild(hexBgInstance);
+                
+                const hexPathInstance = completeHex.cloneNode(true);
+                hexPathInstance.setAttribute("transform", transformString);
+                pathLayer.appendChild(hexPathInstance);
+            } else {
+                // FILL THE INSIDE: 
+                // This triggers for all non-edge hexes when isBorder is true
+                const transformString = `translate(${x}, ${y})`;
+                
+                const interiorHex = document.createElementNS(svgNS, "polygon");
+                interiorHex.setAttribute("points", points);
+                interiorHex.style.fill = options.bgColor;
+                
+                // SVG anti-aliasing can cause hairline gaps between adjacent polygons. 
+                // Adding a stroke matching the background color completely hides them.
+                interiorHex.style.stroke = options.bgColor;
+                interiorHex.setAttribute("stroke-width", hexStrokeWidth);
+                
+                interiorHex.setAttribute("transform", transformString);
+                bgLayer.appendChild(interiorHex);
+            }
+            row++;
         }
         col++;
     }
