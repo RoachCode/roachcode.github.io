@@ -15,3 +15,10 @@ export function renderAboutPage(container) {
     // Maybe the about page uses a different data config for a wider box!
     createHexTextBox(celticTextboxData, container, text);
 }
+
+export function renderContactPage(container) {
+    const text = `This is the contact page. It has different content.`;
+    
+    // Maybe the about page uses a different data config for a wider box!
+    createHexTextBox(celticTextboxData, container, text);
+}

@@ -8,13 +8,19 @@
 </head>
 <body>
     <div id="background-layer"></div>
-    <nav id="tab-buttons">
-        <button data-target="home">Home</button>
-        <button data-target="about">About</button>
-        <button data-target="contact">Contact</button>
-    </nav>
-    <main id="content-container"></main>
-    <script type="module" src="celticBox.js"></script>
+
+    <div id="app-wrapper">
+        
+        <main id="content-container"></main>
+
+        <nav id="side-tabs">
+            <button data-target="home" class="active">Home</button>
+            <button data-target="about">About</button>
+            <button data-target="contact">Contact</button>
+        </nav>
+
+    </div>
+
     <script type="module" src="index.js"></script>
 </body>
 </html>

@@ -84,8 +84,8 @@ function createInteriorRect(options, startX, startY, borderX, borderY) {
     bgRect.setAttribute("height", rectHeight);
     
     bgRect.style.fill = options.color.bgColor;
-    bgRect.style.stroke = options.color.bgColor;
-    bgRect.setAttribute("stroke-width", options.dimensions.hexStrokeWidth);
+    //bgRect.style.stroke = options.color.bgColor;
+    //bgRect.setAttribute("stroke-width", options.dimensions.hexStrokeWidth);
 
     return bgRect;
 }
@@ -180,7 +180,7 @@ export function createHexTextBox(options = {}, ele, textContent = "") {
     contentDiv.style.borderColor = options.color.pathColor;
     contentDiv.style.width = (finalBoxWidth - (innerPaddingX * 2)) + "px";
     contentDiv.style.height = (finalBoxHeight - (innerPaddingY * 2)) + "px";
-    contentDiv.style.color = options.color.contentColor || "#fff"; 
+    contentDiv.style.color = options.color.contentColor || "var(--text-color)"; 
     contentDiv.innerHTML = textContent;
 
     // Draw Elements

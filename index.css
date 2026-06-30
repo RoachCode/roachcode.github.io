@@ -1,66 +1,47 @@
-/* --- 1. Global & Layout Layout --- */
+:root {
+    --celtic-green: #dae4af;
+    --celtic-green-old: #205c24;
+    --main-background: #1a1a1a;
+    --text-color: #bfbdb2;
+    --background-path-color: #423a47;
+
+}
+
+* { box-sizing: border-box; }
+
 body {
-    /* Moved the flex layout to #content-container */
     margin: 0;
     padding: 0;
     background-color: #1a1a1a;
-    color: #fff;
     font-size: 18px;
     line-height: 1.6;
     display: flex;
-    flex-direction: column;
-    min-height: 100vh; 
-    overflow-x: hidden; /* Prevents horizontal scrollbars from SVG bleeds */
+    justify-content: center; 
+    align-items: center;     
+    height: 100vh;
+    overflow: hidden; 
 }
 
-/* --- 2. The New SPA Containers --- */
+/* Background stays locked */
 #background-layer {
-    position: fixed; /* Fixed ensures the background stays put if you scroll down */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -2; /* Keeps it behind absolutely everything */
-    overflow: hidden;
+    z-index: -2;
 }
 
-#tab-buttons {
+/* --- The Main App Layout --- */
+#app-wrapper {
     display: flex;
-    justify-content: center;
-    gap: 1rem;
-    padding: 2rem;
-    z-index: 10;
-}
-
-/* Basic styling for your new tab buttons so they match the dark theme */
-#tab-buttons button {
-    padding: 0.5rem 1.5rem;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #2a2a2a;
-    color: #fff;
-    border: 1px solid #555;
-    border-radius: 5px;
-    transition: background-color 0.2s ease;
-}
-
-#tab-buttons button:hover {
-    background-color: #444;
-}
-
-#content-container {
-    /* This takes over the role your body used to have */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 3rem;
-    flex-wrap: wrap;
-    padding: 2rem;
-    flex-grow: 1; /* Allows it to fill the remaining space below the nav */
+    flex-direction: row; 
+    
+    /* CHANGE: Make the tabs container stretch to match the hex box's height */
+    align-items: stretch; 
     z-index: 1;
 }
-
-/* --- 3. Celtic Box Components --- */
+/* --- Celtic Box Glue (THIS IS WHAT WAS MISSING!) --- */
 .textbox-wrapper {
     position: relative;
     display: flex;
@@ -69,7 +50,6 @@ body {
 }
 
 .page-background {
-    /* The SVG itself now stretches to fill its fixed container */
     width: 100%;
     height: 100%;
     display: block;
@@ -82,27 +62,52 @@ body {
     z-index: -1; 
 }
 
-.hex-border {
-    fill: none;
-}
-
-.path-base {
-    fill: none;
-    stroke-linecap: butt;
-}
-
-.path-eraser {
-    fill: none;
-    stroke-linecap: round;
-}
-
 .hex-box-content {
     position: relative;
     box-sizing: border-box;
     overflow: auto;
+    z-index: 1;
     border: 2px solid;
     border-radius: 10px;
-    padding: 1rem;
-    z-index: 1;
-    /* width, height, color, and border-color are handled by your JS */
+}
+
+.hex-border { fill: none; }
+.path-base { fill: none; stroke-linecap: butt; }
+.path-eraser { fill: none; stroke-linecap: round; }
+
+/* --- The Right-Hand Tabs --- */
+#side-tabs {
+    display: flex;
+    flex-direction: column; 
+    
+    /* CHANGE: Distribute the buttons evenly across the available vertical space */
+    justify-content: space-evenly; 
+    
+    margin-left: -5px;
+    padding-right: 5px;
+    
+    /* CHANGE: Replaced margin-top and gap with padding to keep them from hitting the absolute top/bottom corners */
+    padding: 2rem 0; 
+    gap: 1rem;
+}
+
+#side-tabs button {
+    flex-grow: 1;
+    writing-mode: vertical-rl;
+    padding: 1.5rem 0.5rem;
+    font-size: 16px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    background-color: var(--main-background); 
+    color: var(--text-color);
+    border: 2px solid var(--celtic-green); /* Green stroke to match your SVG */
+    border-radius: 0 10px 10px 0; 
+    transition: all 0.2s ease;
+}
+
+#side-tabs button:hover, 
+#side-tabs button.active {
+    background-color: var(--celtic-green); /* Green fill on active */
+    color: var(--text-color);
+    transform: translateX(5px);
 }

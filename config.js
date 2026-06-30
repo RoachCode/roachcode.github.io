@@ -1,10 +1,10 @@
 export const celticBackgroundData = {
     color: {
-        bgColor: "#1a1a1a",
+        bgColor: "var(--main-background)",
         hexColor: "#1f1f1f",
-        pathColor: "#423a47",
-        eraserColor: "#1a1a1a",
-        contentColor: "#ff00d4"
+        pathColor: "var(--background-path-color)",
+        eraserColor: "var(--main-background)",
+        contentColor: "#ff00d4" /* There should be nothing here */
     },
     position: {x: 0, y: 0},
     border: false,
@@ -24,15 +24,15 @@ export const celticTextboxData = {
     color: {
         bgColor: "#161616e9",
         hexColor: "#dcdacc00",
-        pathColor: "#084617",
-        eraserColor: "#084617",
-        contentColor: "#bfbdb2"
+        pathColor: "var(--celtic-green)",
+        eraserColor: "var(--celtic-green)",
+        contentColor: "var(--text-color)"
     },
     position: {x: 0, y: 0},
     border: true,
     size: {
-        x: window.innerWidth * 0.8, 
-        y: window.innerHeight * 0.6
+        x: window.innerWidth * 0.9, 
+        y: window.innerHeight * 0.9
     },
     dimensions: {
        hexWidth: 8,
