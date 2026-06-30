@@ -65,6 +65,8 @@ export function createCelticBox(options = {}, ele) {
         // Exactly calculate SVG dimensions to perfectly wrap the newly calculated border grid
         finalBoxWidth = (borderX - 1) * (options.dimensions.radius * 1.5) + options.dimensions.hexWidth;
         finalBoxHeight = (borderY - 1) * options.dimensions.height + (options.dimensions.height * 2);
+        console.log("finalBoxWidth: " + finalBoxWidth);
+        console.log("finalBoxHeight: " + finalBoxHeight);
 
         const contentDiv = document.createElement("div");
         contentDiv.classList.add("hex-box-content");
@@ -75,8 +77,8 @@ export function createCelticBox(options = {}, ele) {
         const innerPaddingY = options.dimensions.height * 1.65;
 
         // Match the absolute positioning grid of the SVG box
-        contentDiv.style.left = (innerPaddingX) + "px";
-        contentDiv.style.top = (innerPaddingY) + "px";
+        //contentDiv.style.left = (innerPaddingX) + "px";
+        //contentDiv.style.top = (innerPaddingY) + "px";
         contentDiv.style.width = (finalBoxWidth - (innerPaddingX * 2)) + "px";
         contentDiv.style.height = (finalBoxHeight - (innerPaddingY * 2)) + "px";
         contentDiv.style.color = options.color.contentColor || "#fff"; 
@@ -84,8 +86,8 @@ export function createCelticBox(options = {}, ele) {
         ` Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...
         `;
 
-        container.setAttribute("width", finalBoxWidth);
-        container.setAttribute("height", finalBoxHeight);
+        container.style.width = finalBoxWidth + "px";
+        container.style.height = finalBoxHeight + "px";
         container.appendChild(contentDiv);
 
     }
@@ -142,6 +144,34 @@ export function createCelticBox(options = {}, ele) {
     let col = -leftBleedCols;
     const maxCols = isBorder ? options.border.x : Infinity;
 
+    // Generate a single interior background rectangle for borders to save performance
+    if (isBorder) {
+        const bgRect = document.createElementNS(options.svgNS, "rect");
+
+        // Starting at startX and startY hides the top and left edges 
+        // perfectly beneath the center of the top/left border hexagons.
+        bgRect.setAttribute("x", startX);
+        bgRect.setAttribute("y", startY);
+
+        // Calculate span to the centers of the right and bottom border columns
+        const rectWidth = (options.border.x - 1) * (options.dimensions.radius * 1.5);
+        
+        // Adding half a hex height ensures we cover the drop-down zigzag on odd columns
+        const rectHeight = (options.border.y - 1) * options.dimensions.height + (options.dimensions.height / 2);
+
+        bgRect.setAttribute("width", rectWidth);
+        bgRect.setAttribute("height", rectHeight);
+        
+        bgRect.style.fill = options.color.bgColor;
+        
+        // Adding a stroke identical to the fill prevents hairline gaps from sub-pixel rendering
+        bgRect.style.stroke = options.color.bgColor;
+        bgRect.setAttribute("stroke-width", options.dimensions.hexStrokeWidth);
+
+        // Append to the background layer BEFORE the loops run
+        bgLayer.appendChild(bgRect);
+    }
+
     // START loop at startX offset, factoring in the left bleed
     for (let x = startX - (leftBleedCols * options.dimensions.radius * 1.5); ; x += options.dimensions.radius * 1.5) {
         if (isBorder && col >= maxCols) break;
@@ -196,22 +226,6 @@ export function createCelticBox(options = {}, ele) {
                 const hexPathInstance = completeHex.cloneNode(true);
                 hexPathInstance.setAttribute("transform", transformString);
                 pathLayer.appendChild(hexPathInstance);
-            } else {
-                // FILL THE INSIDE: 
-                // This triggers for all non-edge hexes when isBorder is true
-                const transformString = `translate(${x}, ${y})`;
-                
-                const interiorHex = document.createElementNS(options.svgNS, "polygon");
-                interiorHex.setAttribute("points", points);
-                interiorHex.style.fill = options.color.bgColor;
-                
-                // SVG anti-aliasing can cause hairline gaps between adjacent polygons. 
-                // Adding a stroke matching the background color completely hides them.
-                interiorHex.style.stroke = options.color.bgColor;
-                interiorHex.setAttribute("stroke-width", options.dimensions.hexStrokeWidth);
-                
-                interiorHex.setAttribute("transform", transformString);
-                bgLayer.appendChild(interiorHex);
             }
             row++;
         }
