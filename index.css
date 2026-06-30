@@ -2,26 +2,28 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 3rem;             /* Adds space between side-by-side boxes */
-    flex-wrap: wrap;       /* Allows boxes to stack if the screen is too small */
-    min-height: 100vh;     /* Ensures perfect vertical centering */
+    gap: 3rem;
+    flex-wrap: wrap;
+    height: auto;
     margin: 0;
     padding: 2rem;
     background-color: #1a1a1a;
-    overflow-x: hidden; 
-    font-family: 'Lora', serif;
     font-size: 18px;
     line-height: 1.6;
+    flex-wrap: wrap;
+}
+
+.textbox-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .page-background {
     position: absolute;
-}
-
-/* NEW: The container that holds one complete box together */
-.celtic-box-wrapper {
-    position: relative;
-    /* Size is set dynamically via JavaScript */
+    display: block;
+    overflow: hidden;
 }
 
 .hex-background {
@@ -46,10 +48,11 @@ body {
 }
 
 .hex-box-content {
-    position: absolute;
+    position: relative;
     box-sizing: border-box;
     overflow: auto;
     border: 2px solid;
     border-radius: 10px;
-    padding: 1rem; /* Switched to rem for more consistent text padding */
+    padding: 1rem;
+    z-index: 1;
 }

@@ -1,90 +1,123 @@
-export default function createCelticBox(options = {}, ele) {
-    // Define hex
-    const width = options.hexWidth;
-    const totalLineWidth = width / 7; 
-    const lineGapWidth = width / 10;
-    const hexStrokeWidth = width / 80;
-    const radius = width / 2;                  
-    const height = width * (Math.sqrt(3) / 2);
+// Creates double lines using anchor points
+function createDoubleLine(start, center, end, options) {
+    const dString = `M ${start.x} ${start.y} Q ${center.x} ${center.y} ${end.x} ${end.y}`;
+
+    const baseLine = document.createElementNS(options.svgNS, "path");
+    baseLine.setAttribute("d", dString);
+    baseLine.classList.add("path-base");
+    baseLine.style.stroke = options.color.pathColor;
+    baseLine.setAttribute("stroke-width", options.dimensions.totalLineWidth);
+    
+    const eraserLine = document.createElementNS(options.svgNS, "path");
+    eraserLine.setAttribute("d", dString);
+    eraserLine.classList.add("path-eraser");
+    eraserLine.style.stroke = options.color.eraserColor;
+    eraserLine.setAttribute("stroke-width", options.dimensions.lineGapWidth);
+
+    const group = document.createElementNS(options.svgNS, "g");  
+    group.appendChild(baseLine);
+    group.appendChild(eraserLine);
+    return group;
+}
+
+
+
+
+export function createCelticBox(options = {}, ele) {
 
     // Create svg layers
-    const svgNS = "http://www.w3.org/2000/svg";
-    const tiledSvgBox = document.createElementNS(svgNS, "svg");
-    const bgLayer = document.createElementNS(svgNS, "g");
-    const pathLayer = document.createElementNS(svgNS, "g");
-    const completeHex = document.createElementNS(svgNS, "g");
-    const hexBorder = document.createElementNS(svgNS, "polygon");
+    const container = document.createElement("div");
+    container.classList.add("textbox-wrapper");
+    const tiledSvgBox = document.createElementNS(options.svgNS, "svg");
+    const bgLayer = document.createElementNS(options.svgNS, "g");
+    const pathLayer = document.createElementNS(options.svgNS, "g");
+    const completeHex = document.createElementNS(options.svgNS, "g");
+    const hexBorder = document.createElementNS(options.svgNS, "polygon");
 
     // Check for border mode
     const isBorder = !!options.border;
-    let finalBoxWidth = options.boxWidth;
-    let finalBoxHeight = options.boxHeight;
+    let finalBoxWidth = options.size.x;
+    let finalBoxHeight = options.size.y;
 
     // To prevent clipping, offset the start of the grid by half a hex
-    const startX = radius;
-    const startY = height / 2;
+    const startX = options.dimensions.radius;
+    const startY = options.dimensions.height / 2;
 
     if (isBorder) {
-        // Exactly calculate SVG dimensions to perfectly wrap the shifted border grid
-        if (options.border.x % 2 === 0 && options.border.x > 1) { options.border.x -= 1; }
-        finalBoxWidth = (options.border.x - 1) * (radius * 1.5) + width;
-        finalBoxHeight = (options.border.y - 1) * height + (height * 2);
+        // Reverse-engineer the hexagon count based on the requested size
+        let borderX = Math.round((options.size.x - options.dimensions.hexWidth) / (options.dimensions.radius * 1.5)) + 1;
+        let borderY = Math.round((options.size.y - (options.dimensions.height * 2)) / options.dimensions.height) + 1;
 
-        // Exactly calculate SVG dimensions to perfectly wrap the shifted border grid
-        if (options.border.x % 2 === 0 && options.border.x > 1) { options.border.x -= 1; }
-        finalBoxWidth = (options.border.x - 1) * (radius * 1.5) + width;
-        finalBoxHeight = (options.border.y - 1) * height + (height * 2);
+        // Ensure we have at least 1 hexagon in both directions
+        borderX = Math.max(1, borderX);
+        borderY = Math.max(1, borderY);
+
+        // Enforce your rule about odd numbers of hexagons for the X axis
+        if (borderX % 2 === 0 && borderX > 1) { 
+            borderX -= 1; 
+        }
+
+        options.border = {
+            x: borderX,
+            y: borderY
+        };
+
+        // Exactly calculate SVG dimensions to perfectly wrap the newly calculated border grid
+        finalBoxWidth = (borderX - 1) * (options.dimensions.radius * 1.5) + options.dimensions.hexWidth;
+        finalBoxHeight = (borderY - 1) * options.dimensions.height + (options.dimensions.height * 2);
+
         const contentDiv = document.createElement("div");
         contentDiv.classList.add("hex-box-content");
-        contentDiv.style.borderColor = options.pathColor;
+        contentDiv.style.borderColor = options.color.pathColor;
 
         // These paddings clear the inner vertices of the border hexes plus a comfort buffer
-        const innerPaddingX = width * 1.2; 
-        const innerPaddingY = height * 1.65;
+        const innerPaddingX = options.dimensions.hexWidth * 1.2; 
+        const innerPaddingY = options.dimensions.height * 1.65;
 
         // Match the absolute positioning grid of the SVG box
-        contentDiv.style.left = (options.boxPosition.x + innerPaddingX) + "px";
-        contentDiv.style.top = (options.boxPosition.y + innerPaddingY) + "px";
+        contentDiv.style.left = (innerPaddingX) + "px";
+        contentDiv.style.top = (innerPaddingY) + "px";
         contentDiv.style.width = (finalBoxWidth - (innerPaddingX * 2)) + "px";
         contentDiv.style.height = (finalBoxHeight - (innerPaddingY * 2)) + "px";
-        contentDiv.style.color = options.contentColor || "#fff"; 
+        contentDiv.style.color = options.color.contentColor || "#fff"; 
         contentDiv.innerText =
-        ` A classic, literary serif font inspired by traditional books. It looks professional and feels right at home in a fantasy setting
+        ` Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...
         `;
 
-        ele.appendChild(contentDiv);
+        container.setAttribute("width", finalBoxWidth);
+        container.setAttribute("height", finalBoxHeight);
+        container.appendChild(contentDiv);
+
     }
-    else{
+    else {
         tiledSvgBox.classList.add("page-background");
     }
 
     // Style and append
-    tiledSvgBox.classList.add("hex-background");
-    tiledSvgBox.style.left = options.boxPosition.x + "px";
-    tiledSvgBox.style.top = options.boxPosition.y + "px";
-    tiledSvgBox.style.position = "absolute"; 
+    tiledSvgBox.classList.add("hex-background"); 
     tiledSvgBox.setAttribute("width", finalBoxWidth);
     tiledSvgBox.setAttribute("height", finalBoxHeight);
+
     tiledSvgBox.appendChild(bgLayer);
     tiledSvgBox.appendChild(pathLayer);
     if (!isBorder) { tiledSvgBox.style.border = "none"; }
 
     // Draw hex border
     const points = [
-        `-${radius/2},-${height/2}`, `${radius/2},-${height/2}`, `${radius},0`,
-        `${radius/2},${height/2}`, `-${radius/2},${height/2}`, `-${radius},0`
+        `-${options.dimensions.radius/2},-${options.dimensions.height/2}`, `${options.dimensions.radius/2},-${options.dimensions.height/2}`, `${options.dimensions.radius},0`,
+        `${options.dimensions.radius/2},${options.dimensions.height/2}`, `-${options.dimensions.radius/2},${options.dimensions.height/2}`, `-${options.dimensions.radius},0`
     ].join(" ");
 
     hexBorder.setAttribute("points", points);
     hexBorder.classList.add("hex-border");
-    hexBorder.style.fill = options.bgColor;
-    hexBorder.style.stroke = options.hexColor;
-    hexBorder.setAttribute("stroke-width", hexStrokeWidth);
+    hexBorder.style.fill = options.color.bgColor;
+    hexBorder.style.stroke = options.color.hexColor;
+    hexBorder.setAttribute("stroke-width", options.dimensions.hexStrokeWidth);
 
     // Define the key anchor points
-    const eX = radius * 0.75;
-    const eY = height / 4;
-    const topY = height / 2;
+    const eX = options.dimensions.radius * 0.75;
+    const eY = options.dimensions.height / 4;
+    const topY = options.dimensions.height / 2;
     const center = { x: 0, y: 0 };  
 
     const topMiddle = { x: 0, y: -topY };
@@ -94,33 +127,12 @@ export default function createCelticBox(options = {}, ele) {
     const bottomRight = { x: eX, y: eY };
     const bottomMiddle = { x: 0, y: topY };
 
-    // Creates double lines using anchor points
-    function createDoubleLine(start, end) {
-        const dString = `M ${start.x} ${start.y} Q ${center.x} ${center.y} ${end.x} ${end.y}`;
 
-        const baseLine = document.createElementNS(svgNS, "path");
-        baseLine.setAttribute("d", dString);
-        baseLine.classList.add("path-base");
-        baseLine.style.stroke = options.pathColor;
-        baseLine.setAttribute("stroke-width", totalLineWidth);
-        
-        const eraserLine = document.createElementNS(svgNS, "path");
-        eraserLine.setAttribute("d", dString);
-        eraserLine.classList.add("path-eraser");
-        eraserLine.style.stroke = options.bgColor;
-        if (isBorder) { eraserLine.style.stroke = options.pathColor; }
-        eraserLine.setAttribute("stroke-width", lineGapWidth);
-
-        const group = document.createElementNS(svgNS, "g");  
-        group.appendChild(baseLine);
-        group.appendChild(eraserLine);
-        return group;
-    }
 
     // Draw celtic knot pattern
-    completeHex.appendChild(createDoubleLine(topMiddle, bottomRight));
-    completeHex.appendChild(createDoubleLine(topLeft, bottomLeft)); 
-    completeHex.appendChild(createDoubleLine(topRight, bottomMiddle));
+    completeHex.appendChild(createDoubleLine(topMiddle, center, bottomRight, options));
+    completeHex.appendChild(createDoubleLine(topLeft, center, bottomLeft, options)); 
+    completeHex.appendChild(createDoubleLine(topRight, center, bottomMiddle, options));
 
    // Generate the grid over bounding area OR as a hollow border
     
@@ -131,16 +143,16 @@ export default function createCelticBox(options = {}, ele) {
     const maxCols = isBorder ? options.border.x : Infinity;
 
     // START loop at startX offset, factoring in the left bleed
-    for (let x = startX - (leftBleedCols * radius * 1.5); ; x += radius * 1.5) {
+    for (let x = startX - (leftBleedCols * options.dimensions.radius * 1.5); ; x += options.dimensions.radius * 1.5) {
         if (isBorder && col >= maxCols) break;
         
         // FIX: Add right side bleed buffer to ensure the right edge doesn't clip
-        const rightBleedBuffer = !isBorder ? width * 2 : 0;
-        if (!isBorder && (x - startX) > options.boxWidth + width + rightBleedBuffer) break;
+        const rightBleedBuffer = !isBorder ? options.dimensions.hexWidth * 2 : 0;
+        if (!isBorder && (x - startX) > options.size.x + options.dimensions.hexWidth + rightBleedBuffer) break;
 
         // INVERTED LOGIC: Even columns shift down, making odd columns step "up"
         const isEvenCol = (col % 2 === 0);
-        const yOffset = isEvenCol ? height / 2 : 0;
+        const yOffset = isEvenCol ? options.dimensions.height / 2 : 0;
         
         let row = 0;
         
@@ -149,15 +161,15 @@ export default function createCelticBox(options = {}, ele) {
         const currentMaxRows = isBorder ? (isEvenCol ? baseRows : baseRows + 1) : Infinity;
 
         // Prevent top clipping on backgrounds by starting the draw loop one full hex higher
-        const bgTopBleed = !isBorder ? -height : 0;
+        const bgTopBleed = !isBorder ? -options.dimensions.height : 0;
 
         // START loop at startY offset, factoring in the top bleed
-        for (let y = startY + yOffset + bgTopBleed; ; y += height) {
+        for (let y = startY + yOffset + bgTopBleed; ; y += options.dimensions.height) {
             if (isBorder && row >= currentMaxRows) break;
             
             // Bottom bleed buffer
-            const bottomBleedBuffer = !isBorder ? height * 2 : 0;
-            if (!isBorder && (y - startY) > options.boxHeight + height + bottomBleedBuffer) break;
+            const bottomBleedBuffer = !isBorder ? options.dimensions.height * 2 : 0;
+            if (!isBorder && (y - startY) > options.size.y + options.dimensions.height + bottomBleedBuffer) break;
 
             let shouldDrawHex = true;
             
@@ -189,14 +201,14 @@ export default function createCelticBox(options = {}, ele) {
                 // This triggers for all non-edge hexes when isBorder is true
                 const transformString = `translate(${x}, ${y})`;
                 
-                const interiorHex = document.createElementNS(svgNS, "polygon");
+                const interiorHex = document.createElementNS(options.svgNS, "polygon");
                 interiorHex.setAttribute("points", points);
-                interiorHex.style.fill = options.bgColor;
+                interiorHex.style.fill = options.color.bgColor;
                 
                 // SVG anti-aliasing can cause hairline gaps between adjacent polygons. 
                 // Adding a stroke matching the background color completely hides them.
-                interiorHex.style.stroke = options.bgColor;
-                interiorHex.setAttribute("stroke-width", hexStrokeWidth);
+                interiorHex.style.stroke = options.color.bgColor;
+                interiorHex.setAttribute("stroke-width", options.dimensions.hexStrokeWidth);
                 
                 interiorHex.setAttribute("transform", transformString);
                 bgLayer.appendChild(interiorHex);
@@ -206,5 +218,11 @@ export default function createCelticBox(options = {}, ele) {
         col++;
     }
 
-    ele.appendChild(tiledSvgBox);
+    if (isBorder) {
+        container.appendChild(tiledSvgBox);
+        ele.appendChild(container);
+    } else {
+        ele.appendChild(tiledSvgBox);
+    }
+    
 }
