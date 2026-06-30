@@ -135,98 +135,48 @@ export function createCelticBox(options = {}, ele) {
     completeHex.appendChild(createDoubleLine(topMiddle, center, bottomRight, options));
     completeHex.appendChild(createDoubleLine(topLeft, center, bottomLeft, options)); 
     completeHex.appendChild(createDoubleLine(topRight, center, bottomMiddle, options));
-
-   // Generate the grid over bounding area OR as a hollow border
+// Generate the grid over bounding area OR as a hollow border
     
-    // FIX: Add left side bleed for backgrounds. Stepping back by 2 columns 
-    // ensures we perfectly maintain the even/odd parity for alignment.
-    const leftBleedCols = !isBorder ? 2 : 0;
-    let col = -leftBleedCols;
-    const maxCols = isBorder ? options.border.x : Infinity;
-
-    // Generate a single interior background rectangle for borders to save performance
     if (isBorder) {
-        const bgRect = document.createElementNS(options.svgNS, "rect");
-
-        // Starting at startX and startY hides the top and left edges 
-        // perfectly beneath the center of the top/left border hexagons.
-        bgRect.setAttribute("x", startX);
-        bgRect.setAttribute("y", startY);
-
-        // Calculate span to the centers of the right and bottom border columns
-        const rectWidth = (options.border.x - 1) * (options.dimensions.radius * 1.5);
-        
-        // Adding half a hex height ensures we cover the drop-down zigzag on odd columns
-        const rectHeight = (options.border.y - 1) * options.dimensions.height + (options.dimensions.height / 2);
-
-        bgRect.setAttribute("width", rectWidth);
-        bgRect.setAttribute("height", rectHeight);
-        
-        bgRect.style.fill = options.color.bgColor;
-        
-        // Adding a stroke identical to the fill prevents hairline gaps from sub-pixel rendering
-        bgRect.style.stroke = options.color.bgColor;
-        bgRect.setAttribute("stroke-width", options.dimensions.hexStrokeWidth);
-
-        // Append to the background layer BEFORE the loops run
-        bgLayer.appendChild(bgRect);
+        bgLayer.appendChild(createInteriorRect(options, startX, startY));
     }
 
-    // START loop at startX offset, factoring in the left bleed
+    // --- Grid Setup & Bleed Calculations ---
+    const leftBleedCols = !isBorder ? 2 : 0;
+    const rightBleedBuffer = !isBorder ? options.dimensions.hexWidth * 2 : 0;
+    const bottomBleedBuffer = !isBorder ? options.dimensions.height * 2 : 0;
+    const bgTopBleed = !isBorder ? -options.dimensions.height : 0;
+    
+    const maxCols = isBorder ? options.border.x : Infinity;
+    const baseRows = isBorder ? options.border.y : Infinity;
+
+    // Package DOM elements to pass into the helper cleanly
+    const svgElements = { bgLayer, pathLayer, hexBorder, completeHex };
+
+    let col = -leftBleedCols;
+
+    // --- Main Draw Loop ---
     for (let x = startX - (leftBleedCols * options.dimensions.radius * 1.5); ; x += options.dimensions.radius * 1.5) {
         if (isBorder && col >= maxCols) break;
-        
-        // FIX: Add right side bleed buffer to ensure the right edge doesn't clip
-        const rightBleedBuffer = !isBorder ? options.dimensions.hexWidth * 2 : 0;
         if (!isBorder && (x - startX) > options.size.x + options.dimensions.hexWidth + rightBleedBuffer) break;
 
-        // INVERTED LOGIC: Even columns shift down, making odd columns step "up"
         const isEvenCol = (col % 2 === 0);
         const yOffset = isEvenCol ? options.dimensions.height / 2 : 0;
+        const currentMaxRows = isBorder ? (isEvenCol ? baseRows : baseRows + 1) : Infinity;
         
         let row = 0;
         
-        // Give odd columns one extra row so the bottom edge zigzags downward
-        const baseRows = isBorder ? options.border.y : Infinity;
-        const currentMaxRows = isBorder ? (isEvenCol ? baseRows : baseRows + 1) : Infinity;
-
-        // Prevent top clipping on backgrounds by starting the draw loop one full hex higher
-        const bgTopBleed = !isBorder ? -options.dimensions.height : 0;
-
-        // START loop at startY offset, factoring in the top bleed
         for (let y = startY + yOffset + bgTopBleed; ; y += options.dimensions.height) {
             if (isBorder && row >= currentMaxRows) break;
-            
-            // Bottom bleed buffer
-            const bottomBleedBuffer = !isBorder ? options.dimensions.height * 2 : 0;
             if (!isBorder && (y - startY) > options.size.y + options.dimensions.height + bottomBleedBuffer) break;
 
-            let shouldDrawHex = true;
-            
-            // If in border mode, only draw the perimeter
-            if (isBorder) {
-                const isLeftEdge = (col === 0);
-                const isRightEdge = (col === maxCols - 1);
-                const isTopEdge = (row === 0);
-                
-                // Check against the dynamically adjusted row count for this specific column
-                const isBottomEdge = (row === currentMaxRows - 1);
-                
-                shouldDrawHex = isLeftEdge || isRightEdge || isTopEdge || isBottomEdge;
-            }
+            // If it's not a border, always draw. If it is a border, check if it's on the edge.
+            const shouldDrawHex = !isBorder || isPerimeterHex(col, row, maxCols, currentMaxRows);
 
             if (shouldDrawHex) {
-                const rotation = Math.floor(Math.random() * 6) * 60;
-                const transformString = `translate(${x}, ${y}) rotate(${rotation})`;
-                
-                const hexBgInstance = hexBorder.cloneNode(true);
-                hexBgInstance.setAttribute("transform", transformString);
-                bgLayer.appendChild(hexBgInstance);
-                
-                const hexPathInstance = completeHex.cloneNode(true);
-                hexPathInstance.setAttribute("transform", transformString);
-                pathLayer.appendChild(hexPathInstance);
+                placeHexagon(x, y, svgElements);
             }
+            
             row++;
         }
         col++;
@@ -239,4 +189,43 @@ export function createCelticBox(options = {}, ele) {
         ele.appendChild(tiledSvgBox);
     }
     
+}
+
+// HELPER: Generates the solid background rectangle for border mode
+function createInteriorRect(options, startX, startY) {
+    const bgRect = document.createElementNS(options.svgNS, "rect");
+    
+    // Calculate dimensions to span the border centers
+    const rectWidth = (options.border.x - 1) * (options.dimensions.radius * 1.5);
+    const rectHeight = (options.border.y - 1) * options.dimensions.height + (options.dimensions.height / 2);
+
+    bgRect.setAttribute("x", startX);
+    bgRect.setAttribute("y", startY);
+    bgRect.setAttribute("width", rectWidth);
+    bgRect.setAttribute("height", rectHeight);
+    
+    bgRect.style.fill = options.color.bgColor;
+    bgRect.style.stroke = options.color.bgColor;
+    bgRect.setAttribute("stroke-width", options.dimensions.hexStrokeWidth);
+
+    return bgRect;
+}
+
+// HELPER: Determines if a specific grid coordinate is on the outer edge
+function isPerimeterHex(col, row, maxCols, maxRows) {
+    return col === 0 || col === maxCols - 1 || row === 0 || row === maxRows - 1;
+}
+
+// HELPER: Clones, rotates, and appends a hexagon to the SVG layers
+function placeHexagon(x, y, elements) {
+    const rotation = Math.floor(Math.random() * 6) * 60;
+    const transformString = `translate(${x}, ${y}) rotate(${rotation})`;
+    
+    const hexBgInstance = elements.hexBorder.cloneNode(true);
+    hexBgInstance.setAttribute("transform", transformString);
+    elements.bgLayer.appendChild(hexBgInstance);
+    
+    const hexPathInstance = elements.completeHex.cloneNode(true);
+    hexPathInstance.setAttribute("transform", transformString);
+    elements.pathLayer.appendChild(hexPathInstance);
 }
