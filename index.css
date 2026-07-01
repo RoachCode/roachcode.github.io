@@ -1,8 +1,8 @@
 :root {
-    --celtic-green: #5d6d1c;
-    --celtic-green-old: #205c24;
+    --celtic-green: #205c24;
     --main-background: #1a1a1a;
-    --text-color: #bfbdb2;
+    --text-color-old: #bfbdb2;
+    --text-color: #b5a8c2;
     --background-path-color: #423a47;
 
 }
@@ -12,7 +12,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: #1a1a1a;
+    background-color: var(--main-background);
     font-size: 18px;
     line-height: 1.6;
     display: flex;
@@ -40,6 +40,8 @@ body {
     /* CHANGE: Make the tabs container stretch to match the hex box's height */
     align-items: stretch; 
     z-index: 1;
+    height: 95%;
+    width: 95%;
 }
 /* --- Celtic Box Glue (THIS IS WHAT WAS MISSING!) --- */
 .textbox-wrapper {
@@ -47,6 +49,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+
 }
 
 .page-background {
@@ -100,14 +103,65 @@ body {
     cursor: pointer;
     background-color: var(--main-background); 
     color: var(--text-color);
-    border: 2px solid var(--celtic-green); /* Green stroke to match your SVG */
+    border: 2px solid var(--text-color); /* Green stroke to match your SVG */
     border-radius: 0 10px 10px 0; 
     transition: all 0.2s ease;
 }
 
 #side-tabs button:hover, 
 #side-tabs button.active {
-    background-color: var(--celtic-green); /* Green fill on active */
+    background-color: var(--text-color); /* Green fill on active */
     color: var(--main-background);
     transform: translateX(5px);
+}
+
+/* --- Character Sheet Grid Layout --- */
+#character-sheet {
+    /* Take up the full space of the parent container */
+    width: 100%;
+    height: 100%;
+
+    border: 2px solid var(--background-path-color);
+    border-radius: 8px;
+    
+    display: grid;
+    /*gap*/
+    
+    /* Define the size of the columns and rows */
+    grid-template-columns: 1fr 2.5fr 1.5fr; 
+    grid-template-rows: auto 4fr 4fr;
+    
+    /* Visually map exactly where each piece goes */
+    grid-template-areas: 
+        "header header header"
+        "stats skills combat"
+        "stats skills features";
+}
+
+/* Assign the HTML elements to the names mapped above */
+#sheet-header   { grid-area: header; }
+#sheet-stats    { grid-area: stats; }
+#sheet-skills   { grid-area: skills; }
+#sheet-combat   { grid-area: combat; }
+#sheet-features { grid-area: features; }
+
+/* Styling for the internal blocks */
+.sheet-section {
+    background-color: var(--main-background);
+    border: 2px solid var(--background-path-color);
+    border-radius: 8px;
+    padding: 1rem;
+    color: var(--text-color);
+    margin: 1px;
+    /* Center the placeholder text nicely */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.sheet-section h2 {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    margin: 0;
 }

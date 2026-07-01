@@ -3,10 +3,35 @@ import { createHexTextBox } from './celticBox.js';
 import { celticTextboxData } from './config.js';
 
 export function renderHomePage(container) {
-    const text = `Welcome to the home page! Neque porro quisquam est...`;
-    
-    // You can call createHexTextBox multiple times here if a page needs multiple boxes
-    createHexTextBox(celticTextboxData, container, text);
+    // Create the massive main container
+    const sheetWrapper = document.createElement('div');
+    sheetWrapper.id = 'character-sheet';
+
+    // Define the specific areas of our character sheet
+    const sections = [
+        { id: 'sheet-header', text: 'Character Name & Class' },
+        { id: 'sheet-stats', text: 'Attributes (STR, DEX, etc.)' },
+        { id: 'sheet-skills', text: 'Skills & Proficiencies' },
+        { id: 'sheet-combat', text: 'HP, AC, & Attacks' },
+        { id: 'sheet-features', text: 'Traits & Inventory' }
+    ];
+
+    // Generate and append each section to the grid
+    sections.forEach(sec => {
+        const div = document.createElement('div');
+        div.id = sec.id;
+        div.className = 'sheet-section'; // Shared class for basic styling
+        
+        // Placeholder content
+        const title = document.createElement('h2');
+        title.textContent = sec.text;
+        div.appendChild(title);
+        
+        sheetWrapper.appendChild(div);
+    });
+
+    // Append the whole sheet to your main content container
+    container.appendChild(sheetWrapper);
 }
 
 export function renderAboutPage(container) {
