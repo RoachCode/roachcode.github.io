@@ -1,5 +1,5 @@
 :root {
-    --celtic-green: #dae4af;
+    --celtic-green: #5d6d1c;
     --celtic-green-old: #205c24;
     --main-background: #1a1a1a;
     --text-color: #bfbdb2;
@@ -108,6 +108,6 @@ body {
 #side-tabs button:hover, 
 #side-tabs button.active {
     background-color: var(--celtic-green); /* Green fill on active */
-    color: var(--text-color);
+    color: var(--main-background);
     transform: translateX(5px);
 }
