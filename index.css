@@ -1,10 +1,18 @@
 :root {
+    /*
     --celtic-green: #205c24;
     --main-background: #1a1a1a;
     --text-color-old: #bfbdb2;
     --text-color: #b5a8c2;
     --background-path-color: #423a47;
-
+    */
+    --celtic-green: #205c24;
+    --main-background: #1a1814;
+    --text-color: #b4b09d;
+    --tab-color: #95887d;
+    --tab-color-dark: #7e736a;
+    --background-path-color: #7f7a4a;
+    --app-background-color: rgba(20, 38, 56, 0.889);
 }
 
 * { box-sizing: border-box; }
@@ -30,18 +38,22 @@ body {
     width: 100vw;
     height: 100vh;
     z-index: -2;
+    /* display: none; */
 }
 
 /* --- The Main App Layout --- */
 #app-wrapper {
     display: flex;
     flex-direction: row; 
-    
+
     /* CHANGE: Make the tabs container stretch to match the hex box's height */
     align-items: stretch; 
     z-index: 1;
     height: 95%;
     width: 95%;
+    /* border: 1px solid red; */
+    /* Adds a soft shadow: 2px horizontal, 2px vertical, 5px blur, semi-transparent black */
+    box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.205);
 }
 /* --- Celtic Box Glue (THIS IS WHAT WAS MISSING!) --- */
 .textbox-wrapper {
@@ -49,7 +61,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
 .page-background {
@@ -79,58 +90,72 @@ body {
 .path-eraser { fill: none; stroke-linecap: round; }
 
 /* --- The Right-Hand Tabs --- */
-#side-tabs {
+#sheet-nav-right {
     display: flex;
     flex-direction: column; 
-    
+
     /* CHANGE: Distribute the buttons evenly across the available vertical space */
     justify-content: space-evenly; 
     
-    margin-left: -5px;
     padding-right: 5px;
-    
-    /* CHANGE: Replaced margin-top and gap with padding to keep them from hitting the absolute top/bottom corners */
-    padding: 2rem 0; 
-    gap: 1rem;
+
+    /* gap: 1rem; */
 }
 
-#side-tabs button {
-    flex-grow: 1;
+#sheet-nav-right button {
+    flex: 1;
     writing-mode: vertical-rl;
     padding: 1.5rem 0.5rem;
-    font-size: 16px;
     letter-spacing: 2px;
     cursor: pointer;
-    background-color: var(--main-background); 
-    color: var(--text-color);
-    border: 2px solid var(--text-color); /* Green stroke to match your SVG */
+
+
+
+    
     border-radius: 0 10px 10px 0; 
+    /* background-color: var(--tab-color); */
+    background: linear-gradient(to bottom, var(--tab-color-dark) 1%, var(--tab-color) 99%);
+    color: var(--text-color);
+
     transition: all 0.2s ease;
 }
 
-#side-tabs button:hover, 
-#side-tabs button.active {
-    background-color: var(--text-color); /* Green fill on active */
-    color: var(--main-background);
+#sheet-nav-right button:hover, 
+#sheet-nav-right button.active {
+    background: none;
+    background-color: var(--main-background); 
+    color: var(--text-color);
+    border: 2px solid var(--text-color);
+    border-radius: 0 10px 10px 0; 
     transform: translateX(5px);
 }
 
+/* --- Character Sheet Grid Layout --- */
 /* --- Character Sheet Grid Layout --- */
 #character-sheet {
     /* Take up the full space of the parent container */
     width: 100%;
     height: 100%;
 
-    border: 2px solid var(--background-path-color);
+    /* Bring back your background color baseline */
+    background-color: var(--app-background-color); 
+    background-blend-mode:soft-light;
+    /* FIX: Corrected SVG syntax layout */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.0080' numOctaves='6' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.25 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    
+    /* Mixes the noise texture directly into your background color variables */
+    background-blend-mode: overlay; 
+    /* opacity: 0.3; (Optional: alternative way if you separate the layer) */
+
+    /* border: 2px solid var(--background-path-color); */
     border-radius: 8px;
     
     display: grid;
-    /*gap*/
     
     /* Define the size of the columns and rows */
-    grid-template-columns: 1fr 2.5fr 1.5fr; 
-    grid-template-rows: auto 4fr 4fr;
-    
+    grid-template-columns: 5fr 15fr 7fr; 
+    grid-template-rows: 1fr 5fr 5fr;
+
     /* Visually map exactly where each piece goes */
     grid-template-areas: 
         "header header header"
@@ -144,11 +169,12 @@ body {
 #sheet-skills   { grid-area: skills; }
 #sheet-combat   { grid-area: combat; }
 #sheet-features { grid-area: features; }
+#sheet-nav-right { grid-area: navright; }
 
 /* Styling for the internal blocks */
 .sheet-section {
-    background-color: var(--main-background);
-    border: 2px solid var(--background-path-color);
+    background-color: rgba(255, 0, 0, 0);
+    border: 0.5px solid var(--text-color);
     border-radius: 8px;
     padding: 1rem;
     color: var(--text-color);
@@ -158,6 +184,7 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
+    width: 100%;
 }
 
 .sheet-section h2 {
