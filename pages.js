@@ -39,7 +39,18 @@ export async function renderMapPage(container) {
         const mapSvg = targetArea.querySelector("svg");
         mapSvg.style.width = "100%";
         mapSvg.style.height = "100%";
+        mapSvg.setAttribute('class', 'map-fill');
         
+        // 2. Create the <use> element for the border
+        // IMPORTANT: You must use createElementNS for SVG elements
+        const useElement = document.createElementNS("http://www.w3.org/2000/svg", "use");
+        useElement.setAttributeNS("http://www.w3.org/1999/xlink", "href", "#map-data");
+        useElement.setAttribute('class', 'map-border');
+
+// 3. Append the <use> tag directly to mapSvg
+// Since it's inside mapSvg, panzoom will move it automatically!
+mapSvg.appendChild(useElement);
+
         // 3. INITIALIZE PANZOOM
         // This single line adds mouse drag, mouse wheel, and mobile pinch-to-zoom
         const mapController = panzoom(mapSvg, {
