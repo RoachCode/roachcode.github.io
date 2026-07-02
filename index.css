@@ -17,6 +17,7 @@
 
 /* Add this anywhere in your CSS */
 #page-content {
+
     flex: 1; /* Takes up all remaining space in the flex row */
 
     /* Prevents grid blowout from pushing the nav off-screen */
@@ -85,6 +86,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 8px;
 }
 
 .page-background {
