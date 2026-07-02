@@ -44,18 +44,14 @@ export const celticBackgroundData = {
 
 export const celticTextboxData = {
     color: {
-        bgColor: "#161616e9",
+        bgColor: "#000000",
         hexColor: "#dcdacc00",
-        pathColor: "var(--celtic-green)",
-        eraserColor: "var(--celtic-green)",
+        pathColor: "var(--celtic-border)",
+        eraserColor: "var(--celtic-border)",
         contentColor: "var(--text-color)"
     },
     position: {x: 0, y: 0},
     border: true,
-    size: {
-        x: window.innerWidth * 0.9, 
-        y: window.innerHeight * 0.9
-    },
     dimensions: {
        hexWidth: 8,
        totalLineWidth: 8 / 7,

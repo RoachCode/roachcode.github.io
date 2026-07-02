@@ -104,8 +104,8 @@ export function createHexBackground(options = {}, ele) {
     const pathLayer = document.createElementNS(options.svgNS, "g");
 
     tiledSvgBox.classList.add("hex-background", "page-background");
-    tiledSvgBox.setAttribute("width", options.size.x);
-    tiledSvgBox.setAttribute("height", options.size.y);
+    tiledSvgBox.setAttribute("width", ele.clientWidth);
+    tiledSvgBox.setAttribute("height", ele.clientHeight);
     tiledSvgBox.style.border = "none";
     tiledSvgBox.appendChild(bgLayer);
     tiledSvgBox.appendChild(pathLayer);
@@ -124,12 +124,12 @@ export function createHexBackground(options = {}, ele) {
 
     let col = -leftBleedCols;
 
-    for (let x = startX - (leftBleedCols * options.dimensions.radius * 1.5); x <= options.size.x + options.dimensions.hexWidth + rightBleedBuffer; x += options.dimensions.radius * 1.5) {
+    for (let x = startX - (leftBleedCols * options.dimensions.radius * 1.5); x <= ele.clientWidth + options.dimensions.hexWidth + rightBleedBuffer; x += options.dimensions.radius * 1.5) {
         
         const isEvenCol = (col % 2 === 0);
         const yOffset = isEvenCol ? options.dimensions.height / 2 : 0;
         
-        for (let y = startY + yOffset + bgTopBleed; y <= options.size.y + options.dimensions.height + bottomBleedBuffer; y += options.dimensions.height) {
+        for (let y = startY + yOffset + bgTopBleed; y <= ele.clientHeight + options.dimensions.height + bottomBleedBuffer; y += options.dimensions.height) {
             // Unconditional rendering for backgrounds
             placeHexagon(x, y, svgElements);
         }
@@ -146,64 +146,99 @@ export function createHexTextBox(options = {}, ele, textContent = "") {
     const container = document.createElement("div");
     container.classList.add("textbox-wrapper");
     
-    const tiledSvgBox = document.createElementNS(options.svgNS, "svg");
-    const bgLayer = document.createElementNS(options.svgNS, "g");
-    const pathLayer = document.createElementNS(options.svgNS, "g");
+    // --- 1. HORIZONTAL MATH: Perfect Width Scaling ---
+    const targetHexWidth = options.dimensions.hexWidth;
+    const targetRadius = options.dimensions.radius;
+    
+    // Estimate how many columns fit based on original options
+    let borderX = Math.round((ele.clientWidth - targetHexWidth) / (targetRadius * 1.5)) + 1;
+    borderX = Math.max(1, borderX);
+    if (borderX % 2 === 0 && borderX > 1) borderX -= 1; // Keep symmetrical
+    
+    // REVERSE MATH: Find exact hex width so the grid matches clientWidth perfectly
+    // Equation derived from: clientWidth = (borderX - 1) * (newHexWidth * 0.75) + newHexWidth
+    const newHexWidth = ele.clientWidth / (0.75 * borderX + 0.25);
+    const scaleFactor = newHexWidth / targetHexWidth;
+
+    // Create a localized copy of options so we don't permanently alter the global config
+    const scaledOptions = {
+        ...options,
+        dimensions: {
+            hexWidth: newHexWidth,
+            totalLineWidth: options.dimensions.totalLineWidth * scaleFactor,
+            lineGapWidth: options.dimensions.lineGapWidth * scaleFactor,
+            hexStrokeWidth: options.dimensions.hexStrokeWidth * scaleFactor,
+            radius: newHexWidth / 2,
+            height: newHexWidth * (Math.sqrt(3) / 2)
+        }
+    };
+
+    // --- 2. VERTICAL MATH: Standard Fit ---
+    let borderY = Math.round((ele.clientHeight - (scaledOptions.dimensions.height * 2)) / scaledOptions.dimensions.height) + 1;
+    borderY = Math.max(1, borderY);
+
+    // finalBoxWidth is now mathematically identical to ele.clientWidth
+    const finalBoxWidth = ele.clientWidth; 
+    const finalBoxHeight = (borderY - 1) * scaledOptions.dimensions.height + (scaledOptions.dimensions.height * 2);
+
+    // --- 3. SVG & CONTAINER SETUP (Rubber Band Mode) ---
+    const tiledSvgBox = document.createElementNS(scaledOptions.svgNS, "svg");
+    const bgLayer = document.createElementNS(scaledOptions.svgNS, "g");
+    const pathLayer = document.createElementNS(scaledOptions.svgNS, "g");
 
     tiledSvgBox.classList.add("hex-background"); 
     tiledSvgBox.appendChild(bgLayer);
     tiledSvgBox.appendChild(pathLayer);
 
-    // Calculate Grid Bounds
-    let borderX = Math.round((options.size.x - options.dimensions.hexWidth) / (options.dimensions.radius * 1.5)) + 1;
-    let borderY = Math.round((options.size.y - (options.dimensions.height * 2)) / options.dimensions.height) + 1;
+    // Tell wrapper to fill parent exactly
+    container.style.width = "100%";
+    container.style.height = "100%";
+    
+    // Tell SVG to stretch its internal coordinates to fit the wrapper
+    tiledSvgBox.setAttribute("width", "100%");
+    tiledSvgBox.setAttribute("height", "100%");
+    tiledSvgBox.setAttribute("viewBox", `0 0 ${finalBoxWidth} ${finalBoxHeight}`);
+    tiledSvgBox.setAttribute("preserveAspectRatio", "none"); // Allows the Y-axis to squash
 
-    borderX = Math.max(1, borderX);
-    borderY = Math.max(1, borderY);
-    if (borderX % 2 === 0 && borderX > 1) borderX -= 1; 
-
-    const finalBoxWidth = (borderX - 1) * (options.dimensions.radius * 1.5) + options.dimensions.hexWidth;
-    const finalBoxHeight = (borderY - 1) * options.dimensions.height + (options.dimensions.height * 2);
-
-    // Container & SVG Sizing
-    container.style.width = finalBoxWidth + "px";
-    container.style.height = finalBoxHeight + "px";
-    tiledSvgBox.setAttribute("width", finalBoxWidth);
-    tiledSvgBox.setAttribute("height", finalBoxHeight);
-
-    // Setup Content HTML
-    const innerPaddingX = options.dimensions.hexWidth * 1.2; 
-    const innerPaddingY = options.dimensions.height * 1.65;
+    // --- 4. CONTENT HTML SETUP ---
+    // We must squash the Y-padding by the same ratio the background squashed, 
+    // ensuring the text box perfectly avoids the border no matter what.
+    const squashRatioY = ele.clientHeight / finalBoxHeight;
+    const actualPaddingX = scaledOptions.dimensions.hexWidth * 1.2; 
+    const actualPaddingY = (scaledOptions.dimensions.height * 1.65) * squashRatioY;
     
     const contentDiv = document.createElement("div");
     contentDiv.classList.add("hex-box-content");
-    contentDiv.style.borderColor = options.color.pathColor;
-    contentDiv.style.width = (finalBoxWidth - (innerPaddingX * 2)) + "px";
-    contentDiv.style.height = (finalBoxHeight - (innerPaddingY * 2)) + "px";
-    contentDiv.style.color = options.color.contentColor || "var(--text-color)"; 
+    contentDiv.style.borderColor = scaledOptions.color.pathColor;
+    
+    // Use CSS calc to handle padding dynamically
+    contentDiv.style.width = `calc(100% - ${actualPaddingX * 2}px)`;
+    contentDiv.style.height = `calc(100% - ${actualPaddingY * 2}px)`;
+    contentDiv.style.color = scaledOptions.color.contentColor || "var(--text-color)"; 
     contentDiv.innerHTML = textContent;
 
-    // Draw Elements
-    const { hexBorder, completeHex } = createHexTemplates(options);
+    // --- 5. DRAW ELEMENTS ---
+    // Use our new scaledOptions for all templates and rendering
+    const { hexBorder, completeHex } = createHexTemplates(scaledOptions);
     const svgElements = { bgLayer, pathLayer, hexBorder, completeHex };
 
-    const startX = options.dimensions.radius;
-    const startY = options.dimensions.height / 2;
+    const startX = scaledOptions.dimensions.radius;
+    const startY = scaledOptions.dimensions.height / 2;
 
     // Interior solid rect
-    bgLayer.appendChild(createInteriorRect(options, startX, startY, borderX, borderY));
+    bgLayer.appendChild(createInteriorRect(scaledOptions, startX, startY, borderX, borderY));
 
     let col = 0;
 
-    for (let x = startX; col < borderX; x += options.dimensions.radius * 1.5) {
+    for (let x = startX; col < borderX; x += scaledOptions.dimensions.radius * 1.5) {
         
         const isEvenCol = (col % 2 === 0);
-        const yOffset = isEvenCol ? options.dimensions.height / 2 : 0;
+        const yOffset = isEvenCol ? scaledOptions.dimensions.height / 2 : 0;
         const currentMaxRows = isEvenCol ? borderY : borderY + 1;
         
         let row = 0;
         
-        for (let y = startY + yOffset; row < currentMaxRows; y += options.dimensions.height) {
+        for (let y = startY + yOffset; row < currentMaxRows; y += scaledOptions.dimensions.height) {
             
             // Only draw if on the perimeter
             if (isPerimeterHex(col, row, borderX, currentMaxRows)) {
@@ -217,4 +252,46 @@ export function createHexTextBox(options = {}, ele, textContent = "") {
     container.appendChild(contentDiv);
     container.appendChild(tiledSvgBox);
     ele.appendChild(container);
+}
+
+
+export function mountResponsiveBackground(options, container) {
+    let resizeTimer;
+    
+    const observer = new ResizeObserver(() => {
+        // Debounce: wait 100ms after the resizing stops before drawing
+        // This prevents massive lag from redrawing hundreds of SVGs instantly
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            // 1. Wipe the old background
+            container.replaceChildren(); 
+            
+            // 2. Draw the new one
+            createHexBackground(options, container);
+        }, 100); 
+    });
+
+    // Start watching the container
+    observer.observe(container);
+    
+    // Return the observer in case you need to disconnect it later
+    return observer;
+}
+
+export function mountResponsiveTextBox(options, container, textContent = "") {
+    let resizeTimer;
+    
+    const observer = new ResizeObserver(() => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            // 1. Wipe the old text box
+            container.replaceChildren(); 
+            
+            // 2. Draw the new one with the exact same text
+            createHexTextBox(options, container, textContent);
+        }, 50); // Text boxes are smaller, so we can redraw a bit faster
+    });
+
+    observer.observe(container);
+    return observer;
 }

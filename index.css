@@ -1,18 +1,42 @@
 :root {
     /*
-    --celtic-green: #205c24;
+    --celtic-border: #205c24;
     --main-background: #1a1a1a;
     --text-color-old: #bfbdb2;
     --text-color: #b5a8c2;
     --background-path-color: #423a47;
     */
-    --celtic-green: #205c24;
+    --celtic-border: #ffffff;
     --main-background: #1a1814;
     --text-color: #b4b09d;
     --tab-color: #95887d;
     --tab-color-dark: #7e736a;
     --background-path-color: #7f7a4a;
     --app-background-color: rgba(20, 38, 56, 0.889);
+}
+
+/* Add this anywhere in your CSS */
+#page-content {
+    flex: 1; /* Takes up all remaining space in the flex row */
+
+    /* Prevents grid blowout from pushing the nav off-screen */
+    overflow: hidden; 
+    /* Take up the full space of the parent container */
+    width: 100%;
+    height: 100%;
+
+    /* Bring back your background color baseline */
+    background-color: var(--app-background-color); 
+    background-blend-mode:soft-light;
+    /* FIX: Corrected SVG syntax layout */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.0080' numOctaves='6' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.25 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    
+    /* Mixes the noise texture directly into your background color variables */
+    background-blend-mode: overlay; 
+    /* opacity: 0.3; (Optional: alternative way if you separate the layer) */
+
+    /* border: 2px solid var(--background-path-color); */
+    border-radius: 8px;
 }
 
 * { box-sizing: border-box; }
@@ -81,8 +105,6 @@ body {
     box-sizing: border-box;
     overflow: auto;
     z-index: 1;
-    border: 2px solid;
-    border-radius: 10px;
 }
 
 .hex-border { fill: none; }
@@ -108,22 +130,23 @@ body {
     padding: 1.5rem 0.5rem;
     letter-spacing: 2px;
     cursor: pointer;
-
-
-
     
     border-radius: 0 10px 10px 0; 
-    /* background-color: var(--tab-color); */
+    /* 1. Add a transparent border to prevent layout jumping on hover */
+    border: 2px solid transparent; 
+    
+    /* Base gradient */
     background: linear-gradient(to bottom, var(--tab-color-dark) 1%, var(--tab-color) 99%);
     color: var(--text-color);
-
+    
     transition: all 0.2s ease;
 }
 
 #sheet-nav-right button:hover, 
 #sheet-nav-right button.active {
-    background: none;
-    background-color: var(--main-background); 
+    /* 2. Remove background: none and use a flat gradient instead */
+    background: linear-gradient(to bottom, var(--main-background) 1%, var(--main-background) 99%); 
+    
     color: var(--text-color);
     border: 2px solid var(--text-color);
     border-radius: 0 10px 10px 0; 
@@ -133,22 +156,7 @@ body {
 /* --- Character Sheet Grid Layout --- */
 /* --- Character Sheet Grid Layout --- */
 #character-sheet {
-    /* Take up the full space of the parent container */
-    width: 100%;
-    height: 100%;
-
-    /* Bring back your background color baseline */
-    background-color: var(--app-background-color); 
-    background-blend-mode:soft-light;
-    /* FIX: Corrected SVG syntax layout */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.0080' numOctaves='6' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.25 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
     
-    /* Mixes the noise texture directly into your background color variables */
-    background-blend-mode: overlay; 
-    /* opacity: 0.3; (Optional: alternative way if you separate the layer) */
-
-    /* border: 2px solid var(--background-path-color); */
-    border-radius: 8px;
     
     display: grid;
     

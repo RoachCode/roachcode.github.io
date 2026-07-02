@@ -1,22 +1,21 @@
 // index.js
-import { createHexBackground } from './celticBox.js';
+import { mountResponsiveBackground } from './celticBox.js';
 import { celticBackgroundData } from './config.js';
 import { renderCharacterPage, renderMapPage, renderGlossaryPage } from './pages.js';
 
 // 1. Grab DOM elements
 const bgLayer = document.getElementById('background-layer');
-const appWrapper = document.getElementById('app-wrapper');
-// FIX: Keep a persistent reference to the actual navigation element container
-const sheetNav = document.getElementById('sheet-nav-right');
+// FIX: Target the new page-content container instead of the whole wrapper
+const pageContent = document.getElementById('page-content');
 const navButtons = document.querySelectorAll('#sheet-nav-right button');
 
 // 2. Draw the static background ONCE
-createHexBackground(celticBackgroundData, bgLayer);
+mountResponsiveBackground(celticBackgroundData, bgLayer);
 
 // 3. The Tab Switching Logic
 function loadTab(tabName) {
     // Wipe the container's contents safely (sheetNav is preserved in JS memory)
-    appWrapper.replaceChildren(); 
+    pageContent.replaceChildren(); 
 
     // Update the visual "active" state on the tabs
     navButtons.forEach(btn => {
@@ -33,21 +32,21 @@ function loadTab(tabName) {
     switch (tabName) {
         case 'character':
             // FIX: Pass the real navigation node into the home page grid setup
-            renderCharacterPage(appWrapper);
+            renderCharacterPage(pageContent);
             break;
         case 'map':
-            renderMapPage(appWrapper);
+            renderMapPage(pageContent);
             // FIX: Append the navigation to the app wrapper flex layout so it stays visible
 
             break;
         case 'glossary':
-            renderGlossaryPage(appWrapper); 
+            renderGlossaryPage(pageContent); 
 
             break;
         default:
-            appWrapper.appendChild(sheetNav);
+            break;
     }
-    appWrapper.appendChild(sheetNav);
+
 }
 
 // 4. Attach Event Listeners to Buttons

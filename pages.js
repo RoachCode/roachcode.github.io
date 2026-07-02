@@ -1,13 +1,11 @@
 // pages.js
-import { createHexTextBox } from './celticBox.js';
+import { mountResponsiveBackground, mountResponsiveTextBox } from './celticBox.js';
 import { celticTextboxData } from './config.js';
 
-export function renderCharacterPage(container, sheetNav) {
-    // Create the massive main container
-    const sheetWrapper = document.createElement('div');
-    sheetWrapper.id = 'character-sheet';
+export function renderCharacterPage(container) {
+    const characterSheet = document.createElement('div');
+    characterSheet.id = 'character-sheet';
 
-    // Define the structural areas of our character sheet (EXCLUDING the navigation element)
     const sections = [
         { id: 'sheet-header' },
         { id: 'sheet-stats' },
@@ -16,38 +14,22 @@ export function renderCharacterPage(container, sheetNav) {
         { id: 'sheet-features' }
     ];
 
-    // Generate and append each core section to the grid
     sections.forEach(sec => {
         const div = document.createElement('div');
         div.id = sec.id;
         div.className = 'sheet-section'; 
-        sheetWrapper.appendChild(div);
+        characterSheet.appendChild(div);
     });
 
-    // FIX: Injection point. Toss the living navigation element directly into the grid wrapper.
-    if (sheetNav) {
-        sheetWrapper.appendChild(sheetNav);
-    }
-
-    // Append the whole sheet to your main content container
-    container.appendChild(sheetWrapper);
+    // The entire page gets dropped into pageContent. No nav hacking required.
+    container.appendChild(characterSheet);
 }
 
 export function renderMapPage(container) {
-    
-    createHexTextBox(celticTextboxData, container, text);
+    const text = "testy mctest";
+    mountResponsiveTextBox(celticTextboxData, container, text);
 }
 
 export function renderGlossaryPage(container) {
-    // Create the massive main container
-    const sheetWrapper = document.createElement('div');
-    sheetWrapper.id = 'character-sheet';
 
-    // FIX: Injection point. Toss the living navigation element directly into the grid wrapper.
-    if (sheetNav) {
-        sheetWrapper.appendChild(sheetNav);
-    }
-
-    // Append the whole sheet to your main content container
-    container.appendChild(sheetWrapper);
 }
