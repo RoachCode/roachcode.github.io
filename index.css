@@ -104,7 +104,21 @@ body {
     position: relative;
     box-sizing: border-box;
     overflow: auto;
-    z-index: 1;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    /* z-index: 1; */
+
+}
+
+.hex-box-content svg path {
+    /* /fill: var(--main-background) !important; */
+    /* filter: url(#noiseFilter) !important; */
+    fill: rgba(28, 80, 0, 0.553);
+    stroke: var(--tab-color) !important;
+    stroke-width: 2px !important;
 }
 
 .hex-border { fill: none; }
@@ -156,8 +170,8 @@ body {
 /* --- Character Sheet Grid Layout --- */
 /* --- Character Sheet Grid Layout --- */
 #character-sheet {
-    
-    
+    width: 100%;
+    height: 100%;
     display: grid;
     
     /* Define the size of the columns and rows */
