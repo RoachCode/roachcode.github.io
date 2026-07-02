@@ -25,7 +25,7 @@ export const celticBackgroundData = {
         bgColor: "var(--main-background)",
         hexColor: "#ffffff05",
         pathColor: "var(--background-path-color)",
-        eraserColor: "#262205",
+        eraserColor: "var(--background-eraser-color)",
         contentColor: "#ff00d4" /* There should be nothing here */
     },
     position: {x: 0, y: 0},
@@ -34,7 +34,7 @@ export const celticBackgroundData = {
     dimensions: {
        hexWidth: 33,
        totalLineWidth: 33 / 7,
-       lineGapWidth: 33 / 10,
+       lineGapWidth: 33 / 20,
        hexStrokeWidth: 33 / 80,
        radius: 33 / 2,
        height: 33 * (Math.sqrt(3) / 2)

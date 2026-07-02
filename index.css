@@ -1,18 +1,25 @@
 :root {
     /*
-    --celtic-border: #205c24;
-    --main-background: #1a1a1a;
-    --text-color-old: #bfbdb2;
-    --text-color: #b5a8c2;
-    --background-path-color: #423a47;
-    */
-    --celtic-border: #ffffff;
-    --main-background: #1a1814;
+    --main-background: #000000;
+    --background-path-color: #021c2f;
+    --background-eraser-color : #454556;
+    --app-background-color: #142638e3;       
     --text-color: #b4b09d;
     --tab-color: #95887d;
     --tab-color-dark: #7e736a;
-    --background-path-color: #7f7a4a;
-    --app-background-color: rgba(20, 38, 56, 0.889);
+    --celtic-border: #ffffff;    
+    */
+
+
+    --main-background: #040204;
+    --background-path-color: #051c2d;
+    --background-eraser-color : #353546;
+    --app-background-color: #142638e3;       
+    --text-color: #b4b09d;
+    --tab-color: #95887d;
+    --tab-color-dark: #7e736a;
+    --celtic-border: #ffffff;    
+
 }
 
 /* Add this anywhere in your CSS */
@@ -79,6 +86,7 @@ body {
     /* border: 1px solid red; */
     /* Adds a soft shadow: 2px horizontal, 2px vertical, 5px blur, semi-transparent black */
     box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.205);
+    border-radius: 8px;
 }
 /* --- Celtic Box Glue (THIS IS WHAT WAS MISSING!) --- */
 .textbox-wrapper {
@@ -198,11 +206,10 @@ body {
 /* Styling for the internal blocks */
 .sheet-section {
     background-color: rgba(255, 0, 0, 0);
-    border: 0.5px solid var(--text-color);
+    border: 1px solid rgba(255, 0, 0, 0.17);
     border-radius: 8px;
-    padding: 1rem;
     color: var(--text-color);
-    margin: 1px;
+    /* margin: 1px; */
     /* Center the placeholder text nicely */
     display: flex;
     justify-content: center;
