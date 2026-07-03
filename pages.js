@@ -9,11 +9,10 @@ export function renderCharacterPage(container) {
     characterSheet.id = 'character-sheet';
 
     const sections = [
-        { id: 'sheet-header' },
-        { id: 'sheet-stats' },
-        { id: 'sheet-skills' },
-        { id: 'sheet-combat' },
-        { id: 'sheet-features' }
+        { id: 'sheet-header' }, { id: 'sheet-header2' },
+        { id: 'sheet-header3' }, { id: 'sheet-stats' },
+        { id: 'sheet-skills' }, { id: 'sheet-combat' },
+        { id: 'sheet-features' }, { id: 'sheet-arc' }
     ];
 
     sections.forEach(sec => {
@@ -23,8 +22,54 @@ export function renderCharacterPage(container) {
         characterSheet.appendChild(div);
     });
 
-    // The entire page gets dropped into pageContent. No nav hacking required.
+    // 1. Add characterSheet to the DOM FIRST
     container.appendChild(characterSheet);
+
+    // 2. NOW we can query the DOM for #sheet-arc
+    const sheetArc = document.getElementById('sheet-arc');
+    
+    // Define your stats array here
+    const stats = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
+
+    // 3. Perform calculations
+    const rect = sheetArc.getBoundingClientRect();
+    const aspectRatio = rect.width / rect.height;
+
+    // We use a base radius relative to the container width (e.g., 30%)
+    // If the box is wider than it is tall, we force the Y radius to shrink 
+    // to keep the orbit circular rather than stretched.
+    const radiusX = 30; 
+    const radiusY = 30 * aspectRatio; 
+
+    const centerX = 50; 
+    const centerY = 50;
+
+    stats.forEach((stat, i) => {
+        // Calculate degrees: 0, 60, 120, 180, 240, 300
+        // We don't need radians for CSS!
+        const angle = i * (360 / stats.length); 
+        
+        const shape = `<circle cx="50" cy="50" r="45" fill="#00000000" stroke="var(--text-color)" stroke-width="4"/>`;
+        const node = createStatComponent(shape, 10, stat); 
+        
+        // Pin every node to the exact dead-center of #sheet-arc
+        node.style.top = '50%';
+        node.style.left = '50%';
+        
+        // The Magic Formula:
+        // 1. Center it (-50%, -50%)
+        // 2. Rotate it to the correct angle
+        // 3. Push it outward by a factor of its own size (e.g., 180%)
+        // 4. Rotate it backward so the text/numbers stay upright
+        node.style.transform = `
+            translate(-50%, -50%) 
+            rotate(${angle}deg) 
+            translateY(calc(-50cqmin + 14cqmin)) 
+            rotate(-${angle}deg)
+        `;
+        // 4. APPEND TO sheetArc
+        sheetArc.appendChild(node);
+    });
 }
 
 export async function renderMapPage(container) {
@@ -75,6 +120,10 @@ mapSvg.appendChild(useElement);
     }
 }
 
+export function renderBattlePage(container) {
+
+}
+
 export function renderGlossaryPage(container) {
 
 }
@@ -100,4 +149,27 @@ function waitForElement(selector, parent = document) {
         // Start watching the parent container for new children
         observer.observe(parent, { childList: true, subtree: true });
     });
+}
+
+export function createStatComponent(svgInnerCode, startingNumber, label = '') {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'stat-node';
+    
+    // 1. The SVG Background Layer
+    const svgLayer = `
+        <svg class="node-art" viewBox="0 0 100 100">
+            ${svgInnerCode}
+        </svg>
+    `;
+
+    // 2. The HTML Foreground Layer
+    const contentLayer = `
+        <div class="node-content">
+            ${label ? `<span class="node-label">${label}</span>` : ''}
+            <input type="text" class="stat-input" value="${startingNumber}" />
+        </div>
+    `;
+
+    wrapper.innerHTML = svgLayer + contentLayer;
+    return wrapper;
 }

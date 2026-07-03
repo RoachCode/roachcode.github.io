@@ -14,8 +14,7 @@
     --main-background: #16161d;
     --background-path-color: #051c2d;
     --background-eraser-color : #353546;
-    /* --app-background-color: #142638e3; */
-    --app-background-color: #14263800;    
+    --app-background-color: #142638e3;   
     --text-color: #b4b09d;
     --tab-color: #95887d;
     --tab-color-dark: #7e736a;
@@ -193,28 +192,44 @@ body {
     display: grid;
     
     /* Define the size of the columns and rows */
-    grid-template-columns: 5fr 15fr 7fr; 
-    grid-template-rows: 1fr 5fr 5fr;
+    grid-template-columns: 5fr 5fr 5fr; 
+    grid-template-rows: 2fr 1fr 1fr 8fr 5fr 5fr;
 
     /* Visually map exactly where each piece goes */
     grid-template-areas: 
         "header header header"
-        "stats skills combat"
+        "header2 header2 header2"
+        "header3 header3 header3"
+        "stats arc combat"
+        "stats skills features"
         "stats skills features";
 }
 
 /* Assign the HTML elements to the names mapped above */
+#sheet-header2   { grid-area: header2; }
+#sheet-header3   { grid-area: header3; }
 #sheet-header   { grid-area: header; }
 #sheet-stats    { grid-area: stats; }
 #sheet-skills   { grid-area: skills; }
 #sheet-combat   { grid-area: combat; }
 #sheet-features { grid-area: features; }
+#sheet-arc   { 
+    grid-area: arc; 
+    position: relative; /* Crucial: This traps the absolutely positioned SVG inside this specific grid cell */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1; /* Ensures the container's normal HTML content stays on top */
+    width: 100%;
+    height: 100%;
+    container-type: size;
+}
 #sheet-nav-right { grid-area: navright; }
 
 /* Styling for the internal blocks */
 .sheet-section {
     background-color: rgba(255, 0, 0, 0);
-    border: 1px solid rgba(255, 0, 0, 0.17);
+    border: 1px solid rgb(255, 0, 0);
     border-radius: 8px;
     color: var(--text-color);
     /* margin: 1px; */
@@ -230,4 +245,53 @@ body {
     font-size: 1.2rem;
     color: var(--text-color);
     margin: 0;
+}
+
+/* 1. The Parent Node */
+.stat-node {
+    position: absolute;
+    width: 28cqmin; /* Size of the node relative to the main #sheet-arc */
+    aspect-ratio: 1 / 1;
+    
+    /* NEW: This makes the node a container for its internal text */
+    container-type: size; 
+}
+
+/* 2. The Layers */
+.node-art, .node-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* We only need flexbox on the content layer */
+.node-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2; /* Keeps inputs clickable above the SVG */
+}
+
+/* 3. The Responsive Typography */
+.node-label {
+    /* Replaces 12px. It will always be 15% of the node's width */
+    font-size: 15cqmin; 
+    color: var(--text-color);
+    letter-spacing: 1px;
+}
+
+.stat-input {
+    /* Replaces 40px. The input is always 60% of the node's width */
+    width: 60cqmin; 
+    text-align: center;
+    background: transparent;
+    border: none;
+    color: white;
+    /* Replaces 24px. The number will always be 35% of the node's width */
+    font-size: 35cqmin; 
+    font-weight: bold;
+    outline: none;
 }

@@ -1,7 +1,7 @@
 // index.js
 import { mountResponsiveBackground } from './celticBox.js';
 import { celticBackgroundData } from './config.js';
-import { renderCharacterPage, renderMapPage, renderGlossaryPage } from './pages.js';
+import { renderCharacterPage, renderMapPage, renderBattlePage, renderGlossaryPage } from './pages.js';
 
 // 1. Grab DOM elements
 const bgLayer = document.getElementById('background-layer');
@@ -37,8 +37,8 @@ function loadTab(tabName) {
         case 'map':
             renderMapPage(pageContent);
             // FIX: Append the navigation to the app wrapper flex layout so it stays visible
-
-            break;
+        case 'battle':
+            renderBattlePage(pageContent);
         case 'glossary':
             renderGlossaryPage(pageContent); 
 
