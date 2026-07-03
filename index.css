@@ -14,7 +14,8 @@
     --main-background: #16161d;
     --background-path-color: #051c2d;
     --background-eraser-color : #353546;
-    --app-background-color: #142638e3;       
+    /* --app-background-color: #142638e3; */
+    --app-background-color: #14263800;    
     --text-color: #b4b09d;
     --tab-color: #95887d;
     --tab-color-dark: #7e736a;
