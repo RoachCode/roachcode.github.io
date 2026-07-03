@@ -1,25 +1,3 @@
-export const celticBackgroundDataOld = {
-    color: {
-        bgColor: "var(--main-background)",
-        hexColor: "#1f1f1f",
-        pathColor: "var(--background-path-color)",
-        eraserColor: "var(--main-background)",
-        contentColor: "#ff00d4" /* There should be nothing here */
-    },
-    position: {x: 0, y: 0},
-    border: false,
-    size: {x: window.innerWidth, y: window.innerHeight},
-    dimensions: {
-       hexWidth: 80,
-       totalLineWidth: 80 / 7,
-       lineGapWidth: 80 / 10,
-       hexStrokeWidth: 80 / 80,
-       radius: 80 / 2,
-       height: 80 * (Math.sqrt(3) / 2)
-    },
-    svgNS: "http://www.w3.org/2000/svg"
-};
-
 export const celticBackgroundData = {
     color: {
         bgColor: "var(--main-background)",

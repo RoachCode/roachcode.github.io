@@ -192,7 +192,7 @@ body {
     display: grid;
     
     /* Define the size of the columns and rows */
-    grid-template-columns: 5fr 5fr 5fr; 
+    grid-template-columns: 5fr 6fr 5fr; 
     grid-template-rows: 2fr 1fr 1fr 8fr 5fr 5fr;
 
     /* Visually map exactly where each piece goes */
@@ -229,7 +229,7 @@ body {
 /* Styling for the internal blocks */
 .sheet-section {
     background-color: rgba(255, 0, 0, 0);
-    border: 1px solid rgb(255, 0, 0);
+    border: 1px solid color-mix(in srgb, var(--text-color), transparent 70%);
     border-radius: 8px;
     color: var(--text-color);
     /* margin: 1px; */
@@ -250,7 +250,8 @@ body {
 /* 1. The Parent Node */
 .stat-node {
     position: absolute;
-    width: 28cqmin; /* Size of the node relative to the main #sheet-arc */
+    /* Increased from 28cqmin to 40cqmin to account for the new outer text padding */
+    width: 40cqmin; 
     aspect-ratio: 1 / 1;
     
     /* NEW: This makes the node a container for its internal text */
@@ -266,32 +267,23 @@ body {
     height: 100%;
 }
 
-/* We only need flexbox on the content layer */
+/* 3. The Content Wrapper */
 .node-content {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 2; /* Keeps inputs clickable above the SVG */
+    /* z-index: 2;  */
+    /* Pushes the input down slightly so it balances with the top text */
+    /* padding-top: 10cqmin; */
 }
 
-/* 3. The Responsive Typography */
-.node-label {
-    /* Replaces 12px. It will always be 15% of the node's width */
-    font-size: 15cqmin; 
-    color: var(--text-color);
-    letter-spacing: 1px;
-}
-
+/* 4. The Massive Number */
 .stat-input {
-    /* Replaces 40px. The input is always 60% of the node's width */
-    width: 60cqmin; 
+    /* REMOVE: width: 80cqmin; */
+    /* REMOVE: font-size: 40cqmin; */
     text-align: center;
     background: transparent;
     border: none;
-    color: white;
-    /* Replaces 24px. The number will always be 35% of the node's width */
-    font-size: 35cqmin; 
-    font-weight: bold;
+    color: var(--text-color);
     outline: none;
 }

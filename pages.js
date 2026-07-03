@@ -27,9 +27,9 @@ export function renderCharacterPage(container) {
 
     // 2. NOW we can query the DOM for #sheet-arc
     const sheetArc = document.getElementById('sheet-arc');
-    
+
     // Define your stats array here
-    const stats = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
+    const stats = ['Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom', 'Charisma'];
 
     // 3. Perform calculations
     const rect = sheetArc.getBoundingClientRect();
@@ -49,8 +49,9 @@ export function renderCharacterPage(container) {
         // We don't need radians for CSS!
         const angle = i * (360 / stats.length); 
         
-        const shape = `<circle cx="50" cy="50" r="45" fill="#00000000" stroke="var(--text-color)" stroke-width="4"/>`;
-        const node = createStatComponent(shape, 10, stat); 
+        const shape = `<circle cx="50" cy="50" r="45" fill="#00000000" stroke="var(--text-color)" stroke-width="2"/>`;
+        const config = { radius: 45 }; 
+        const node = createStatComponent(shape, 10, stat, angle); 
         
         // Pin every node to the exact dead-center of #sheet-arc
         node.style.top = '50%';
@@ -62,14 +63,63 @@ export function renderCharacterPage(container) {
         // 3. Push it outward by a factor of its own size (e.g., 180%)
         // 4. Rotate it backward so the text/numbers stay upright
         node.style.transform = `
-            translate(-50%, -50%) 
-            rotate(${angle}deg) 
-            translateY(calc(-50cqmin + 14cqmin)) 
-            rotate(-${angle}deg)
-        `;
+        translate(-50%, -50%) 
+        rotate(${angle}deg) 
+        translateY(calc(-50cqmin + 20cqmin)) 
+        rotate(-${angle}deg)
+    `;
         // 4. APPEND TO sheetArc
         sheetArc.appendChild(node);
+
+        // ==========================================
+        // 2. INNER RING (New smaller circles)
+        // ==========================================
+        // Decrease 'r' to make the circle itself smaller (e.g., from 45 to 20)
+        const innerShape = `<circle cx="50" cy="50" r="22" fill="#00000000" stroke="var(--text-color)" stroke-width="1"/>`;
+        
+        // Pass whatever inner value/text you need here (using "+0" and an empty string as placeholders)
+        const configSmall = { radius: 22 }; 
+        const innerNode = createStatComponent(innerShape, "+0", "", angle, configSmall);
+        
+        innerNode.style.top = '50%';
+        innerNode.style.left = '50%';
+        innerNode.style.position = 'absolute';
+        
+        // Set a higher z-index so it sits on top of the central blue circle
+        innerNode.style.zIndex = '5'; 
+        
+        // Push it outward by a smaller amount. 
+        // The outer ring pushes by effectively -30cqmin. 
+        // We will push this inner ring by -14cqmin to keep it inside.
+        innerNode.style.transform = `
+            translate(-50%, -50%) 
+            rotate(${angle}deg) 
+            translateY(-14cqmin) 
+            rotate(-${angle}deg)
+        `;
+        
+        sheetArc.appendChild(innerNode);
     });
+
+    // 1. Create the element
+    const circle = document.createElement('div');
+
+    // 2. Define the styles
+    const size = '40cqmin';
+    Object.assign(circle.style, {
+    width: size,
+    height: size,
+    borderRadius: '50%',
+    backgroundColor: 'color-mix(in srgb, #365568, transparent 0%)', // Using your variable
+    border: '1px solid #d5d1596d',            // Or another variable/color
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 3
+    });
+
+    // 3. Append it to the document body
+    sheetArc.appendChild(circle);
 }
 
 export async function renderMapPage(container) {
@@ -151,22 +201,62 @@ function waitForElement(selector, parent = document) {
     });
 }
 
-export function createStatComponent(svgInnerCode, startingNumber, label = '') {
+// NEW: We pass the 'angle' into the component so it knows its position in the orbit
+// We can now pass a 'config' object so the math works for any circle size!
+export function createStatComponent(svgInnerCode, startingNumber, label = '', angle = 0, config = {}) {
     const wrapper = document.createElement('div');
     wrapper.className = 'stat-node';
+
+    // 1. Pull the radius (Defaults to 45 for your outer rings)
+    const r = config.radius || 45;
+    const strokeWidth = config.strokeWidth || 1;
     
-    // 1. The SVG Background Layer
+    // 2. Separate the label font size from the input math!
+    const labelFontSize = config.labelFontSize || 13; 
+    const textGap = config.textGap || 5; 
+    
+    const outerEdge = r + (strokeWidth / 2);
+    const isBottomHalf = angle > 90 && angle < 270;
+    
+    const topPathRadius = outerEdge + textGap;
+    const bottomPathRadius = outerEdge + textGap + (labelFontSize * 0.85); 
+    const pathRadius = isBottomHalf ? bottomPathRadius : topPathRadius;
+    
+    const startX = 50 - pathRadius;
+    const endX = 50 + pathRadius;
+    
+    const pathData = isBottomHalf 
+        ? `M ${startX} 50 A ${pathRadius} ${pathRadius} 0 0 0 ${endX} 50` 
+        : `M ${startX} 50 A ${pathRadius} ${pathRadius} 0 0 1 ${endX} 50`;
+        
+    const textRotation = isBottomHalf ? angle - 180 : angle;
+    const pathId = `curve-${label.replace(/\s+/g, '')}`;
+
+    // 3. SVG Layer uses labelFontSize
     const svgLayer = `
-        <svg class="node-art" viewBox="0 0 100 100">
+        <svg class="node-art" viewBox="-20 -20 140 140" style="overflow: visible;">
             ${svgInnerCode}
+            ${label ? `
+            <g transform="rotate(${textRotation}, 50, 50)">
+                <path id="${pathId}" d="${pathData}" fill="none" />
+                <text fill="var(--text-color)" font-size="${labelFontSize}" font-weight="bold" letter-spacing="2">
+                    <textPath href="#${pathId}" startOffset="50%" text-anchor="middle">${label}</textPath>
+                </text>
+            </g>
+            ` : ''}
         </svg>
     `;
 
-    // 2. The HTML Foreground Layer
+    // 4. Content Layer uses Proportional Math
+    // The viewBox is 140 units. We map the radius (r) to the container width (100cqw).
+    // This scales the font size to be exactly proportional to the circle drawn.
     const contentLayer = `
         <div class="node-content">
-            ${label ? `<span class="node-label">${label}</span>` : ''}
-            <input type="text" class="stat-input" value="${startingNumber}" />
+            <input type="text" class="stat-input" value="${startingNumber}" 
+                   style="
+                       font-size: calc(${r} / 140 * 100cqw); 
+                       width: calc(${r * 1.5} / 140 * 100cqw);
+                   " />
         </div>
     `;
 
