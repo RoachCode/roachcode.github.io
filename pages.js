@@ -171,26 +171,28 @@ export async function renderMapPage(container) {
 }
 
 export function renderBattlePage(container) {
-const pageContent = document.getElementById('page-content');
+    const pageContent = document.getElementById('page-content');
 
+    // Create the iframe
+    const iframe = document.createElement('iframe');
 
-  // Create the iframe
-  const iframe = document.createElement('iframe');
-  
-  // Set attributes for the stream
-  iframe.src = 'https://www.youtube.com/embed/dQw4w9WgXcQ?mute=1&origin=https://roachcode.github.io';
-  iframe.title = 'Battle Map Stream';
-  iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-  iframe.allowFullscreen = true;
-  
-  // Use CSS for styling to ensure it fills the container
-  iframe.style.width = '100%';
-  iframe.style.height = '100%';
-  iframe.style.border = 'none';
-  iframe.style.display = 'block'; // Removes default inline spacing issues
+    // Set attributes for the VDO.ninja stream
+    // ?view= targets your OBS stream directly.
+    // &meshcast routes it through cloud servers to save your CPU.
+    iframe.src = 'https://vdo.ninja/?view=thisismymotherfuckingroom&meshcast&autoplay=1&clean=1';
+    iframe.title = 'Battle Map Stream';
+    // VDO.ninja needs these specific permissions to auto-play the incoming video
+    iframe.allow = 'autoplay; encrypted-media'; 
+    iframe.allowFullscreen = true;
 
-  // Inject into the page
-  pageContent.appendChild(iframe);
+    // Use CSS for styling to ensure it fills the container
+    iframe.style.width = '100%';
+    iframe.style.height = '100%';
+    iframe.style.border = 'none';
+    iframe.style.display = 'block';
+
+    // Inject into the page
+    pageContent.appendChild(iframe);
 }
 
 export function renderGlossaryPage(container) {
