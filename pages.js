@@ -178,7 +178,7 @@ const pageContent = document.getElementById('page-content');
   const iframe = document.createElement('iframe');
   
   // Set attributes for the stream
-  iframe.src = 'https://www.youtube.com/embed/eWJY5X8YBqM?autoplay=1&mute=1';
+  iframe.src = 'https://www.youtube.com/embed/Wo-iVbHpTZw?autoplay=1&mute=1';
   iframe.title = 'Battle Map Stream';
   iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
   iframe.allowFullscreen = true;
