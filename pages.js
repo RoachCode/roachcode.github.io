@@ -171,7 +171,26 @@ mapSvg.appendChild(useElement);
 }
 
 export function renderBattlePage(container) {
+const pageContent = document.getElementById('page-content');
 
+
+  // Create the iframe
+  const iframe = document.createElement('iframe');
+  
+  // Set attributes for the stream
+  iframe.src = 'https://www.youtube.com/embed/eWJY5X8YBqM?autoplay=1';
+  iframe.title = 'Battle Map Stream';
+  iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+  iframe.allowFullscreen = true;
+  
+  // Use CSS for styling to ensure it fills the container
+  iframe.style.width = '100%';
+  iframe.style.height = '100%';
+  iframe.style.border = 'none';
+  iframe.style.display = 'block'; // Removes default inline spacing issues
+
+  // Inject into the page
+  pageContent.appendChild(iframe);
 }
 
 export function renderGlossaryPage(container) {
