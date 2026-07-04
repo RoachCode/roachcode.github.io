@@ -142,32 +142,32 @@ export async function renderMapPage(container) {
         useElement.setAttributeNS("http://www.w3.org/1999/xlink", "href", "#map-data");
         useElement.setAttribute('class', 'map-border');
 
-// 3. Append the <use> tag directly to mapSvg
-// Since it's inside mapSvg, panzoom will move it automatically!
-mapSvg.appendChild(useElement);
+    // 3. Append the <use> tag directly to mapSvg
+    // Since it's inside mapSvg, panzoom will move it automatically!
+    mapSvg.appendChild(useElement);
 
-        // 3. INITIALIZE PANZOOM
-        // This single line adds mouse drag, mouse wheel, and mobile pinch-to-zoom
-        const mapController = panzoom(mapSvg, {
+            // 3. INITIALIZE PANZOOM
+            // This single line adds mouse drag, mouse wheel, and mobile pinch-to-zoom
+            const mapController = panzoom(mapSvg, {
 
-        });
+            });
 
-        mapContainer.addEventListener('mousedown', (e) => {
-            // e.button === 1 is the middle mouse wheel click
-            if (e.button === 1) { 
-                e.preventDefault(); // Stops the annoying auto-scroll icon from appearing
+            mapContainer.addEventListener('mousedown', (e) => {
+                // e.button === 1 is the middle mouse wheel click
+                if (e.button === 1) { 
+                    e.preventDefault(); // Stops the annoying auto-scroll icon from appearing
 
-                // Reset the scale to 1 (100%) relative to the top-left corner (0,0)
-                mapController.zoomAbs(0, 0, 1); 
-                
-                // Move the map back to its original 0,0 position
-                mapController.moveTo(0, 0); 
-            }
-        });
+                    // Reset the scale to 1 (100%) relative to the top-left corner (0,0)
+                    mapController.zoomAbs(0, 0, 1); 
+                    
+                    // Move the map back to its original 0,0 position
+                    mapController.moveTo(0, 0); 
+                }
+            });
 
-    } catch (error) {
-        console.error("Failed to attach map:", error);
-    }
+        } catch (error) {
+            console.error("Failed to attach map:", error);
+        }
 }
 
 export function renderBattlePage(container) {
@@ -178,7 +178,7 @@ const pageContent = document.getElementById('page-content');
   const iframe = document.createElement('iframe');
   
   // Set attributes for the stream
-  iframe.src = 'https://www.youtube.com/embed/eWJY5X8YBqM?autoplay=1';
+  iframe.src = 'https://www.youtube.com/embed/eWJY5X8YBqM?autoplay=1&mute=1';
   iframe.title = 'Battle Map Stream';
   iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
   iframe.allowFullscreen = true;
