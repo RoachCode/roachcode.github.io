@@ -178,7 +178,7 @@ const pageContent = document.getElementById('page-content');
   const iframe = document.createElement('iframe');
   
   // Set attributes for the stream
-  iframe.src = 'https://www.youtube.com/embed/I3CUnIUC5t0?mute=1';
+  iframe.src = 'https://www.youtube.com/embed/I3CUnIUC5t0?mute=1&origin=https://roachcode.github.io';
   iframe.title = 'Battle Map Stream';
   iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
   iframe.allowFullscreen = true;
