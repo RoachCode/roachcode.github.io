@@ -251,241 +251,290 @@ export function renderBattlePage(container) {
 }
 
 export function renderGlossaryPage(container) {
-  container.innerHTML = '';
+	container.innerHTML = '';
+    const glossaryContent = document.createElement('div');
+	glossaryContent.className = 'glossary-content';
 
-  const glossaryData = [
-    { title: 'Characters', items: ['Aria', 'Balthazar', 'Caelum', 'Darius', 'Elora', 'Faelan', 'Garrick', 'Hanna', 'Ignis', 'Jorun', 'Kael'] },
-    { title: 'Locations', items: ['The Citadel', 'Whispering Woods', 'Sunken City', 'Dragon Peaks', 'Iron Keep', 'Shadow Rift'] },
-    { title: 'Artifacts', items: ['Amulet of Time', 'Soul Blade', 'Ember Stone', 'Void Chalice', 'Sunken Crown', 'Crystal Tear', 'Moon Ring', 'Star Map', 'Amulet of Time', 'Soul Blade', 'Ember Stone', 'Void Chalice', 'Sunken Crown', 'Crystal Tear', 'Moon Ring', 'Star Map'] },
-    { title: 'Factions', items: ['The Order', 'Crimson Hand', 'Silver Vanguard', 'Night Walkers', 'Sun Cult'] }
-  ];
+	// 1. Pad the data with 5 empty strings at the start and end
+	const PADDING_COUNT = 5;
+	const rawGlossaryData = [
+		{ title: 'Characters', items: ['Aria', 'Balthazar', 'Caelum', 'Darius', 'Elora', 'Faelan', 'Garrick', 'Hanna', 'Ignis', 'Jorun', 'Kael'] },
+		{ title: 'Locations', items: ['The Citadel', 'Whispering Woods', 'Sunken City', 'Dragon Peaks', 'Iron Keep', 'Shadow Rift'] },
+		{ title: 'Artifacts', items: ['Amulet of Time', 'Soul Blade', 'Ember Stone', 'Void Chalice', 'Sunken Crown', 'Crystal Tear', 'Moon Ring', 'Star Map', 'Amulet of Time', 'Soul Blade', 'Ember Stone', 'Void Chalice', 'Sunken Crown', 'Crystal Tear', 'Moon Ring', 'Star Map'] },
+		{ title: 'Factions', items: ['The Order', 'Crimson Hand', 'Silver Vanguard', 'Night Walkers', 'Sun Cult'] }
+	];
 
-  const masterScene = document.createElement('div');
-  masterScene.className = 'master-scene';
+	// Find the maximum character length of all entries for responsive text sizing
+	const maxChars = Math.max(...rawGlossaryData.flatMap(d => d.items.map(text => text.length)));
 
-  const horizontalCarousel = document.createElement('div');
-  horizontalCarousel.className = 'horizontal-carousel';
+	const glossaryData = rawGlossaryData.map(data => {
+		const pad = Array(PADDING_COUNT).fill('');
+		return {
+			title: data.title,
+			originalItems: data.items,
+			items: [...pad, ...data.items, ...pad] 
+		};
+	});
 
-  const totalCategories = glossaryData.length;
-  const thetaY = 360 / totalCategories;
-  
-  const panelWidth = 250; 
-  let radiusY = Math.round((panelWidth / 2) / Math.tan(Math.PI / totalCategories));
-  radiusY = Math.max(radiusY, 200);
+	const masterScene = document.createElement('div');
+	masterScene.className = 'master-scene';
 
-  const verticalCylinders = [];
-  const verticalAngles = glossaryData.map(() => 0);
-  const thetaXArray = [];
-  const panelsArray = []; // Store panels for visibility updates
-  
-  // NEW: Store the highest and lowest allowed angles for each cylinder
-  const verticalBounds = []; 
+	const horizontalCarousel = document.createElement('div');
+	horizontalCarousel.className = 'horizontal-carousel';
 
-  // Fixed vertical radius ensures all cylinders are the exact same diameter visually
-  const CONSTANT_RADIUS_X = 60; 
+	const totalCategories = glossaryData.length;
+	const thetaY = 360 / totalCategories;
+	
+	const verticalCylinders = [];
+	const thetaXArray = [];
+	const panelsArray = []; // Store panels for visibility updates
+	const verticalBounds = []; // Store clamping bounds to stop infinite scrolling
 
-  glossaryData.forEach((data, index) => {
-    const panel = document.createElement('div');
-    panel.className = 'carousel-panel';
-    panel.style.transform = `rotateY(${index * thetaY}deg) translateZ(${radiusY}px)`;
+	// Retained precisely at 60px per your requirements
+	const CONSTANT_RADIUS_X = 60; 
+	const THETA_X = 24; 
 
-    // Add title back in
-    const title = document.createElement('div');
-    title.className = 'panel-title';
-    title.textContent = data.title;
-    panel.appendChild(title);
+	// Offset starting angle so it skips the padding and centers on the first real item
+	const verticalAngles = glossaryData.map(() => -(PADDING_COUNT * THETA_X));
 
-    const cylinder = document.createElement('div');
-    cylinder.className = 'cylinder';
+	glossaryData.forEach((data, index) => {
+		const panel = document.createElement('div');
+		panel.className = 'carousel-panel';
 
-    const totalItems = data.items.length;
-    const thetaX = 360 / totalItems;
-    thetaXArray.push(thetaX);
-    
-    // NEW: Calculate the limits. Max is 0 (first item). Min is the angle of the last item.
-    verticalBounds.push({ max: 0, min: -(totalItems - 1) * thetaX });
+		// TOP: Add title
+		const title = document.createElement('div');
+		title.className = 'panel-title';
+		title.textContent = data.title;
+		panel.appendChild(title);
 
-    data.items.forEach((itemText, i) => {
-      const itemEl = document.createElement('div');
-      itemEl.className = 'item';
-      itemEl.textContent = itemText;
-      // Use the constant radius here
-      itemEl.style.transform = `rotateX(${i * thetaX}deg) translateZ(${CONSTANT_RADIUS_X}px)`;
-      cylinder.appendChild(itemEl);
-    });
+		// MIDDLE: Create cylinder
+		const cylinder = document.createElement('div');
+		cylinder.className = 'cylinder';
 
-    panel.appendChild(cylinder);
-    horizontalCarousel.appendChild(panel);
-    
-    verticalCylinders.push(cylinder);
-    panelsArray.push(panel);
-  });
+		thetaXArray.push(THETA_X);
 
-  masterScene.appendChild(horizontalCarousel);
-  container.appendChild(masterScene);
+		const startBound = -(PADDING_COUNT * THETA_X);
+		const endBound = -((PADDING_COUNT + data.originalItems.length - 1) * THETA_X);
+		verticalBounds.push({ max: startBound, min: endBound });
 
-  // --- Centralized Touch, Scroll, & Visibility Logic ---
-  let horizontalAngle = 0;
-  let activeCategoryIndex = 0;
-  
-  let isDragging = false;
-  let startX = 0;
-  let startY = 0;
-  let dragAxis = null; 
-  let scrollTimeout;
+		data.items.forEach((itemText, i) => {
+			const itemEl = document.createElement('div');
+			itemEl.className = 'item';
+			itemEl.textContent = itemText;
+			
+			// Hooking the font size up to our dynamic CSS variable (set by the ResizeObserver below)
+			// itemEl.style.fontSize = 'var(--dynamic-font-size)';
+			itemEl.style.transform = `rotateX(${i * THETA_X}deg) translateZ(${CONSTANT_RADIUS_X}px)`;
+			
+			cylinder.appendChild(itemEl);
+		});
 
-  // Hides cylinders when they rotate to the back of the carousel
-  function updateVisibility() {
-    panelsArray.forEach((panel, i) => {
-      let worldAngle = (i * thetaY + horizontalAngle) % 360;
-      if (worldAngle < 0) worldAngle += 360;
-      
-      let diff = Math.min(worldAngle, 360 - worldAngle); 
-      const titleEl = panel.querySelector('.panel-title');
-      const itemEls = panel.querySelectorAll('.item');
+		cylinder.style.transform = `rotateX(${verticalAngles[index]}deg)`;
+		panel.appendChild(cylinder);
 
-      const opacity = (180 - diff) / 180;
-      
-      // Apply opacity strictly to the 2D elements
-      titleEl.style.opacity = opacity;
-      itemEls.forEach(item => item.style.opacity = opacity);
-    });
-  }
+		horizontalCarousel.appendChild(panel);
+		
+		verticalCylinders.push(cylinder);
+		panelsArray.push(panel);
+	});
 
-  function updateActiveIndex(angleY) {
-    let normalized = angleY % 360;
-    if (normalized < 0) normalized += 360;
-    activeCategoryIndex = Math.round((360 - normalized) % 360 / thetaY) % totalCategories;
-  }
+	masterScene.appendChild(horizontalCarousel);
+	glossaryContent.appendChild(masterScene);
 
-  function snap() {
-    if (dragAxis === 'x' || dragAxis === null) {
-      const snappedY = Math.round(horizontalAngle / thetaY) * thetaY;
-      horizontalCarousel.style.transition = 'transform 0.5s cubic-bezier(0.25, 1.5, 0.5, 1)';
-      horizontalAngle = snappedY;
-      horizontalCarousel.style.transform = `rotateY(${horizontalAngle}deg)`;
-      updateActiveIndex(horizontalAngle);
-    }
-    
-    if (dragAxis === 'y' || dragAxis === null) {
-      const cyl = verticalCylinders[activeCategoryIndex];
-      const tX = thetaXArray[activeCategoryIndex];
-      const bounds = verticalBounds[activeCategoryIndex];
-      
-      // NEW: Calculate closest snap, then force it within our bounds
-      let snappedX = Math.round(verticalAngles[activeCategoryIndex] / tX) * tX;
-      snappedX = Math.max(bounds.min, Math.min(bounds.max, snappedX));
-      
-      cyl.style.transition = 'transform 0.4s cubic-bezier(0.25, 1.5, 0.5, 1)';
-      verticalAngles[activeCategoryIndex] = snappedX;
-      cyl.style.transform = `rotateX(${snappedX}deg)`;
-    }
-    
-    dragAxis = null;
-    // Ensure visibility is perfect after a snap transition
-    requestAnimationFrame(updateVisibility);
-  }
+    // BOTTOM: Add the requested div below the cylinder
+    const bottomDiv = document.createElement('div');
+    bottomDiv.className = 'panel-bottom';
+    glossaryContent.appendChild(bottomDiv);
 
-  // Set initial visibility state
-  updateVisibility();
+    container.appendChild(glossaryContent);
 
-  // --- EXTRACTED EVENT HANDLERS ---
-  
-  // Desktop Wheel
-  function onWheel(e) {
-    e.preventDefault();
-    horizontalCarousel.style.transition = 'none';
-    verticalCylinders[activeCategoryIndex].style.transition = 'none';
+	// --- Responsive Geometry Logic (Replaces hardcoded values) ---
+	const resizeObserver = new ResizeObserver(entries => {
+		for (let entry of entries) {
+			const width = entry.contentRect.width;
+			
+			// 1. Dynamic Font Size: Scales based on container width and max characters.
+			// The 0.6 estimates character width-to-height ratio. Clamped between 14px and 36px.
+			const calculatedFontSize = Math.max(14, Math.min(36, (width * 0.8) / (maxChars * 0.6)));
+			// masterScene.style.setProperty('--dynamic-font-size', `${calculatedFontSize}px`);
 
-    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-      horizontalAngle -= e.deltaX * 0.2;
-      horizontalCarousel.style.transform = `rotateY(${horizontalAngle}deg)`;
-      dragAxis = 'x';
-    } else {
-      const bounds = verticalBounds[activeCategoryIndex];
-      let newAngle = verticalAngles[activeCategoryIndex] - e.deltaY * 0.2;
-      
-      // NEW: Soft clamp during scrolling (allows slight over-scroll elasticity before snapping back)
-      verticalAngles[activeCategoryIndex] = Math.max(bounds.min - 15, Math.min(bounds.max + 15, newAngle));
-      verticalCylinders[activeCategoryIndex].style.transform = `rotateX(${verticalAngles[activeCategoryIndex]}deg)`;
-      dragAxis = 'y';
-    }
+			// 2. Dynamic Horizontal Carousel Radius
+			const dynamicPanelWidth = width * 0.75; 
+			let newRadiusY = Math.round((dynamicPanelWidth / 2) / Math.tan(Math.PI / totalCategories));
+			newRadiusY = Math.max(newRadiusY, width * 0.4); 
 
-    // updateVisibility();
-    clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(snap, 150);
-  }
+			panelsArray.forEach((panel, index) => {
+				// We apply the newly calculated radius on the fly
+				panel.style.transform = `rotateY(${index * thetaY}deg) translateZ(${newRadiusY}px)`;
+			});
+			
+			// Ensure visibility logic recalculates properly after a resize
+			requestAnimationFrame(updateVisibility);
+		}
+	});
 
-  // Mobile Touch
-  function onTouchStart(e) {
-    isDragging = true;
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-    dragAxis = null;
-    
-    horizontalCarousel.style.transition = 'none';
-    verticalCylinders[activeCategoryIndex].style.transition = 'none';
-    clearTimeout(scrollTimeout);
-  }
+	// Start listening to the container size
+	resizeObserver.observe(container);
 
-  function onTouchMove(e) {
-    if (!isDragging) return;
-    
-    const currentX = e.touches[0].clientX;
-    const currentY = e.touches[0].clientY;
-    const deltaX = currentX - startX;
-    const deltaY = currentY - startY;
+	// --- Centralized Touch, Scroll, & Visibility Logic ---
+	let horizontalAngle = 0;
+	let activeCategoryIndex = 0;
+	
+	let isDragging = false;
+	let startX = 0;
+	let startY = 0;
+	let dragAxis = null; 
+	let scrollTimeout;
 
-    if (!dragAxis) {
-      if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
-        dragAxis = Math.abs(deltaX) > Math.abs(deltaY) ? 'x' : 'y';
-      } else {
-        return; 
-      }
-    }
+	function updateVisibility() {
+		panelsArray.forEach((panel, i) => {
+			let worldAngle = (i * thetaY + horizontalAngle) % 360;
+			if (worldAngle < 0) worldAngle += 360;
+			
+			let diff = Math.min(worldAngle, 360 - worldAngle); 
+			const titleEl = panel.querySelector('.panel-title');
+			// We can fade the bottom div alongside the title to keep the UI clean
 
-    if (dragAxis === 'x') {
-      horizontalAngle += deltaX * 0.5;
-      horizontalCarousel.style.transform = `rotateY(${horizontalAngle}deg)`;
-      startX = currentX;
-      updateVisibility(); // Dynamically fade as user drags
-    } else {
-      const bounds = verticalBounds[activeCategoryIndex];
-      let newAngle = verticalAngles[activeCategoryIndex] - deltaY * 0.5;
-      
-      // NEW: Soft clamp during dragging
-      verticalAngles[activeCategoryIndex] = Math.max(bounds.min - 15, Math.min(bounds.max + 15, newAngle));
-      verticalCylinders[activeCategoryIndex].style.transform = `rotateX(${verticalAngles[activeCategoryIndex]}deg)`;
-      startY = currentY;
-    }
-  }
+			const itemEls = panel.querySelectorAll('.item');
 
-  function onTouchEnd() {
-    if (!isDragging) return;
-    isDragging = false;
-    snap(); 
-  }
+			const opacity = (180 - diff) / 180;
+			
+			titleEl.style.opacity = opacity;
 
-  // Bind the extracted handlers
-  masterScene.addEventListener('wheel', onWheel, { passive: false });
-  masterScene.addEventListener('touchstart', onTouchStart, { passive: false });
-  masterScene.addEventListener('touchmove', onTouchMove, { passive: false });
-  masterScene.addEventListener('touchend', onTouchEnd);
+			const currentAngle = verticalAngles[i];
+			const activeItemIndex = Math.round(-currentAngle / THETA_X);
 
-  // Return teardown function for SPA routing
-  return function destroyGlossaryPage() {
-    // 1. Remove the event listeners from the container
-    masterScene.removeEventListener('wheel', onWheel);
-    masterScene.removeEventListener('touchstart', onTouchStart);
-    masterScene.removeEventListener('touchmove', onTouchMove);
-    masterScene.removeEventListener('touchend', onTouchEnd);
-    
-    // 2. Clear any lingering timeouts
-    clearTimeout(scrollTimeout);
-    
-    // 3. Clear the container
-    container.innerHTML = '';
-  };
+			itemEls.forEach((item, itemIndex) => {
+
+					item.style.opacity = opacity;
+				
+			});
+		});
+	}
+
+	function updateActiveIndex(angleY) {
+		let normalized = angleY % 360;
+		if (normalized < 0) normalized += 360;
+		activeCategoryIndex = Math.round((360 - normalized) % 360 / thetaY) % totalCategories;
+	}
+
+	function snap() {
+		if (dragAxis === 'x' || dragAxis === null) {
+			const snappedY = Math.round(horizontalAngle / thetaY) * thetaY;
+			horizontalCarousel.style.transition = 'transform 0.5s cubic-bezier(0.25, 1.5, 0.5, 1)';
+			horizontalAngle = snappedY;
+			horizontalCarousel.style.transform = `rotateY(${horizontalAngle}deg)`;
+			updateActiveIndex(horizontalAngle);
+		}
+		
+		if (dragAxis === 'y' || dragAxis === null) {
+			const cyl = verticalCylinders[activeCategoryIndex];
+			const tX = thetaXArray[activeCategoryIndex];
+			const bounds = verticalBounds[activeCategoryIndex];
+			
+			let snappedX = Math.round(verticalAngles[activeCategoryIndex] / tX) * tX;
+			snappedX = Math.max(bounds.min, Math.min(bounds.max, snappedX));
+			
+			cyl.style.transition = 'transform 0.4s cubic-bezier(0.25, 1.5, 0.5, 1)';
+			verticalAngles[activeCategoryIndex] = snappedX;
+			cyl.style.transform = `rotateX(${snappedX}deg)`;
+		}
+		
+		dragAxis = null;
+		requestAnimationFrame(updateVisibility);
+	}
+
+	updateVisibility();
+
+	// --- Extracted Event Handlers ---
+
+	function onWheel(e) {
+		e.preventDefault();
+		horizontalCarousel.style.transition = 'none';
+		verticalCylinders[activeCategoryIndex].style.transition = 'none';
+
+		if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+			horizontalAngle -= e.deltaX * 0.2;
+			horizontalCarousel.style.transform = `rotateY(${horizontalAngle}deg)`;
+			dragAxis = 'x';
+		} else {
+			const bounds = verticalBounds[activeCategoryIndex];
+			let newAngle = verticalAngles[activeCategoryIndex] - e.deltaY * 0.2;
+			verticalAngles[activeCategoryIndex] = Math.max(bounds.min - 15, Math.min(bounds.max + 15, newAngle));
+			verticalCylinders[activeCategoryIndex].style.transform = `rotateX(${verticalAngles[activeCategoryIndex]}deg)`;
+			dragAxis = 'y';
+		}
+
+		updateVisibility();
+		clearTimeout(scrollTimeout);
+		scrollTimeout = setTimeout(snap, 150);
+	}
+
+	function onTouchStart(e) {
+		isDragging = true;
+		startX = e.touches[0].clientX;
+		startY = e.touches[0].clientY;
+		dragAxis = null;
+		
+		horizontalCarousel.style.transition = 'none';
+		verticalCylinders[activeCategoryIndex].style.transition = 'none';
+		clearTimeout(scrollTimeout);
+	}
+
+	function onTouchMove(e) {
+		if (!isDragging) return;
+		
+		const currentX = e.touches[0].clientX;
+		const currentY = e.touches[0].clientY;
+		const deltaX = currentX - startX;
+		const deltaY = currentY - startY;
+
+		if (!dragAxis) {
+			if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
+				dragAxis = Math.abs(deltaX) > Math.abs(deltaY) ? 'x' : 'y';
+			} else {
+				return; 
+			}
+		}
+
+		if (dragAxis === 'x') {
+			horizontalAngle += deltaX * 0.5;
+			horizontalCarousel.style.transform = `rotateY(${horizontalAngle}deg)`;
+			startX = currentX;
+			updateVisibility(); 
+		} else {
+			const bounds = verticalBounds[activeCategoryIndex];
+			let newAngle = verticalAngles[activeCategoryIndex] - deltaY * 0.5;
+			verticalAngles[activeCategoryIndex] = Math.max(bounds.min - 15, Math.min(bounds.max + 15, newAngle));
+			verticalCylinders[activeCategoryIndex].style.transform = `rotateX(${verticalAngles[activeCategoryIndex]}deg)`;
+			startY = currentY;
+			updateVisibility();
+		}
+	}
+
+	function onTouchEnd() {
+		if (!isDragging) return;
+		isDragging = false;
+		snap(); 
+	}
+
+	masterScene.addEventListener('wheel', onWheel, { passive: false });
+	masterScene.addEventListener('touchstart', onTouchStart, { passive: false });
+	masterScene.addEventListener('touchmove', onTouchMove, { passive: false });
+	masterScene.addEventListener('touchend', onTouchEnd);
+
+	return function destroyGlossaryPage() {
+		// Clean up the ResizeObserver to prevent memory leaks
+		resizeObserver.disconnect();
+		
+		masterScene.removeEventListener('wheel', onWheel);
+		masterScene.removeEventListener('touchstart', onTouchStart);
+		masterScene.removeEventListener('touchmove', onTouchMove);
+		masterScene.removeEventListener('touchend', onTouchEnd);
+		
+		clearTimeout(scrollTimeout);
+		container.innerHTML = '';
+	};
 }
 
 // A helpful little tool that waits for an element to exist
