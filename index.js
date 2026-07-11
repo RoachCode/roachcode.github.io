@@ -36,12 +36,12 @@ function loadTab(tabName) {
             break;
         case 'map':
             renderMapPage(pageContent);
-            // FIX: Append the navigation to the app wrapper flex layout so it stays visible
+            break;
         case 'battle':
             renderBattlePage(pageContent);
+            break;
         case 'glossary':
             renderGlossaryPage(pageContent); 
-
             break;
         default:
             break;

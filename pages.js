@@ -1,8 +1,9 @@
 // pages.js
+import panzoom from 'https://cdn.jsdelivr.net/npm/panzoom@9.4.3/+esm';
 import { mountResponsiveBackground, mountResponsiveTextBox } from './celticBox.js';
 import { celticTextboxData } from './config.js';
 import { testLandmassSvg } from './mapData.js';
-import panzoom from 'https://cdn.jsdelivr.net/npm/panzoom@9.4.3/+esm';
+
 
 export function renderCharacterPage(container) {
     const characterSheet = document.createElement('div');
@@ -182,15 +183,15 @@ export function renderBattlePage(container) {
     fallbackScreen.id = 'battle-fallback';
     
     // Styling the fallback to match a dark, seamless UI
-    fallbackScreen.style.cssText = `
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-        background-color: #16161d;
-        color: var(--text-color);
-    `;
+    // fallbackScreen.style.cssText = `
+    //     display: flex;
+    //     align-items: center;
+    //     justify-content: center;
+    //     width: 100%;
+    //     height: 100%;
+    //     background-color: #16161d;
+    //     color: var(--text-color);
+    // `;
     // You can replace this innerHTML with your own SVG design later
     fallbackScreen.innerHTML = `<h3>Awaiting Stream...</h3>`;
 
@@ -276,6 +277,9 @@ export function renderGlossaryPage(container) {
   const verticalAngles = glossaryData.map(() => 0);
   const thetaXArray = [];
   const panelsArray = []; // Store panels for visibility updates
+  
+  // NEW: Store the highest and lowest allowed angles for each cylinder
+  const verticalBounds = []; 
 
   // Fixed vertical radius ensures all cylinders are the exact same diameter visually
   const CONSTANT_RADIUS_X = 60; 
@@ -297,6 +301,9 @@ export function renderGlossaryPage(container) {
     const totalItems = data.items.length;
     const thetaX = 360 / totalItems;
     thetaXArray.push(thetaX);
+    
+    // NEW: Calculate the limits. Max is 0 (first item). Min is the angle of the last item.
+    verticalBounds.push({ max: 0, min: -(totalItems - 1) * thetaX });
 
     data.items.forEach((itemText, i) => {
       const itemEl = document.createElement('div');
@@ -330,15 +337,18 @@ export function renderGlossaryPage(container) {
   // Hides cylinders when they rotate to the back of the carousel
   function updateVisibility() {
     panelsArray.forEach((panel, i) => {
-        
-        let worldAngle = (i * thetaY + horizontalAngle) % 360;
-        if (worldAngle < 0) worldAngle += 360;
-        
-        // Calculate how far the panel is from the absolute front (0 degrees)
-        let diff = Math.min(worldAngle, 360 - worldAngle); 
-        const opacity = (180 - diff) / 180;
-        // Currently broken; changing opacity flattens perspective for some reason.
-        //panel.style.opacity = opacity;
+      let worldAngle = (i * thetaY + horizontalAngle) % 360;
+      if (worldAngle < 0) worldAngle += 360;
+      
+      let diff = Math.min(worldAngle, 360 - worldAngle); 
+      const titleEl = panel.querySelector('.panel-title');
+      const itemEls = panel.querySelectorAll('.item');
+
+      const opacity = (180 - diff) / 180;
+      
+      // Apply opacity strictly to the 2D elements
+      titleEl.style.opacity = opacity;
+      itemEls.forEach(item => item.style.opacity = opacity);
     });
   }
 
@@ -360,7 +370,11 @@ export function renderGlossaryPage(container) {
     if (dragAxis === 'y' || dragAxis === null) {
       const cyl = verticalCylinders[activeCategoryIndex];
       const tX = thetaXArray[activeCategoryIndex];
-      const snappedX = Math.round(verticalAngles[activeCategoryIndex] / tX) * tX;
+      const bounds = verticalBounds[activeCategoryIndex];
+      
+      // NEW: Calculate closest snap, then force it within our bounds
+      let snappedX = Math.round(verticalAngles[activeCategoryIndex] / tX) * tX;
+      snappedX = Math.max(bounds.min, Math.min(bounds.max, snappedX));
       
       cyl.style.transition = 'transform 0.4s cubic-bezier(0.25, 1.5, 0.5, 1)';
       verticalAngles[activeCategoryIndex] = snappedX;
@@ -375,8 +389,10 @@ export function renderGlossaryPage(container) {
   // Set initial visibility state
   updateVisibility();
 
+  // --- EXTRACTED EVENT HANDLERS ---
+  
   // Desktop Wheel
-  masterScene.addEventListener('wheel', (e) => {
+  function onWheel(e) {
     e.preventDefault();
     horizontalCarousel.style.transition = 'none';
     verticalCylinders[activeCategoryIndex].style.transition = 'none';
@@ -386,19 +402,22 @@ export function renderGlossaryPage(container) {
       horizontalCarousel.style.transform = `rotateY(${horizontalAngle}deg)`;
       dragAxis = 'x';
     } else {
-      verticalAngles[activeCategoryIndex] -= e.deltaY * 0.2;
+      const bounds = verticalBounds[activeCategoryIndex];
+      let newAngle = verticalAngles[activeCategoryIndex] - e.deltaY * 0.2;
+      
+      // NEW: Soft clamp during scrolling (allows slight over-scroll elasticity before snapping back)
+      verticalAngles[activeCategoryIndex] = Math.max(bounds.min - 15, Math.min(bounds.max + 15, newAngle));
       verticalCylinders[activeCategoryIndex].style.transform = `rotateX(${verticalAngles[activeCategoryIndex]}deg)`;
       dragAxis = 'y';
     }
 
-    updateVisibility();
-
+    // updateVisibility();
     clearTimeout(scrollTimeout);
     scrollTimeout = setTimeout(snap, 150);
-  }, { passive: false });
+  }
 
   // Mobile Touch
-  masterScene.addEventListener('touchstart', (e) => {
+  function onTouchStart(e) {
     isDragging = true;
     startX = e.touches[0].clientX;
     startY = e.touches[0].clientY;
@@ -407,9 +426,9 @@ export function renderGlossaryPage(container) {
     horizontalCarousel.style.transition = 'none';
     verticalCylinders[activeCategoryIndex].style.transition = 'none';
     clearTimeout(scrollTimeout);
-  }, { passive: false });
+  }
 
-  masterScene.addEventListener('touchmove', (e) => {
+  function onTouchMove(e) {
     if (!isDragging) return;
     
     const currentX = e.touches[0].clientX;
@@ -431,17 +450,42 @@ export function renderGlossaryPage(container) {
       startX = currentX;
       updateVisibility(); // Dynamically fade as user drags
     } else {
-      verticalAngles[activeCategoryIndex] -= deltaY * 0.5;
+      const bounds = verticalBounds[activeCategoryIndex];
+      let newAngle = verticalAngles[activeCategoryIndex] - deltaY * 0.5;
+      
+      // NEW: Soft clamp during dragging
+      verticalAngles[activeCategoryIndex] = Math.max(bounds.min - 15, Math.min(bounds.max + 15, newAngle));
       verticalCylinders[activeCategoryIndex].style.transform = `rotateX(${verticalAngles[activeCategoryIndex]}deg)`;
       startY = currentY;
     }
-  }, { passive: false });
+  }
 
-  masterScene.addEventListener('touchend', () => {
+  function onTouchEnd() {
     if (!isDragging) return;
     isDragging = false;
     snap(); 
-  });
+  }
+
+  // Bind the extracted handlers
+  masterScene.addEventListener('wheel', onWheel, { passive: false });
+  masterScene.addEventListener('touchstart', onTouchStart, { passive: false });
+  masterScene.addEventListener('touchmove', onTouchMove, { passive: false });
+  masterScene.addEventListener('touchend', onTouchEnd);
+
+  // Return teardown function for SPA routing
+  return function destroyGlossaryPage() {
+    // 1. Remove the event listeners from the container
+    masterScene.removeEventListener('wheel', onWheel);
+    masterScene.removeEventListener('touchstart', onTouchStart);
+    masterScene.removeEventListener('touchmove', onTouchMove);
+    masterScene.removeEventListener('touchend', onTouchEnd);
+    
+    // 2. Clear any lingering timeouts
+    clearTimeout(scrollTimeout);
+    
+    // 3. Clear the container
+    container.innerHTML = '';
+  };
 }
 
 // A helpful little tool that waits for an element to exist
