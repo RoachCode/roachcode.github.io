@@ -179,17 +179,11 @@ export function renderBattlePage(container) {
     // Set attributes for the VDO.ninja stream
     // ?view= targets your OBS stream directly.
     // &meshcast routes it through cloud servers to save your CPU.
-    iframe.src = 'https://vdo.ninja/?view=thisismymotherfuckingroom&meshcast&autoplay=1&clean=1';
+    iframe.src = 'https://vdo.ninja/?view=rTnTihr';
     iframe.title = 'Battle Map Stream';
     // VDO.ninja needs these specific permissions to auto-play the incoming video
-    iframe.allow = 'autoplay; encrypted-media'; 
+    iframe.allow = 'autoplay; fullscreen;'
     iframe.allowFullscreen = true;
-
-    // Use CSS for styling to ensure it fills the container
-    iframe.style.width = '100%';
-    iframe.style.height = '100%';
-    iframe.style.border = 'none';
-    iframe.style.display = 'block';
 
     // Inject into the page
     pageContent.appendChild(iframe);
