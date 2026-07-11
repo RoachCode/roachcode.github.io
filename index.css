@@ -296,3 +296,60 @@ body {
     height: 100%;
     border: none;
 }
+/* The Master Camera for the entire screen */
+.master-scene {
+  width: 100%;
+  height: 100vh; /* Adjust to fit inside #page-content */
+  perspective: 1000px; /* Increased for a wider view of the side cylinders */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-color: #121212;
+  touch-action: none; 
+}
+
+/* The horizontal rotating container */
+.horizontal-carousel {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform-style: preserve-3d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* The individual category panels (each holds one cylinder) */
+.carousel-panel {
+  position: absolute;
+  width: 250px; /* Constrain width so they form a proper horizontal wheel */
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform-style: preserve-3d;
+  /* Opacity fading has been completely removed to show true 3D placement */
+}
+
+/* The inner vertical cylinder container */
+.cylinder {
+  width: 100%;
+  height: 50px;
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+/* The glossary terms */
+.item {
+  position: absolute;
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  backface-visibility: hidden;
+  user-select: none;
+}

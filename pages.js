@@ -250,7 +250,169 @@ export function renderBattlePage(container) {
 }
 
 export function renderGlossaryPage(container) {
+  container.innerHTML = '';
 
+  const glossaryData = [
+    { items: ['Aria', 'Balthazar', 'Caelum', 'Darius', 'Elora', 'Faelan', 'Garrick', 'Hanna', 'Ignis', 'Jorun', 'Kael'] },
+    { items: ['The Citadel', 'Whispering Woods', 'Sunken City', 'Dragon Peaks', 'Iron Keep', 'Shadow Rift'] },
+    { items: ['Amulet of Time', 'Soul Blade', 'Ember Stone', 'Void Chalice', 'Sunken Crown', 'Crystal Tear', 'Moon Ring', 'Star Map'] },
+    { items: ['The Order', 'Crimson Hand', 'Silver Vanguard', 'Night Walkers', 'Sun Cult'] }
+  ];
+
+  // --- HTML Construction ---
+  const masterScene = document.createElement('div');
+  masterScene.className = 'master-scene';
+
+  const horizontalCarousel = document.createElement('div');
+  horizontalCarousel.className = 'horizontal-carousel';
+
+  const totalCategories = glossaryData.length;
+  const thetaY = 360 / totalCategories;
+  
+  // Calculate horizontal radius so cylinders space out into a proper wheel
+  const panelWidth = 250; 
+  let radiusY = Math.round((panelWidth / 2) / Math.tan(Math.PI / totalCategories));
+  
+  // Ensure a minimum horizontal radius so they don't clip into each other
+  radiusY = Math.max(radiusY, 200);
+
+  const verticalCylinders = [];
+  const verticalAngles = glossaryData.map(() => 0);
+  const thetaXArray = [];
+
+  glossaryData.forEach((data, index) => {
+    const panel = document.createElement('div');
+    panel.className = 'carousel-panel';
+    panel.style.transform = `rotateY(${index * thetaY}deg) translateZ(${radiusY}px)`;
+
+    const cylinder = document.createElement('div');
+    cylinder.className = 'cylinder';
+
+    const totalItems = data.items.length;
+    const thetaX = 360 / totalItems;
+    thetaXArray.push(thetaX);
+    
+    // Dynamic vertical radius based on item count
+    const itemHeight = 50; 
+    const radiusX = Math.round((itemHeight / 2) / Math.tan(Math.PI / totalItems));
+
+    data.items.forEach((itemText, i) => {
+      const itemEl = document.createElement('div');
+      itemEl.className = 'item';
+      itemEl.textContent = itemText;
+      itemEl.style.transform = `rotateX(${i * thetaX}deg) translateZ(${radiusX}px)`;
+      cylinder.appendChild(itemEl);
+    });
+
+    panel.appendChild(cylinder);
+    horizontalCarousel.appendChild(panel);
+    verticalCylinders.push(cylinder);
+  });
+
+  masterScene.appendChild(horizontalCarousel);
+  container.appendChild(masterScene);
+
+  // --- Centralized Touch & Scroll Logic ---
+  let horizontalAngle = 0;
+  let activeCategoryIndex = 0;
+  
+  let isDragging = false;
+  let startX = 0;
+  let startY = 0;
+  let dragAxis = null; 
+  let scrollTimeout;
+
+  function updateActiveIndex(angleY) {
+    let normalized = angleY % 360;
+    if (normalized < 0) normalized += 360;
+    activeCategoryIndex = Math.round((360 - normalized) % 360 / thetaY) % totalCategories;
+  }
+
+  function snap() {
+    if (dragAxis === 'x' || dragAxis === null) {
+      const snappedY = Math.round(horizontalAngle / thetaY) * thetaY;
+      horizontalCarousel.style.transition = 'transform 0.5s cubic-bezier(0.25, 1.5, 0.5, 1)';
+      horizontalAngle = snappedY;
+      horizontalCarousel.style.transform = `rotateY(${horizontalAngle}deg)`;
+      updateActiveIndex(horizontalAngle);
+    }
+    
+    if (dragAxis === 'y' || dragAxis === null) {
+      const cyl = verticalCylinders[activeCategoryIndex];
+      const tX = thetaXArray[activeCategoryIndex];
+      const snappedX = Math.round(verticalAngles[activeCategoryIndex] / tX) * tX;
+      
+      cyl.style.transition = 'transform 0.4s cubic-bezier(0.25, 1.5, 0.5, 1)';
+      verticalAngles[activeCategoryIndex] = snappedX;
+      cyl.style.transform = `rotateX(${snappedX}deg)`;
+    }
+    dragAxis = null;
+  }
+
+  // Desktop Wheel
+  masterScene.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    horizontalCarousel.style.transition = 'none';
+    verticalCylinders[activeCategoryIndex].style.transition = 'none';
+
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+      horizontalAngle -= e.deltaX * 0.2;
+      horizontalCarousel.style.transform = `rotateY(${horizontalAngle}deg)`;
+      dragAxis = 'x';
+    } else {
+      verticalAngles[activeCategoryIndex] -= e.deltaY * 0.2;
+      verticalCylinders[activeCategoryIndex].style.transform = `rotateX(${verticalAngles[activeCategoryIndex]}deg)`;
+      dragAxis = 'y';
+    }
+
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(snap, 150);
+  }, { passive: false });
+
+  // Mobile Touch
+  masterScene.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    dragAxis = null;
+    
+    horizontalCarousel.style.transition = 'none';
+    verticalCylinders[activeCategoryIndex].style.transition = 'none';
+    clearTimeout(scrollTimeout);
+  }, { passive: false });
+
+  masterScene.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    
+    const currentX = e.touches[0].clientX;
+    const currentY = e.touches[0].clientY;
+    const deltaX = currentX - startX;
+    const deltaY = currentY - startY;
+
+    if (!dragAxis) {
+      if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
+        dragAxis = Math.abs(deltaX) > Math.abs(deltaY) ? 'x' : 'y';
+      } else {
+        return; 
+      }
+    }
+
+    if (dragAxis === 'x') {
+      horizontalAngle += deltaX * 0.5;
+      horizontalCarousel.style.transform = `rotateY(${horizontalAngle}deg)`;
+      startX = currentX;
+    } else {
+      verticalAngles[activeCategoryIndex] += deltaY * 0.5;
+      verticalCylinders[activeCategoryIndex].style.transform = `rotateX(${verticalAngles[activeCategoryIndex]}deg)`;
+      startY = currentY;
+    }
+  }, { passive: false });
+
+  masterScene.addEventListener('touchend', () => {
+    if (!isDragging) return;
+    isDragging = false;
+    snap(); 
+  });
 }
 
 // A helpful little tool that waits for an element to exist
