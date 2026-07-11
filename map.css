@@ -1,0 +1,13 @@
+
+.map-fill path {
+    fill: var(--map-land);
+    filter: url(#noiseFilter);
+    /* stroke: none !important; */
+    stroke-width: 0px !important;
+}
+.map-border {
+    fill: none !important;
+    stroke: black;
+    stroke-width: 1px !important;
+    filter: none !important;
+}
