@@ -115,7 +115,7 @@ body {
 .hex-box-content {
     position: relative;
     box-sizing: border-box;
-    overflow: auto;
+    overflow: hidden;
     width: 100%;
     height: 100%;
     justify-content: center;
@@ -288,10 +288,8 @@ body {
     outline: none;
 }
 
-iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
+#battle-iframe {
+    position: relative;
     width: 100%;
     height: 100%;
     border: none;

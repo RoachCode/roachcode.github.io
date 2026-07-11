@@ -142,51 +142,111 @@ export async function renderMapPage(container) {
         useElement.setAttributeNS("http://www.w3.org/1999/xlink", "href", "#map-data");
         useElement.setAttribute('class', 'map-border');
 
-    // 3. Append the <use> tag directly to mapSvg
-    // Since it's inside mapSvg, panzoom will move it automatically!
-    mapSvg.appendChild(useElement);
+        // 3. Append the <use> tag directly to mapSvg
+        // Since it's inside mapSvg, panzoom will move it automatically!
+        mapSvg.appendChild(useElement);
 
-            // 3. INITIALIZE PANZOOM
-            // This single line adds mouse drag, mouse wheel, and mobile pinch-to-zoom
-            const mapController = panzoom(mapSvg, {
+        // 3. INITIALIZE PANZOOM
+        // This single line adds mouse drag, mouse wheel, and mobile pinch-to-zoom
+        const mapController = panzoom(mapSvg, {
 
-            });
+        });
 
-            mapContainer.addEventListener('mousedown', (e) => {
-                // e.button === 1 is the middle mouse wheel click
-                if (e.button === 1) { 
-                    e.preventDefault(); // Stops the annoying auto-scroll icon from appearing
+        // 1. Intercept and kill the native auto-scroll icon immediately
+        container.addEventListener('mousedown', (e) => {
+            if (e.button === 1) { 
+                e.preventDefault(); 
+            }
+        });
 
-                    // Reset the scale to 1 (100%) relative to the top-left corner (0,0)
-                    mapController.zoomAbs(0, 0, 1); 
-                    
-                    // Move the map back to its original 0,0 position
-                    mapController.moveTo(0, 0); 
-                }
-            });
-
+        // 2. Handle the actual map reset via auxclick
+        container.addEventListener('auxclick', (e) => {
+            if (e.button === 1) {
+                e.preventDefault();
+                
+                // Reset the scale to 1 (100%)
+                mapController.zoomAbs(0, 0, 1); 
+                
+                // Move the SVG back to its original origin
+                mapController.moveTo(0, 0); 
+            }
+        });
         } catch (error) {
             console.error("Failed to attach map:", error);
         }
 }
 
 export function renderBattlePage(container) {
-    const pageContent = document.getElementById('page-content');
+    // 1. Create the fallback screen
+    const fallbackScreen = document.createElement('div');
+    fallbackScreen.id = 'battle-fallback';
+    
+    // Styling the fallback to match a dark, seamless UI
+    fallbackScreen.style.cssText = `
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        background-color: #16161d;
+        color: var(--text-color);
+    `;
+    // You can replace this innerHTML with your own SVG design later
+    fallbackScreen.innerHTML = `<h3>Awaiting Stream...</h3>`;
 
-    // Create the iframe
+    // 2. Create the iframe
     const iframe = document.createElement('iframe');
-
-    // Set attributes for the VDO.ninja stream
-    // ?view= targets your OBS stream directly.
-    // &meshcast routes it through cloud servers to save your CPU.
-    iframe.src = 'https://vdo.ninja/?meshcast&view=b37ce914b7f9248bba9f2367790c42e25a109d5b19b295659d61bab06b51491e&autoplay';
+    iframe.id = 'battle-iframe';
+    iframe.src = 'https://vdo.ninja/?meshcast&view=b37ce914b7f9248bba9f2367790c42e25a109d5b19b295659d61bab06b51491e&autoplay&api=The_Ruby_Heart';
     iframe.title = 'Battle Map Stream';
-    // VDO.ninja needs these specific permissions to auto-play the incoming video
-    iframe.allow = 'autoplay; fullscreen;'
+    iframe.allow = 'autoplay; fullscreen;';
     iframe.allowFullscreen = true;
+    
+    // Initial State: Hide the iframe, show the fallback
+    iframe.style.display = 'none';
 
-    // Inject into the page
+    // 3. Handle VDO.Ninja Messages
+    const handleStreamMessage = (event) => {
+        if (event.origin !== 'https://vdo.ninja') return;
+
+        const data = event.data;
+
+        if (data && data.action) {
+            console.log("VDO.Ninja Event:", data.action);
+
+            if (data.action === 'new-stream-added') {
+                // The stream is live! 
+                iframe.style.display = 'block';
+                fallbackScreen.style.display = 'none';
+            } 
+            else if (data.action === 'end-view-connection') {
+                // The connection dropped or stopped
+                iframe.style.display = 'none';
+                fallbackScreen.style.display = 'flex'; 
+            }
+        }
+    };
+    window.addEventListener('message', handleStreamMessage);
+    // 4. Inject into the page
+    // Prefer the passed container, fallback to grabbing by ID
+    const pageContent = document.getElementById('page-content');
+    
+    // Clear out existing content if this page is being re-rendered
+    pageContent.innerHTML = ''; 
+    
+    pageContent.appendChild(fallbackScreen);
     pageContent.appendChild(iframe);
+
+    return function destroyBattlePage() {
+        // Remove the event listener from the window
+        window.removeEventListener('message', handleStreamMessage);
+        
+        // Optional but recommended: sever the iframe's source to kill the WebRTC polling
+        iframe.src = '';
+        
+        // Clear the container
+        pageContent.innerHTML = '';
+    };
 }
 
 export function renderGlossaryPage(container) {
