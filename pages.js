@@ -179,7 +179,7 @@ export function renderBattlePage(container) {
     // Set attributes for the VDO.ninja stream
     // ?view= targets your OBS stream directly.
     // &meshcast routes it through cloud servers to save your CPU.
-    iframe.src = 'https://vdo.ninja/?view=rTnTihr';
+    iframe.src = 'https://vdo.ninja/?meshcast&view=b37ce914b7f9248bba9f2367790c42e25a109d5b19b295659d61bab06b51491e&autoplay';
     iframe.title = 'Battle Map Stream';
     // VDO.ninja needs these specific permissions to auto-play the incoming video
     iframe.allow = 'autoplay; fullscreen;'
