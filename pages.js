@@ -253,13 +253,12 @@ export function renderGlossaryPage(container) {
   container.innerHTML = '';
 
   const glossaryData = [
-    { items: ['Aria', 'Balthazar', 'Caelum', 'Darius', 'Elora', 'Faelan', 'Garrick', 'Hanna', 'Ignis', 'Jorun', 'Kael'] },
-    { items: ['The Citadel', 'Whispering Woods', 'Sunken City', 'Dragon Peaks', 'Iron Keep', 'Shadow Rift'] },
-    { items: ['Amulet of Time', 'Soul Blade', 'Ember Stone', 'Void Chalice', 'Sunken Crown', 'Crystal Tear', 'Moon Ring', 'Star Map'] },
-    { items: ['The Order', 'Crimson Hand', 'Silver Vanguard', 'Night Walkers', 'Sun Cult'] }
+    { title: 'Characters', items: ['Aria', 'Balthazar', 'Caelum', 'Darius', 'Elora', 'Faelan', 'Garrick', 'Hanna', 'Ignis', 'Jorun', 'Kael'] },
+    { title: 'Locations', items: ['The Citadel', 'Whispering Woods', 'Sunken City', 'Dragon Peaks', 'Iron Keep', 'Shadow Rift'] },
+    { title: 'Artifacts', items: ['Amulet of Time', 'Soul Blade', 'Ember Stone', 'Void Chalice', 'Sunken Crown', 'Crystal Tear', 'Moon Ring', 'Star Map', 'Amulet of Time', 'Soul Blade', 'Ember Stone', 'Void Chalice', 'Sunken Crown', 'Crystal Tear', 'Moon Ring', 'Star Map'] },
+    { title: 'Factions', items: ['The Order', 'Crimson Hand', 'Silver Vanguard', 'Night Walkers', 'Sun Cult'] }
   ];
 
-  // --- HTML Construction ---
   const masterScene = document.createElement('div');
   masterScene.className = 'master-scene';
 
@@ -269,21 +268,28 @@ export function renderGlossaryPage(container) {
   const totalCategories = glossaryData.length;
   const thetaY = 360 / totalCategories;
   
-  // Calculate horizontal radius so cylinders space out into a proper wheel
   const panelWidth = 250; 
   let radiusY = Math.round((panelWidth / 2) / Math.tan(Math.PI / totalCategories));
-  
-  // Ensure a minimum horizontal radius so they don't clip into each other
   radiusY = Math.max(radiusY, 200);
 
   const verticalCylinders = [];
   const verticalAngles = glossaryData.map(() => 0);
   const thetaXArray = [];
+  const panelsArray = []; // Store panels for visibility updates
+
+  // Fixed vertical radius ensures all cylinders are the exact same diameter visually
+  const CONSTANT_RADIUS_X = 60; 
 
   glossaryData.forEach((data, index) => {
     const panel = document.createElement('div');
     panel.className = 'carousel-panel';
     panel.style.transform = `rotateY(${index * thetaY}deg) translateZ(${radiusY}px)`;
+
+    // Add title back in
+    const title = document.createElement('div');
+    title.className = 'panel-title';
+    title.textContent = data.title;
+    panel.appendChild(title);
 
     const cylinder = document.createElement('div');
     cylinder.className = 'cylinder';
@@ -291,28 +297,27 @@ export function renderGlossaryPage(container) {
     const totalItems = data.items.length;
     const thetaX = 360 / totalItems;
     thetaXArray.push(thetaX);
-    
-    // Dynamic vertical radius based on item count
-    const itemHeight = 50; 
-    const radiusX = Math.round((itemHeight / 2) / Math.tan(Math.PI / totalItems));
 
     data.items.forEach((itemText, i) => {
       const itemEl = document.createElement('div');
       itemEl.className = 'item';
       itemEl.textContent = itemText;
-      itemEl.style.transform = `rotateX(${i * thetaX}deg) translateZ(${radiusX}px)`;
+      // Use the constant radius here
+      itemEl.style.transform = `rotateX(${i * thetaX}deg) translateZ(${CONSTANT_RADIUS_X}px)`;
       cylinder.appendChild(itemEl);
     });
 
     panel.appendChild(cylinder);
     horizontalCarousel.appendChild(panel);
+    
     verticalCylinders.push(cylinder);
+    panelsArray.push(panel);
   });
 
   masterScene.appendChild(horizontalCarousel);
   container.appendChild(masterScene);
 
-  // --- Centralized Touch & Scroll Logic ---
+  // --- Centralized Touch, Scroll, & Visibility Logic ---
   let horizontalAngle = 0;
   let activeCategoryIndex = 0;
   
@@ -321,6 +326,21 @@ export function renderGlossaryPage(container) {
   let startY = 0;
   let dragAxis = null; 
   let scrollTimeout;
+
+  // Hides cylinders when they rotate to the back of the carousel
+  function updateVisibility() {
+    panelsArray.forEach((panel, i) => {
+        
+        let worldAngle = (i * thetaY + horizontalAngle) % 360;
+        if (worldAngle < 0) worldAngle += 360;
+        
+        // Calculate how far the panel is from the absolute front (0 degrees)
+        let diff = Math.min(worldAngle, 360 - worldAngle); 
+        const opacity = (180 - diff) / 180;
+        // Currently broken; changing opacity flattens perspective for some reason.
+        //panel.style.opacity = opacity;
+    });
+  }
 
   function updateActiveIndex(angleY) {
     let normalized = angleY % 360;
@@ -346,8 +366,14 @@ export function renderGlossaryPage(container) {
       verticalAngles[activeCategoryIndex] = snappedX;
       cyl.style.transform = `rotateX(${snappedX}deg)`;
     }
+    
     dragAxis = null;
+    // Ensure visibility is perfect after a snap transition
+    requestAnimationFrame(updateVisibility);
   }
+
+  // Set initial visibility state
+  updateVisibility();
 
   // Desktop Wheel
   masterScene.addEventListener('wheel', (e) => {
@@ -364,6 +390,8 @@ export function renderGlossaryPage(container) {
       verticalCylinders[activeCategoryIndex].style.transform = `rotateX(${verticalAngles[activeCategoryIndex]}deg)`;
       dragAxis = 'y';
     }
+
+    updateVisibility();
 
     clearTimeout(scrollTimeout);
     scrollTimeout = setTimeout(snap, 150);
@@ -401,8 +429,9 @@ export function renderGlossaryPage(container) {
       horizontalAngle += deltaX * 0.5;
       horizontalCarousel.style.transform = `rotateY(${horizontalAngle}deg)`;
       startX = currentX;
+      updateVisibility(); // Dynamically fade as user drags
     } else {
-      verticalAngles[activeCategoryIndex] += deltaY * 0.5;
+      verticalAngles[activeCategoryIndex] -= deltaY * 0.5;
       verticalCylinders[activeCategoryIndex].style.transform = `rotateX(${verticalAngles[activeCategoryIndex]}deg)`;
       startY = currentY;
     }

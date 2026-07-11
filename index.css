@@ -281,8 +281,6 @@ body {
 
 /* 4. The Massive Number */
 .stat-input {
-    /* REMOVE: width: 80cqmin; */
-    /* REMOVE: font-size: 40cqmin; */
     text-align: center;
     background: transparent;
     border: none;
@@ -299,13 +297,13 @@ body {
 /* The Master Camera for the entire screen */
 .master-scene {
   width: 100%;
-  height: 100vh; /* Adjust to fit inside #page-content */
-  perspective: 1000px; /* Increased for a wider view of the side cylinders */
+  height: 100vh;
+  perspective: 1000px; 
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  background-color: #121212;
+  /* background-color: #121212; */
   touch-action: none; 
 }
 
@@ -320,16 +318,31 @@ body {
   align-items: center;
 }
 
-/* The individual category panels (each holds one cylinder) */
+/* The individual category panels */
 .carousel-panel {
   position: absolute;
-  width: 250px; /* Constrain width so they form a proper horizontal wheel */
-  height: 100%;
+  width: 250px; 
+  /* height: 400px; */
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   transform-style: preserve-3d;
-  /* Opacity fading has been completely removed to show true 3D placement */
+}
+
+/* Positioned high above the cylinder radius to prevent overlap */
+.panel-title {
+  position: absolute;
+  top: 50%;
+  margin-top: -220px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  color: var(--text-color);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 18px;
+  transform: translateZ(30px);
 }
 
 /* The inner vertical cylinder container */
@@ -349,7 +362,8 @@ body {
   text-align: center;
   font-size: 24px;
   font-weight: bold;
-  color: white;
+  color: var(--text-color);
   backface-visibility: hidden;
   user-select: none;
+  border: 3px solid var(--main-background);
 }
