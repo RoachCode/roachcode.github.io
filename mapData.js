@@ -1,4 +1,5 @@
 // mapData.js
+
 export const testLandmassSvg = `
 <svg width="241" height="290" viewBox="0 0 241 290" fill="none" xmlns="http://www.w3.org/2000/svg">
 <defs>
