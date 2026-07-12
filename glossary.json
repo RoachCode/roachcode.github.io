@@ -1,0 +1,19 @@
+{
+  "categories": [
+    {
+      "title": "Characters",
+      "items": [
+        { "name": "Aria", "description": "A fierce warrior wielding the Soul Blade. She is seeking redemption in the Sunken City." },
+        { "name": "Balthazar", "description": "An ancient mage bound to the Citadel. His knowledge of the Star Map is unparalleled." },
+        { "name": "Caelum", "description": "A rogue of the Night Walkers, known for his agility and sharp wit." }
+      ]
+    },
+    {
+      "title": "Locations",
+      "items": [
+        { "name": "The Citadel", "description": "A towering fortress of white stone, housing the remaining members of The Order." },
+        { "name": "Whispering Woods", "description": "A dense, ancient forest where the trees are said to hold the memories of the fallen." }
+      ]
+    }
+  ]
+}

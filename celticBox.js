@@ -95,53 +95,7 @@ function isPerimeterHex(col, row, maxCols, maxRows) {
     return col === 0 || col === maxCols - 1 || row === 0 || row === maxRows - 1;
 }
 
-
-// --- MAIN EXPORT: BACKGROUND MODE ---
-
-export function createHexBackground(options = {}, ele) {
-    const tiledSvgBox = document.createElementNS(options.svgNS, "svg");
-    const bgLayer = document.createElementNS(options.svgNS, "g");
-    const pathLayer = document.createElementNS(options.svgNS, "g");
-
-    tiledSvgBox.classList.add("hex-background", "page-background");
-    tiledSvgBox.setAttribute("width", ele.clientWidth);
-    tiledSvgBox.setAttribute("height", ele.clientHeight);
-    tiledSvgBox.style.border = "none";
-    tiledSvgBox.appendChild(bgLayer);
-    tiledSvgBox.appendChild(pathLayer);
-
-    const { hexBorder, completeHex } = createHexTemplates(options);
-    const svgElements = { bgLayer, pathLayer, hexBorder, completeHex };
-
-    const startX = options.dimensions.radius;
-    const startY = options.dimensions.height / 2;
-    
-    // Background Bleeds
-    const leftBleedCols = 2;
-    const rightBleedBuffer = options.dimensions.hexWidth * 2;
-    const bottomBleedBuffer = options.dimensions.height * 2;
-    const bgTopBleed = -options.dimensions.height;
-
-    let col = -leftBleedCols;
-
-    for (let x = startX - (leftBleedCols * options.dimensions.radius * 1.5); x <= ele.clientWidth + options.dimensions.hexWidth + rightBleedBuffer; x += options.dimensions.radius * 1.5) {
-        
-        const isEvenCol = (col % 2 === 0);
-        const yOffset = isEvenCol ? options.dimensions.height / 2 : 0;
-        
-        for (let y = startY + yOffset + bgTopBleed; y <= ele.clientHeight + options.dimensions.height + bottomBleedBuffer; y += options.dimensions.height) {
-            // Unconditional rendering for backgrounds
-            placeHexagon(x, y, svgElements);
-        }
-        col++;
-    }
-
-    ele.appendChild(tiledSvgBox);
-}
-
-
 // --- MAIN EXPORT: TEXT BOX MODE ---
-
 export function createHexTextBox(options = {}, ele, textContent = "") {
     const container = document.createElement("div");
     container.classList.add("textbox-wrapper");
@@ -253,8 +207,65 @@ export function createHexTextBox(options = {}, ele, textContent = "") {
     container.appendChild(tiledSvgBox);
     ele.appendChild(container);
 }
+export function mountResponsiveTextBox(options, container, textContent = "") {
+    let resizeTimer;
+    
+    const observer = new ResizeObserver(() => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            // 1. Wipe the old text box
+            container.replaceChildren(); 
+            
+            // 2. Draw the new one with the exact same text
+            createHexTextBox(options, container, textContent);
+        }, 50); // Text boxes are smaller, so we can redraw a bit faster
+    });
 
+    observer.observe(container);
+    return observer;
+}
 
+// --- MAIN EXPORT: BACKGROUND MODE ---
+export function createHexBackground(options = {}, ele) {
+    const tiledSvgBox = document.createElementNS(options.svgNS, "svg");
+    const bgLayer = document.createElementNS(options.svgNS, "g");
+    const pathLayer = document.createElementNS(options.svgNS, "g");
+
+    tiledSvgBox.classList.add("hex-background", "page-background");
+    tiledSvgBox.setAttribute("width", ele.clientWidth);
+    tiledSvgBox.setAttribute("height", ele.clientHeight);
+    tiledSvgBox.style.border = "none";
+    tiledSvgBox.appendChild(bgLayer);
+    tiledSvgBox.appendChild(pathLayer);
+
+    const { hexBorder, completeHex } = createHexTemplates(options);
+    const svgElements = { bgLayer, pathLayer, hexBorder, completeHex };
+
+    const startX = options.dimensions.radius;
+    const startY = options.dimensions.height / 2;
+    
+    // Background Bleeds
+    const leftBleedCols = 2;
+    const rightBleedBuffer = options.dimensions.hexWidth * 2;
+    const bottomBleedBuffer = options.dimensions.height * 2;
+    const bgTopBleed = -options.dimensions.height;
+
+    let col = -leftBleedCols;
+
+    for (let x = startX - (leftBleedCols * options.dimensions.radius * 1.5); x <= ele.clientWidth + options.dimensions.hexWidth + rightBleedBuffer; x += options.dimensions.radius * 1.5) {
+        
+        const isEvenCol = (col % 2 === 0);
+        const yOffset = isEvenCol ? options.dimensions.height / 2 : 0;
+        
+        for (let y = startY + yOffset + bgTopBleed; y <= ele.clientHeight + options.dimensions.height + bottomBleedBuffer; y += options.dimensions.height) {
+            // Unconditional rendering for backgrounds
+            placeHexagon(x, y, svgElements);
+        }
+        col++;
+    }
+
+    ele.appendChild(tiledSvgBox);
+}
 export function mountResponsiveBackground(options, container) {
     let resizeTimer;
     
@@ -278,20 +289,3 @@ export function mountResponsiveBackground(options, container) {
     return observer;
 }
 
-export function mountResponsiveTextBox(options, container, textContent = "") {
-    let resizeTimer;
-    
-    const observer = new ResizeObserver(() => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => {
-            // 1. Wipe the old text box
-            container.replaceChildren(); 
-            
-            // 2. Draw the new one with the exact same text
-            createHexTextBox(options, container, textContent);
-        }, 50); // Text boxes are smaller, so we can redraw a bit faster
-    });
-
-    observer.observe(container);
-    return observer;
-}

@@ -66,18 +66,25 @@
 
 /* The glossary terms */
 .item {
-  position: absolute;
-  width: 100%;
-  /* Use Flexbox for flawless vertical/horizontal centering inside borders */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  font-weight: bold;
-  color: var(--text-color);
-  backface-visibility: hidden;
-  user-select: none;
-  border: 3px solid var(--main-background);
+    position: absolute;
+    width: 100%;
+    /* Use Flexbox for flawless vertical/horizontal centering inside borders */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-weight: bold;
+    color: var(--text-color);
+    backface-visibility: hidden;
+    user-select: none;
+    border: 3px solid var(--main-background);
+
+    font-size: var(--dynamic-font-size);
+    height: var(--item-height);
+    top: 50%;
+    left: 0;
+    margin-top: calc(var(--item-height) / -2);
+    box-sizing: border-box;
 }
 
 .panel-bottom{
@@ -87,4 +94,13 @@
     background: radial-gradient(ellipse, rgba(0, 0, 0, 0.5), 75%, transparent);
     font-size: 6;
     
+}
+
+.description-text {
+    transition: opacity 0.3s ease-in-out;
+    opacity: 1;
+}
+
+.description-text.faded {
+    opacity: 0;
 }
