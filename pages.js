@@ -320,23 +320,38 @@ export function renderGlossaryPage(container) {
             itemEl.className = 'item';
             itemEl.textContent = itemText;
             
-            // Hooking into CSS variables for dynamic sizing based on constraints
+            // Sizing via CSS variables
             itemEl.style.fontSize = 'var(--dynamic-font-size)';
             itemEl.style.height = 'var(--item-height)';
-            itemEl.style.lineHeight = 'var(--item-height)';
+            // REMOVED line-height setter here since Flexbox handles it now
             
-            // THE FIX: Absolutely position every item to share the exact same transform origin
             itemEl.style.position = 'absolute';
             itemEl.style.top = '50%';
             itemEl.style.left = '0';
             itemEl.style.width = '100%';
             itemEl.style.marginTop = 'calc(var(--item-height) / -2)';
 
-            // Ensure padding/borders don't break the height calculation
             itemEl.style.boxSizing = 'border-box';
             itemEl.style.backfaceVisibility = 'hidden';
             
             itemEl.style.transform = `rotateX(${i * THETA_X}deg) translateZ(var(--radius-x))`;
+            
+            // --- NEW CLICK LISTENER ---
+            itemEl.addEventListener('click', () => {
+                if (hasDragged) return; // Prevent firing if the user was scrolling
+
+                // Check if this item belongs to the currently front-facing category
+                if (activeCategoryIndex === index) {
+                    const currentAngle = verticalAngles[index];
+                    const activeItemIndex = Math.round(-currentAngle / THETA_X);
+                    
+                    // Only log if the clicked item is the exact one centered in the front
+                    if (i === activeItemIndex) {
+                        console.log(`Active item clicked: ${itemText}`);
+                        // You can dispatch a custom event here, update UI, play a sound, etc.
+                    }
+                }
+            });
             
             cylinder.appendChild(itemEl);
         });
@@ -409,6 +424,7 @@ export function renderGlossaryPage(container) {
     let activeCategoryIndex = 0;
     
     let isDragging = false;
+    let hasDragged = false;
     let startX = 0;
     let startY = 0;
     let dragAxis = null; 
@@ -509,6 +525,7 @@ export function renderGlossaryPage(container) {
 
     function onTouchStart(e) {
         isDragging = true;
+        hasDragged = false; // Reset on touch start
         startX = e.touches[0].clientX;
         startY = e.touches[0].clientY;
         dragAxis = null;
@@ -525,6 +542,10 @@ export function renderGlossaryPage(container) {
         const currentY = e.touches[0].clientY;
         const deltaX = currentX - startX;
         const deltaY = currentY - startY;
+
+        if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
+            hasDragged = true;
+        }
 
         if (!dragAxis) {
             if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {

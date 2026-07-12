@@ -8,14 +8,12 @@
 /* The Master Camera for the entire screen */
 .master-scene {
   width: 100%;
-  /* height: 100%; */
   perspective: 1000px; 
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  /* background-color: #121212; */
   touch-action: none; 
-  flex: 2;
+  flex: 1.2; /* Changed from 2 to push the cylinder closer to the vertical center */
   position: relative;
 }
 
@@ -45,16 +43,13 @@
 /* Positioned high above the cylinder radius to prevent overlap */
 .panel-title {
   position: absolute;
-  top: 50%;
-  margin-top: -120px;
-  left: 0;
   width: 100%;
   text-align: center;
   color: var(--text-color);
   text-transform: uppercase;
   letter-spacing: 2px;
   font-size: 18px;
-  transform: translateZ(30px);
+  transform: translateZ(30px) translateY(-110px);
 }
 
 /* The inner vertical cylinder container */
@@ -69,10 +64,11 @@
 .item {
   position: absolute;
   width: 100%;
-  height: 50px;
-  line-height: 50px;
+  /* Use Flexbox for flawless vertical/horizontal centering inside borders */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
-  font-size: 24px;
   font-weight: bold;
   color: var(--text-color);
   backface-visibility: hidden;
