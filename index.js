@@ -1,7 +1,8 @@
 // index.js
 import { mountResponsiveBackground } from './celticBox.js';
 import { celticBackgroundData } from './config.js';
-import { renderCharacterPage, renderMapPage, renderBattlePage, renderGlossaryPage } from './pages.js';
+import { renderCharacterPage, renderMapPage, renderBattlePage } from './pages.js';
+import { renderGlossaryPage } from './glossary.js';
 
 // 1. Grab DOM elements
 const bgLayer = document.getElementById('background-layer');
