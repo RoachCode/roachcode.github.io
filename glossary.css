@@ -8,7 +8,7 @@
 /* The Master Camera for the entire screen */
 .master-scene {
   width: 100%;
-  perspective: 1000px; 
+  perspective: 2000px; 
   justify-content: center;
   align-items: center;
   overflow: hidden;
@@ -32,24 +32,27 @@
 .carousel-panel {
   position: absolute;
   width: 250px; 
-  /* height: 400px; */
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Stacks items vertically */
   justify-content: center;
   align-items: center;
   transform-style: preserve-3d;
+  height: 100%;
 }
 
 /* Positioned high above the cylinder radius to prevent overlap */
 .panel-title {
-  position: absolute;
   width: 100%;
+  height: fit-content;
   text-align: center;
   color: var(--text-color);
   text-transform: uppercase;
-  letter-spacing: 2px;
-  font-size: 18px;
-  transform: translateZ(30px) translateY(-110px);
+  letter-spacing: 5px;
+  font-size: 20px;
+  /* Just add a little breathing room below the title */
+  /* margin-bottom: 20px;  */
+  flex: 0.5;
+  transform: translateZ(30px);
 }
 
 /* The inner vertical cylinder container */
@@ -58,6 +61,7 @@
   height: 50px;
   position: relative;
   transform-style: preserve-3d;
+  margin-bottom: 20px;
 }
 
 /* The glossary terms */
@@ -77,7 +81,10 @@
 }
 
 .panel-bottom{
-    flex: 1;
+    flex: 0.7;
     margin: 10px;
-    background-color: var(--main-background);
+    /* background-color: var(--main-background); */
+    background: radial-gradient(ellipse, rgba(0, 0, 0, 0.5), 75%, transparent);
+    font-size: 6;
+    
 }

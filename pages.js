@@ -370,6 +370,9 @@ export function renderGlossaryPage(container) {
 
     const bottomDiv = document.createElement('div');
     bottomDiv.className = 'panel-bottom';
+
+    const testText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+    mountResponsiveTextBox(celticTextboxData, bottomDiv, testText);
     glossaryContent.appendChild(bottomDiv);
 
     container.appendChild(glossaryContent);
@@ -446,7 +449,7 @@ export function renderGlossaryPage(container) {
             const activeItemIndex = Math.round(-currentAngle / THETA_X);
             
             // Aggressive culling range: show center item + 3 above + 3 below
-            const VISIBLE_RANGE = 3;
+            const VISIBLE_RANGE = 5;
 
             itemEls.forEach((item, itemIndex) => {
                 const distance = Math.abs(itemIndex - activeItemIndex);
@@ -458,8 +461,7 @@ export function renderGlossaryPage(container) {
                 } else {
                     // Item is inside the visible window -> render and fade out towards edges
                     item.style.visibility = 'visible';
-                    const verticalOpacity = 1 - (distance / (VISIBLE_RANGE + 1));
-                    item.style.opacity = panelOpacity * verticalOpacity;
+                    item.style.opacity = panelOpacity;
                 }
             });
         });
