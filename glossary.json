@@ -1,19 +1,29 @@
 {
-  "categories": [
-    {
-      "title": "Characters",
-      "items": [
-        { "name": "Aria", "description": "A fierce warrior wielding the Soul Blade. She is seeking redemption in the Sunken City." },
-        { "name": "Balthazar", "description": "An ancient mage bound to the Citadel. His knowledge of the Star Map is unparalleled." },
-        { "name": "Caelum", "description": "A rogue of the Night Walkers, known for his agility and sharp wit." }
-      ]
-    },
-    {
-      "title": "Locations",
-      "items": [
-        { "name": "The Citadel", "description": "A towering fortress of white stone, housing the remaining members of The Order." },
-        { "name": "Whispering Woods", "description": "A dense, ancient forest where the trees are said to hold the memories of the fallen." }
-      ]
-    }
-  ]
+"categories": [
+{
+"title": "Characters",
+"items": [
+{ "name": "Aria", "description": "A fierce warrior wielding the Soul Blade. She is seeking redemption in the Sunken City." },
+{ "name": "Balthazar", "description": "An ancient mage bound to the Citadel. His knowledge of the Star Map is unparalleled." },
+{ "name": "Caelum", "description": "A rogue of the Night Walkers, known for his agility and sharp wit." }
+ ]
+},
+{
+"title": "Locations",
+"items": [
+{ "name": "Agrestis", "description": "Far to the East, known as the Land of the Sun's Origin, Agrestis is the Azerus Empire's agricultural powerhouse, supplying most of the food for the entirety of the North-Eastern continents." },
+{ "name": "Artsomnus", "description": "The frozen tundra at the bottom of the world, Artsomnus bears no reported flora or fauna. Few who venture there have returned, leading to tales of ferocious beasts and endless labyrinths beneath the ice." },
+{ "name": "Azuria", "description": "The seat of power for the Azerus Empire. Azuria rests upon the Lapisine Peninsula, its blue-and-white walls shining against the cerulean backdrop of the Eburrian Ocean. From behind its powerful marble fortifications Emperor Azerus commands the forces of the Shatterguard to the ends of the known world." },
+{ "name": "Ferrum", "description": "An island to the far South-East. It is mountainous, forested, and wild, with silvery trees that shatter like crystal when they fall. Strange druids walk the land, communing with beasts and attacking foolish interlopers on sight." },
+{ "name": "Gann", "description": "One of the great kingdoms. Gann is a place where heavy tradition and burgeoning tradition clash, with honor-bound knights manning newly devised siege engines. The beauty of this lands forests and flowers hides the blood used to fertilize them." },
+{ "name": "Ivarra", "description": "High in the North-West, Ivarra is a land of dense fog and sailor's stories. It sits alone, far from trade routes, at the edge of civilization, surrounded by riptides and massive swells that can swallow ships whole." },
+{ "name": "Kagaria", "description": "One of the great kingdoms. A land split by a massive fissure running North to South. Great towering oaks grow in East Kagaria, which provide the raw materials for the worlds greatest shipwrights and other artisans who have settled. The West is mountainous wilderness traversed only for its precious metals." },
+{ "name": "Kanabron", "description": "North of Kagaria and seperated from it by by the Dimon Strait lies the great kingdom of Kanabron. Port cities dot the coastline, and verdant pastureland rolls in gentle hills between wooded glades." },
+{ "name": "Medina", "description": "The central continent and hub of travel and commerce. All who travel between the Eastern and Western continents will make landfall here for supplies - necessary or illicit. It is said that you can find anything in Medina, and lose it twice as fast." },
+{ "name": "Narshica", "description": "The far North. Harsh winds bite the land, halted only by mountains and steadfast pines. Only the hardiest hunters and fishermen brave these lands, and those who call it home bear an unparalleled respect for the power of nature." },
+{ "name": "Occassia", "description": "The Western-most landmass. There are no easy trails through this dense forest and mountainous terrain. This land is settled by none but the massive fauna that call this land home. Some say that great riches lie beneath the mountain, guarded over by lions and bears." },
+{ "name": "Silvestris", "description": "A triangular island heavily populated with mining towns, Silvestris houses massive veins of silver, coal, gold, corundum, and beryllium. The well-educated often ponder the unusually dense concentration of precious materials with inquisitive curiousity." }
+ ]
+}
+]
 }
